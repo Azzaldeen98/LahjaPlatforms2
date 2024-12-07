@@ -1,0 +1,57 @@
+﻿ 
+@using MudBlazor
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="pa-4">
+    <MudGrid>
+        <!-- القسم الأول: عرض الخصائص -->
+        <MudItem xs="12" md="6">
+            <MudCard>
+                <MudCardHeader>
+                    <MudText Typo="Typo.h6">مميزات الاشتراك</MudText>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudList Dense="true">
+                        @foreach (var feature in Features)
+                        {
+                            <MudListItem>
+                                <MudText Typo="Typo.body1">@feature</MudText>
+                            </MudListItem>
+                        }
+                    </MudList>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <!-- القسم الثاني: عرض واجهة الاشتراك -->
+        <MudItem xs="12" md="6">
+            <MudCard>
+                <MudCardHeader>
+                    <MudText Typo="Typo.h6">الاشتراك في الباقة</MudText>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Typo="Typo.body1" Class="mb-2">اشترك الآن واستمتع بجميع المزايا!</MudText>
+                    <MudButton Variant="MudBlazor.Variant.Filled" Color="MudBlazor.Color.Primary" OnClick="Subscribe">اشتراك</MudButton>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    // قائمة الخصائص (يمكن تعديلها أو تحميلها من API)
+    private List<string> Features = new List<string>
+    {
+        "إمكانية الوصول لجميع المحتويات",
+        "دعم على مدار الساعة",
+        "طلبات غير محدودة",
+        "تحديثات مجانية",
+        "تقارير دورية"
+    };
+
+    // دالة الاشتراك
+    private void Subscribe()
+    {
+       
+        Console.WriteLine("تم النقر على زر الاشتراك.");
+    }
+}

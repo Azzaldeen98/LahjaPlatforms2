@@ -1,0 +1,109 @@
+﻿@inject CardShopping.Web.Token.TokenService _ttokenService
+@inject IDialogService _DialogService
+ 
+    <MudButtonGroup>
+    if (@flagauth)
+    {
+
+        <MudIconButton Icon="@Icons.Material.Filled.AccessAlarm" OnClick="OpenLoginDialog">Rigister</MudIconButton>
+
+        <MudIconButton Icon="@Icons.Material.Filled.AccessAlarm">Login</MudIconButton>
+    }
+    else
+    {
+        <MudIconButton Icon="@Icons.Material.Filled.AcUnit">Logout</MudIconButton>
+        <MudButton StartIcon="@Icons.Material.Filled.AlarmAdd" IconColor="Color.Warning">@nameemail</MudButton>
+    }
+
+    </MudButtonGroup>
+
+       
+
+
+       
+
+
+ 
+}
+@* 
+ else
+{
+       @if (@flagauth)
+
+                    {
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="/Rigist">Rigister</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Login">Login</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+
+                           <BlazorASG.Components.T.Logout OnClickLogout="Handellogout"/>
+                        </li>
+                        <li class="nav-item">
+
+                            <MudText>@nameemail</MudText>
+                        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/Login">Login</a>
+        </li>
+                    } *@
+ 
+
+
+@code
+{
+    
+ 
+    private string tokenn;
+    string nameemail;
+    bool flagauth = true;
+    [Parameter]
+    public EventCallback<bool> OnClickkkk { get; set; }
+
+
+    
+    protected async override Task OnInitializedAsync()
+
+    {
+
+
+        try
+        {
+
+
+            tokenn = await _ttokenService.GetTokenAsync();
+            if (!string.IsNullOrEmpty(tokenn))
+            {
+
+                flagauth = false;
+                string[] x = tokenn.Split(',');
+                nameemail = x[1];
+            }
+        }
+        catch
+        {
+
+        }
+        StateHasChanged();
+    }
+    
+    private async void Handellogout(bool flag)
+    {
+        flagauth = flag;
+        StateHasChanged();
+    }
+    private async Task OpenLoginDialog()
+    {
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = false };
+        var dialog =_DialogService.Show<Login>("Verification code", options);
+
+        var result = await dialog.Result;
+}
+}

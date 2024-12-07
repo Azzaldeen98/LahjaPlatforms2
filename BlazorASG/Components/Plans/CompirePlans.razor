@@ -1,0 +1,59 @@
+﻿ 
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-5">
+
+    <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-2">مقارنه بين انواع الاشتراكات </MudText>
+    <MudTable Items="Features" Dense="true" Bordered="true">
+        <HeaderContent>
+            <MudTh>الميزة</MudTh>
+            <MudTh>الخطة المجانية</MudTh>
+            <MudTh>الخطة الأساسية</MudTh>
+            <MudTh>الخطة المحترفة</MudTh>
+
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="الميزة">@context.Feature</MudTd>
+            <MudTd DataLabel="الخطة المجانية">@context.FreePlan</MudTd>
+            <MudTd DataLabel="الخطة الأساسية">@context.BasicPlan</MudTd>
+            <MudTd DataLabel="الخطة المحترفة">@context.ProPlan</MudTd>
+        </RowTemplate>
+    </MudTable>
+    </MudContainer>  
+
+
+@code {
+    private List<PlanFeature> Features = new List<PlanFeature>
+    {
+        new PlanFeature
+        {
+            Feature = "عدد الطلبات",
+            FreePlan = "1000 طلب/شهر",
+            BasicPlan = "5000 طلب/شهر",
+            ProPlan = "غير محدود"
+        },
+        new PlanFeature
+        {
+            Feature = "الدعم الفني",
+            FreePlan = "ذاتي",
+            BasicPlan = "24 ساعة",
+            ProPlan = "فوري"
+        },
+        new PlanFeature
+        {
+            Feature = "الأمان",
+            FreePlan = "أساسي",
+            BasicPlan = "متقدم",
+            ProPlan = "عالي"
+        }
+    };
+
+    private class PlanFeature
+    {
+        public string Feature { get; set; }
+        public string FreePlan { get; set; }
+        public string BasicPlan { get; set; }
+      
+        public string ProPlan { get; set; }
+    }
+
+}

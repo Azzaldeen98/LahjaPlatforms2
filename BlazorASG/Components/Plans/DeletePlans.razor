@@ -1,0 +1,18 @@
+﻿@using MudBlazor
+@inject IDialogService DialogService
+
+<MudDialog MaxWidth="MaxWidth.Small">
+    <MudButtonMudDialogTitle>تأكيد</MudButtonMudDialogTitle>
+    <MudDialogContent>
+        <MudText Typo="Typo.body1">@Message</MudText>
+    </MudDialogContent>
+    <MudDialogActions>
+        <MudButton OnClick="() => MudDialog.Cancel()">إلغاء</MudButton>
+        <MudButton Color="MudBlazor.Color.Error" OnClick="() => MudDialog.Close(DialogResult.Ok(true))">حذف</MudButton>
+    </MudDialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public string Message { get; set; }
+}

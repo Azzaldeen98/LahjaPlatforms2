@@ -1,0 +1,39 @@
+﻿@using BlazorASG.Application_Layer.Interfaces
+@inject ILoggerService LogService
+<h3>Application Logs</h3>
+
+<button @onclick="ClearLogs">Clear Logs</button>
+
+<ul>
+    @foreach (var log in logs)
+    {
+        <li>@log</li>
+    }
+</ul>
+@code 
+{
+
+
+    private List<string> logs = new();
+    protected override void OnInitialized()
+    {
+        logs = LogService.GetLogs();
+        StateHasChanged();
+        var timer = new System.Timers.Timer(1000); // تحديث كل ثانية
+        timer.Elapsed += (sender, e) =>
+        {
+            InvokeAsync(() =>
+            {
+                logs = LogService.GetLogs();
+                StateHasChanged();
+            });
+        };
+        timer.Start();
+    }
+
+
+    private void ClearLogs()
+    {
+        logs.Clear();
+    }
+}

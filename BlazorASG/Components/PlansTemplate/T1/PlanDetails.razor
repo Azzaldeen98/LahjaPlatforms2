@@ -1,0 +1,114 @@
+﻿@page "/plan-details/{planId}"
+@inject NavigationManager Navigation
+
+@using MudBlazor
+@using System.Linq
+
+<MudPaper Class="pa-4">
+    <MudText Typo="Typo.h4">@plan.Name</MudText>
+    <MudText Color="Color.Secondary" Typo="Typo.body2">@plan.Description</MudText>
+
+    <!-- Price -->
+    <MudText Typo="Typo.h5" Color="Color.Primary" Class="mt-3">Price: @plan.Price.ToString("C")</MudText>
+
+    <!-- Plan Features -->
+    <MudTabs>
+        <MudTab Label="Features">
+            <MudList>
+                @foreach (var feature in plan.Features)
+                {
+                    <MudListItem>
+                        <MudText>@feature</MudText>
+                    </MudListItem>
+                }
+            </MudList>
+        </MudTab>
+        <MudTab Label="Specifications">
+            <MudTable Items="plan.Specifications">
+                <HeaderContent>
+                    <MudTh>Specification</MudTh>
+                    <MudTh>Details</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>@context.Name</MudTd>
+                    <MudTd>@context.Value</MudTd>
+                </RowTemplate>
+            </MudTable>
+        </MudTab>
+        <MudTab Label="Pricing & Billing">
+            <MudText Typo="Typo.body1">Billing cycle: @plan.BillingCycle</MudText>
+            <MudText Typo="Typo.body2">Discount: @plan.Discount.ToString("C")</MudText>
+        </MudTab>
+    </MudTabs>
+
+    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="GoBack" Class="mt-4">Back to Plans</MudButton>
+</MudPaper>
+
+@code {
+    [Parameter] public string planId { get; set; }
+    private Plan plan;
+
+    protected override void OnInitialized()
+    {
+        // الحصول على تفاصيل الخطة بناءً على معرف الخطة
+        plan = new List<Plan>
+        {
+            new Plan
+            {
+                Id = "1",
+                Name = "Basic Plan",
+                Description = "This is a basic subscription plan with essential features.",
+                Price = 19.99m,
+                BillingCycle = "Monthly",
+                Discount = 0,
+                Features = new List<string> { "5GB Storage", "10 Users", "Email Support" },
+                Specifications = new List<Specification>
+                {
+                    new Specification { Name = "Storage", Value = "5GB" },
+                    new Specification { Name = "Users", Value = "10" },
+                    new Specification { Name = "Support", Value = "Email Support" }
+                }
+            },
+            new Plan
+            {
+                Id = "2",
+                Name = "Premium Plan",
+                Description = "Advanced plan with enhanced features for larger teams.",
+                Price = 49.99m,
+                BillingCycle = "Monthly",
+                Discount = 5.00m,
+                Features = new List<string> { "50GB Storage", "Unlimited Users", "Priority Support" },
+                Specifications = new List<Specification>
+                {
+                    new Specification { Name = "Storage", Value = "50GB" },
+                    new Specification { Name = "Users", Value = "Unlimited" },
+                    new Specification { Name = "Support", Value = "Priority Support" }
+                }
+            }
+        }.FirstOrDefault(p => p.Id == planId);
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/plan-list");
+    }
+
+    public class Plan
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public decimal Price { get; set; }
+        public string BillingCycle { get; set; }
+        public decimal Discount { get; set; }
+        public List<string> Features { get; set; }
+        public List<Specification> Specifications { get; set; }
+    }
+
+    public class Specification
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
+    }
+}
+

@@ -1,0 +1,54 @@
+﻿ @page "/Logout"
+@using CardShopping.Web.Token
+@using MudBlazor
+@inject NavigationManager Navigation
+@inject TokenService TokenService
+
+
+
+
+<MudButton Variant="Variant.Text" OnClick="Logoutt">Logout</MudButton>
+
+  <MudText Color="MudBlazor.Color.Error" Class="mt-2">@errorMessage</MudText>
+
+@code
+{
+
+    [Parameter]
+    public EventCallback<bool>OnClickLogout{ get; set; }
+    private string token;
+    private string errorMessage;
+    [Parameter]
+    public bool FlagDev { get; set; } = true;
+
+    private async Task Logoutt()
+    {
+        try
+        {
+            if (FlagDev)
+            {
+                await TokenService.RemoveTokenAsync();
+                if (OnClickLogout.HasDelegate)
+                {
+                    await OnClickLogout.InvokeAsync(true);
+                }
+            }
+            else
+            {
+                errorMessage = "Api قيد الاصلاح ";
+                StateHasChanged();
+            }
+            
+        }
+        catch(Exception ex)
+        {
+            errorMessage =ex.Message;
+        }
+       
+
+
+
+     
+    }
+}
+

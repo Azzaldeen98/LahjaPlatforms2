@@ -1,0 +1,76 @@
+﻿@page "/feature-list3"
+ 
+@inject NavigationManager Navigation
+
+@using MudBlazor
+@using System.Collections.Generic
+<style>
+    .mud-table th, .mud-table td {
+        text-align: center;
+        padding: 10px;
+    }
+
+    .mud-table {
+        width: 100%;
+    }
+
+    .mud-paper {
+        margin-top: 20px;
+        border-radius: 8px;
+        padding: 20px;
+    }
+</style>
+
+<MudPaper Class="pa-4">
+    <MudSelect T="string" Label="Filter by Category" @bind-Value="selectedCategory">
+
+        <MudSelectItem Value="@catgres">All Categories</MudSelectItem>
+        <MudSelectItem Value="@catgres1">Storage</MudSelectItem>
+        <MudSelectItem Value="@catgres2">Analytics</MudSelectItem>
+        <MudSelectItem Value="@catgres3">Branding</MudSelectItem>
+</MudSelect>
+    <MudTable Items="features" Striped="true" Hover="true" Bordered="true">
+        <HeaderContent>
+            <MudTh>Feature Name</MudTh>
+            <MudTh>Category</MudTh>
+            <MudTh>Description</MudTh>
+            <MudTh>Status</MudTh>
+            <MudTh>Price</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.Name</MudTd>
+            <MudTd>@context.Category</MudTd>
+            <MudTd>@context.Description</MudTd>
+            <MudTd>@context.Status</MudTd>
+            <MudTd>@context.Price.ToString("C")</MudTd> <!-- تنسيق السعر -->
+        </RowTemplate>
+    </MudTable>
+</MudPaper>
+
+@code {
+    private string catgres = " ";
+    private string catgres1 = "Storage";
+    private string catgres2 = "Analytics";
+    private string catgres3 = "Branding";
+    private string selectedCategory = string.Empty;
+    private List<Feature> features = new List<Feature>
+    {
+        new Feature { Name = "Data Storage", Category = "Storage", Description = "Provides secure cloud storage for your data.", Status = "Enabled", Price = 49.99m },
+        new Feature { Name = "Advanced Analytics", Category = "Analytics", Description = "Access to advanced analytics and reporting tools.", Status = "Enabled", Price = 99.99m },
+        new Feature { Name = "Custom Branding", Category = "Branding", Description = "Allows adding custom logos and themes.", Status = "Disabled", Price = 149.99m },
+        new Feature { Name = "Priority Support", Category = "Support", Description = "24/7 customer support.", Status = "Enabled", Price = 19.99m }
+    };
+
+    public class Feature
+    {
+        public string Name { get; set; }
+        public string Category { get; set; }
+        public string Description { get; set; }
+        public string Status { get; set; }
+        public decimal Price { get; set; }
+    }
+    private List<Feature> filteredFeatures =>
+       string.IsNullOrEmpty(selectedCategory)
+       ? features
+       : features.Where(f => f.Category == selectedCategory).ToList();
+}

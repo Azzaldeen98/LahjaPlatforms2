@@ -1,0 +1,145 @@
+﻿ 
+ @inject IDialogService DialogService
+ @inject NavigationManager Navigation
+@inject TokenService TokenService
+@using BlazorASG.VitsModel.Auth
+@using CardShopping.Web.Token
+@inject ISnackbar Snackbar
+ 
+
+       
+
+
+        <EditForm @ref="form" Model="registerRequest" OnValidSubmit="HandleRegister">
+            <DataAnnotationsValidator />
+            <MudCard>
+    <MudCardContent>
+            <MudTextField 
+                Label="البريد الإلكتروني" 
+                Variant="Variant.Filled" 
+                FullWidth="true" 
+                @bind-Value="registerRequest.Email" 
+                For="@(() => registerRequest.Email)" />
+            
+
+
+            
+            <MudTextField 
+                Label="كلمة المرور" 
+                Variant="Variant.Filled" 
+                FullWidth="true" 
+                Type="password" 
+                @bind-Value="registerRequest.Password" 
+                For="@(() => registerRequest.Password)" />
+            
+            
+
+        
+            <MudTextField 
+                Label="تأكيد كلمة المرور" 
+                Variant="Variant.Filled" 
+                FullWidth="true" 
+                Type="password" 
+                @bind-Value="registerRequest.ConfirmPassword" 
+                For="@(() => registerRequest.ConfirmPassword)" />
+            
+           
+
+           
+            <MudTextField 
+                Label="رقم الهاتف" 
+                Variant="Variant.Filled" 
+                FullWidth="true" 
+                @bind-Value="registerRequest.PhoneNumber" 
+                For="@(() => registerRequest.PhoneNumber)" />
+        
+            
+                  
+
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Register</MudButton>
+        </MudCardActions>
+    </MudCard>
+</EditForm>
+ 
+
+
+
+@code {
+
+
+    [Parameter]
+    public EventCallback<Application.Common.Model.ResponseModel<OutputRigister>> OnClickRigister { get; set; }
+    [Parameter]
+    public bool FlagDev { get; set; } = true;
+
+    [Parameter]
+    public string ReturnUrl { get; set; }
+    private string token;
+    private RegisterRequest registerRequest = new RegisterRequest()
+    {
+        UserRole="user"
+    };
+    public  string UserRole1 = "User";
+    public  string UserRole2 = "User";
+    private EditForm form;
+    private string errorMessage;
+    bool success;
+
+    private async Task HandleRegister()
+    {
+
+
+
+
+        try
+        {
+            if (FlagDev)
+            {
+                await OpenLoginDialog();
+            }
+            else
+            {
+                errorMessage = "Api قيد الاصلاح ";
+                Snackbar.Add(errorMessage, Severity.Error);
+            }
+
+
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+       
+    }
+    private async Task OpenLoginDialog()
+    {
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth =false };
+        var dialog = DialogService.Show<Verification_code>("Verification code", options);
+
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            
+            token=registerRequest.Email + "," + registerRequest.Password + "," + registerRequest.PhoneNumber;
+            await TokenService.SaveTokenAsync(token);
+           var tokenn = await TokenService.GetTokenAsync();
+            if (OnClickRigister.HasDelegate)
+            {
+                await OnClickRigister.InvokeAsync(null);
+            }
+            
+        
+            Navigation.NavigateTo("/Login");
+        }
+        else
+        {
+            Snackbar.Add("Error!", Severity.Error);
+        }
+    }
+
+
+  
+}

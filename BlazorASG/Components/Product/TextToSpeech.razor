@@ -1,0 +1,278 @@
+﻿@page "/text-to-speech"
+@using CardShopping.Web.Token
+@using MudBlazor
+@inject HttpClient Http
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+@inject TokenService TokenService
+<MudContainer MaxWidth="MaxWidth.Large" Class="pa-4">
+ <MudGrid Justify="MudBlazor.Justify.SpaceAround">
+
+
+        <MudItem xs="6">
+             <MudCard>
+                <MudCardHeader>
+                    <MudButton Variant="MudBlazor.Variant.Filled" Color="MudBlazor.Color.Primary" OnClick="getApiKey">طلب Api Key </MudButton>
+                </MudCardHeader>
+                 <MudCardContent> 
+                    <MudPaper Class="pa-5 mx-auto mt-6" MaxWidth="600px">
+                        <MudTextField Label="X-RapidAPI-Host" Variant="MudBlazor.Variant .Outlined" FullWidth="true" @bind-Value="apiKey.Max_Requesst" />
+                        <MudTextField Label="Api Key" Variant="MudBlazor.Variant .Outlined" FullWidth="true" @bind-Value="apiKey.Api_Key" />
+                         
+                  
+                           
+                          
+                                <MudTextField Label="النص المراد تحويله" Variant="MudBlazor.Variant .Outlined" FullWidth="true" @bind-Value="InputText" />
+                              @*   <MudSlider Min="0.5" Max="1.5" Step="0.1" @bind-Value="SpeakingRate" Label="سرعة الصوت" ValueLabel="true" Class="my-4" /> *@
+                            @*     <MudButton Variant="MudBlazor.Variant.Filled" Color="MudBlazor.Color.Primary" OnClick="ConvertTextToSpeech" Disabled="@IsLoading">
+                                    @if (IsLoading)
+                                    {
+                                        <MudProgressCircular Indeterminate="true" Size="MudBlazor.Size.Medium" />
+                                    }
+                                    تحويل النص إلى صوت
+                                </MudButton> *@
+
+
+
+
+
+                                @if (!string.IsNullOrEmpty(AudioUrl))
+                                {
+                                    <div class="mt-4">
+                                        <MudText Typo="Typo.body1">الصوت الناتج:</MudText>
+                                        <audio controls class="mt-2">
+                                            <source src="@AudioUrl" type="audio/mpeg">
+                                            متصفحك لا يدعم تشغيل الصوت.
+                                        </audio>
+                                    </div>
+                                }
+
+
+
+                         
+                         
+                      
+                    </MudPaper>
+                     </MudCardContent>
+                     </MudCard>
+                     </MudItem>
+
+
+        <MudItem xs="6">
+            <MudCard>
+               
+                <MudCardContent>
+
+
+ 
+                        <MudSelect T="string" @bind-Value="SelectedDialect" Label="اختيار الغة " FullWidth="true" Style="font-size:10px">
+                            <MudSelectItem Value=@name1>c#</MudSelectItem>
+                            <MudSelectItem Value="@name2">php</MudSelectItem>
+                            <MudSelectItem Value="@name3">Android</MudSelectItem>
+                        </MudSelect>
+
+                        <MudPaper Class="p-3" Style="background-color: #f4f4f4; overflow-x: auto;">
+                            <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: Consolas, monospace; font-size:10px; color: #333;">
+                                @codeSnippet
+    </pre>
+                        </MudPaper>
+ 
+
+
+
+
+
+
+
+
+
+
+                </MudCardContent>
+            </MudCard>
+            </MudItem>
+          
+
+
+ 
+    </MudGrid>
+</MudContainer>
+
+
+
+ 
+
+ 
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@code {
+
+
+ private readonly string codeSnippet = @"
+ 
+        using var client = new HttpClient();
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri(""https://api.example.com/data""),
+        };
+        request.Headers.Add(""x-api-key"", ""'apiKey'+"");
+
+        using var response = await client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+        var responseBody = await response.Content.ReadAsStringAsync();
+        
+    }
+}
+";
+
+
+    private string name1 = "ddd";
+    private string name2 = "ddd";
+    private string name3 = "ddd";
+    private string token;
+    private string InputText = string.Empty;  
+    private string AudioUrl; 
+    private double SpeakingRate = 1.0;  
+    private bool IsLoading = false;
+
+    private GetApiKey apiKey = new GetApiKey()
+        {
+            Api_Key = "",
+            Max_Requesst = 0
+        };
+    public class GetApiKey
+    {
+        public string Api_Key{ get; set; }
+        public int Max_Requesst{ get; set; }
+    }
+
+    private async Task getApiKey()
+    {
+
+        token =await  TokenService.GetTokenAsync();
+
+        if (string.IsNullOrEmpty(token))
+        {
+
+            Navigation.NavigateTo("/login");
+        }
+        else
+        {
+            var x = new GetApiKey()
+                {
+                    Api_Key = "ssssss", 
+                    Max_Requesst = 4
+                };
+            apiKey = x;
+            StateHasChanged();
+        }
+     
+    }
+    private async Task ConvertTextToSpeech()
+    {                 
+        if (string.IsNullOrWhiteSpace(InputText))                             
+        {
+            Snackbar.Add("الرجاء إدخال نص لتحويله إلى صوت.", Severity.Warning);
+            return;
+        }
+
+        IsLoading = true;
+        try
+        {
+            // الاتصال بـ API
+            var requestData = new
+            {
+                text = InputText,
+                name_model = "wasmdashai/vits-ar-sa-huba-v2",
+                speaking_rate = SpeakingRate                        
+            };
+            var response = await Http.PostAsJsonAsync("https://gradio-server-url/predict", requestData);
+
+            
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<GradioResponse>();
+                AudioUrl = result?.Output; // استلام رابط الملف الصوتي
+                Snackbar.Add("تم تحويل النص إلى صوت بنجاح.", Severity.Success); 
+            }
+            else
+            {
+                Snackbar.Add("حدث خطأ أثناء الاتصال بالخدمة.", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"خطأ: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    // نموذج لاستجابة الخدمة
+    private class GradioResponse
+    {
+        public string Output { get; set; } // حقل يحتوي على رابط الصوت
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+ //private string InputText { get; set; }
+ private string SelectedDialect { get; set; }
+   private string SelectedVoiceType { get; set; }
+    //private string AudioUrl { get; set; } = "";
+
+    // مثال API
+    private string ApiExample => $@"
+POST /api/text-to-speech
+Content-Type: application/json
+
+{{
+    ""text"": ""{InputText}"",
+    ""dialect"": ""{SelectedDialect}"",
+    ""voiceType"": ""{SelectedVoiceType}""
+}}
+";
+
+    private async Task ConvertTextToSpeechh()
+    {
+        // محاكاة طلب API
+        if (!string.IsNullOrEmpty(InputText) && !string.IsNullOrEmpty(SelectedDialect) && !string.IsNullOrEmpty(SelectedVoiceType))
+        {
+            // استبدل الرابط أدناه بالرابط الناتج من API
+            AudioUrl = "https://example.com/audio/sample.mp3";
+        }
+        else
+        {
+            await Task.Delay(1);
+            AudioUrl = "";
+        }
+}
+
+}

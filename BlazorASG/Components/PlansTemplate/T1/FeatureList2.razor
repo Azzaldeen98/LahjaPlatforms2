@@ -1,0 +1,44 @@
+﻿@page "/feature-list2"
+ 
+@inject NavigationManager Navigation
+
+@using MudBlazor
+@using System.Collections.Generic
+
+<MudPaper Class="pa-4">
+    <MudTable Items="features" Striped="true" Hover="true" Bordered="true">
+        <HeaderContent>
+            <MudTh>Feature Name</MudTh>
+            <MudTh>Category</MudTh>
+            <MudTh>Description</MudTh>
+            <MudTh>Status</MudTh>
+            <MudTh>Price</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.Name</MudTd>
+            <MudTd>@context.Category</MudTd>
+            <MudTd>@context.Description</MudTd>
+            <MudTd>@context.Status</MudTd>
+            <MudTd>@context.Price.ToString("C")</MudTd> <!-- تنسيق السعر -->
+        </RowTemplate>
+    </MudTable>
+</MudPaper>
+
+@code {
+    private List<Feature> features = new List<Feature>
+    {
+        new Feature { Name = "Data Storage", Category = "Storage", Description = "Provides secure cloud storage for your data.", Status = "Enabled", Price = 49.99m },
+        new Feature { Name = "Advanced Analytics", Category = "Analytics", Description = "Access to advanced analytics and reporting tools.", Status = "Enabled", Price = 99.99m },
+        new Feature { Name = "Custom Branding", Category = "Branding", Description = "Allows adding custom logos and themes.", Status = "Disabled", Price = 149.99m },
+        new Feature { Name = "Priority Support", Category = "Support", Description = "24/7 customer support.", Status = "Enabled", Price = 19.99m }
+    };
+
+    public class Feature
+    {
+        public string Name { get; set; }
+        public string Category { get; set; }
+        public string Description { get; set; }
+        public string Status { get; set; }
+        public decimal Price { get; set; }
+    }
+}

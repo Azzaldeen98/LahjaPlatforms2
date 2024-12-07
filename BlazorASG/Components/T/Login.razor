@@ -1,0 +1,188 @@
+﻿ 
+ 
+ 
+@inject ISnackbar Snackbar
+@using BlazorASG.Application_Layer.Use_Cases.Auth
+@inject CreateLogin _createLogin
+@using BlazorASG.VitsModel.Auth
+@using MudBlazor
+@inject TokenService _tokenService
+@using CardShopping.Web.Token
+ @inject NavigationManager Navigation
+ 
+
+
+
+
+<EditForm @ref="loginForm" Model="loginRequest" OnValidSubmit="HandleRegisterr">
+    <DataAnnotationsValidator />
+    <MudCard Class="mx-auto mt-10" Style="max-width: 500px;">
+    <MudCardContent>
+            <MudTextField @bind-Value="loginRequest.Email" Label="البريد الإلكتروني" 
+                          Required="true" For="@(() => loginRequest.Email)" 
+                          Type="Email" Variant="MudBlazor.Variant.Outlined" />
+                          
+            <MudTextField @bind-Value="loginRequest.Password" Label="كلمة المرور" 
+                          Required="true" For="@(() => loginRequest.Password)" 
+                          Type="Password" Variant="MudBlazor.Variant.Outlined" />
+            <MudText Typo="Typo.subtitle2"></MudText>
+            @if (success)
+            {
+                <MudText Color="Color.Success">Success</MudText>
+            }
+            else
+            {
+
+                <MudText Color="@Color.Error">
+                    <ValidationSummary />
+                </MudText>
+            }
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit" Disabled="@_processing" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
+    @if (_processing)
+    {
+        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+        <MudText Class="ms-2">Processing</MudText>
+    }
+    else
+    {
+        <MudText>Click me</MudText>
+    }
+            </MudButton>
+           
+        </MudCardActions>
+          
+      
+    </MudCard>
+        </EditForm>
+<MudButtonGroup>
+ 
+
+    <MudIconButton Icon="@Icons.Material.Filled.AccessAlarm">استعاده كلمه السر</MudIconButton>
+
+  
+  
+
+</MudButtonGroup>
+  
+
+
+
+<MudText Color="MudBlazor.Color.Error" Class="mt-2">@errorMessage</MudText>
+ 
+ 
+
+@code {
+
+    private bool _processing = false;
+    private EditForm loginForm;
+    private bool isValid;
+    private string errorMessage;
+
+
+    private VitsModel.Auth.LoginRequest loginRequest = new VitsModel.Auth.LoginRequest();
+
+
+    [Parameter]
+    public EventCallback<Application.Common.Model.ResponseModel<OutputLogin>> OnClickLogenDeb { get; set; }
+    [Parameter]
+    public bool FlagDev { get; set; } =true;
+
+    [Parameter]
+    public string ReturnUrl{ get; set; }
+
+
+
+
+    bool success;
+    public bool flag = false;
+    string tokenn;
+    private async Task LogenDeb()
+    {
+        try
+        {
+
+
+            _processing = true;
+
+            var request = await _createLogin.Createdep(loginRequest);
+            if (request.Success)
+            {
+                if (OnClickLogenDeb.HasDelegate)
+                {
+                    await OnClickLogenDeb.InvokeAsync(request);
+                }
+
+            }
+
+
+            else
+            {
+                errorMessage = request.Message;
+            }
+            _processing = false;
+            StateHasChanged();
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+            _processing = false;
+            StateHasChanged();
+        }
+    }
+
+
+    private async Task HandleRegisterr()
+    {
+        if (FlagDev)
+        {
+            await LogenDeb();
+
+        }
+        else
+        {
+            await HandleRegister();
+        }
+
+
+
+        
+
+    }
+    private async Task HandleRegister()
+    {
+        try
+        {
+           
+
+            _processing = true;
+          
+            errorMessage = "Api قيد الاصلاح ";
+            StateHasChanged();
+        
+           
+        }
+        catch(Exception ex)
+        {
+
+            errorMessage = ex.Message;
+            _processing = false;
+            StateHasChanged();
+
+        }
+        _processing = false;
+        StateHasChanged();
+
+    }
+
+
+    
+ 
+
+   
+
+     
+   
+}
+

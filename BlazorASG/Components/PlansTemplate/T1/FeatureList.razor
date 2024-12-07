@@ -1,0 +1,70 @@
+﻿@page "/feature-list"
+@inject NavigationManager Navigation
+
+@using MudBlazor
+@using System.Collections.Generic
+
+<MudPaper Class="pa-4">
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="4" lg="3" xl="3">
+            <MudTextField Label="Search Features" Variant="Variant.Filled" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" @bind-Value="searchText" />
+        </MudItem>
+    </MudGrid>
+
+    <!-- Filtered Features -->
+    <MudTabs>
+        <MudTab Label="All Features">
+            <MudGrid>
+                @foreach (var feature in filteredFeatures)
+                {
+                    <MudItem xs="12" sm="6" md="4" lg="3" xl="3">
+                        <MudCard>
+                            <MudCardMedia Image="@feature.ImageUrl" Height="140" />
+                            <MudCardContent>
+                                <MudText Typo="Typo.h6">@feature.Name</MudText>
+                                <MudText>@feature.Description</MudText>
+                                <MudText Color="Color.Primary" Typo="Typo.body2">@feature.Price.ToString("C")</MudText>
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudButton Color="Color.Primary" Variant="Variant.Outlined" OnClick="() => ShowDetails(feature)">Details</MudButton>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudTab>
+    </MudTabs>
+</MudPaper>
+
+@code {
+    private string searchText = string.Empty;
+
+    // قائمة الميزات مع صور وأسعار
+    private List<Feature> features = new List<Feature>
+    {
+        new Feature { Name = "Data Storage", Category = "Storage", Description = "Provides secure cloud storage for your data.", Price = 49.99m, ImageUrl = "https://via.placeholder.com/150" },
+        new Feature { Name = "Advanced Analytics", Category = "Analytics", Description = "Access to advanced analytics and reporting tools.", Price = 99.99m, ImageUrl = "https://via.placeholder.com/150" },
+        new Feature { Name = "Custom Branding", Category = "Branding", Description = "Allows adding custom logos and themes.", Price = 149.99m, ImageUrl = "https://via.placeholder.com/150" },
+        new Feature { Name = "Priority Support", Category = "Support", Description = "24/7 customer support.", Price = 19.99m, ImageUrl = "https://via.placeholder.com/150" }
+    };
+
+    private List<Feature> filteredFeatures => string.IsNullOrEmpty(searchText)
+        ? features
+        : features.Where(f => f.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).ToList();
+
+    // الكلاس Feature مع صورة
+    public class Feature
+    {
+        public string Name { get; set; }
+        public string Category { get; set; }
+        public string Description { get; set; }
+        public decimal Price { get; set; }
+        public string ImageUrl { get; set; } // رابط الصورة
+    }
+
+    // عرض تفاصيل الميزة
+    private void ShowDetails(Feature feature)
+    {
+        Navigation.NavigateTo($"/feature-details/{feature.Name}");
+    }
+}

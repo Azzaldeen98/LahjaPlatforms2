@@ -1,0 +1,25 @@
+﻿@page "/Login"
+@using BlazorASG.VitsModel.Auth
+@inject NavigationManager Navigation
+<div style="padding:10%!important">
+
+
+    <BlazorASG.Components.T.Login OnClickLogenDeb="@HandelLogout"  FlagDev=true />
+
+
+</div>
+
+
+@code
+{
+
+    private async void HandelLogout(Application.Common.Model.ResponseModel<OutputLogin>request)
+    {
+        if (request != null)
+        {
+
+            Navigation.NavigateTo("/");
+        }
+    }
+
+}

@@ -1,0 +1,37 @@
+﻿@page "/Admin"
+  <BlazorASG.Components.Errors.Logs/>
+
+ 
+<MudPaper Class="pa-5 mx-auto mt-7" MaxWidth="1000px">
+    <MudTabs>
+
+        <MudTabPanel Text="تسجيل الدخول">
+        <BlazorASG.Components.T.Login/>
+        </MudTabPanel>
+
+
+        <MudTabPanel Text="انشاء حساب جديد">
+            <BlazorASG.Components.T.Rigister/>
+        </MudTabPanel>
+
+
+ 
+
+
+        <MudTabPanel Text="نسيت كلمة المرور">
+
+           <BlazorASG.Components.T.ForgotPassword/>
+
+        </MudTabPanel>
+
+        <MudTabPanel Text="تسجيل الخروج">
+           <BlazorASG.Components.T.Logout/>
+        </MudTabPanel>
+
+        <MudTabPanel Text="تغيير كلمة المرور">
+         <BlazorASG.Components.T.ResetPassword/>
+        </MudTabPanel>
+    </MudTabs>
+
+</MudPaper>
+ 

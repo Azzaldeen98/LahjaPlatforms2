@@ -1,0 +1,75 @@
+﻿@page "/ShowProduct"
+@using MudBlazor
+ 
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudGrid Spacing="3">
+       
+        <MudItem xs="12">
+            <MudText Typo="Typo.h4" Align="MudBlazor.Align.Center">خطط الاستضافة</MudText>
+        </MudItem>
+
+        @foreach (var plan in HostingPlans)
+        {
+            <MudItem xs="12" md="3">
+                <MudCard>
+                    <MudCardHeader>
+                        <MudText Typo="Typo.h6" Align="MudBlazor.Align.Center">@plan.Name</MudText>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudText>رسوم شهرية: @plan.MonthlyFee</MudText>
+                        <MudText>تجديد الرسوم الشهرية: @plan.RenewalFee</MudText>
+                        <MudText>التثبيت: @plan.Installation</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="MudBlazor.Variant.Filled" Color="MudBlazor.Color.Primary" FullWidth="true">معرفة المزيد</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+</MudContainer>
+
+@code
+{
+
+public class HostingPlan
+{
+
+    public string Name { get; set; }         
+    public string MonthlyFee { get; set; }  
+    public string RenewalFee { get; set; }     
+    public string Installation { get; set; }
+    public string typesound{get;set;}
+
+    }
+   
+
+
+    private List<HostingPlan> HostingPlans = new()
+    {
+        new HostingPlan
+        {
+            Name = "60 يوماً تجريبية",
+            MonthlyFee = "$0",
+            RenewalFee = "$0",
+            Installation = "حر"
+        },
+        new HostingPlan
+        {
+            Name = ".NET الأساسية",
+            MonthlyFee = "$2.95",
+            RenewalFee = "$2.95",
+            Installation = "حر"
+        },
+        new HostingPlan
+        {
+            Name = ".NET تقدم",
+            MonthlyFee = "$4.95",
+            RenewalFee = "$4.95",
+            Installation = "حر"
+
+        }
+        
+    };
+    
+}

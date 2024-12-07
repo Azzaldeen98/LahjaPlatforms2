@@ -1,0 +1,244 @@
+﻿@* @page "/plan-details/{planId}"
+@inject NavigationManager Navigation
+@using MudBlazor
+
+<MudPaper Class="pa-4">
+    <!-- اسم الخطة -->
+    <MudText Typo="Typo.h4" Class="mb-4">@plan.Name</MudText>
+
+    <!-- وصف الخطة -->
+    <MudText Typo="Typo.body1" Color="Color.Secondary" Class="mb-4">@plan.Description</MudText>
+
+    <!-- تفاصيل الطلبات -->
+    <MudText Typo="Typo.h6" Class="mt-4">Request Details</MudText>
+    <MudExpansionPanel Text="Request Count" Icon="icons/material/tune" Class="mt-2">
+        <MudTable Items="plan.RequestCount">
+            <HeaderContent>
+                <MudTh>Category</MudTh>
+                <MudTh>Value</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Key</MudTd>
+                <MudTd>@context.Value</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudExpansionPanel>
+
+    <!-- عرض الميزات -->
+    <MudText Typo="Typo.h6" Class="mt-4">Features</MudText>
+    @foreach (var feature in plan.Features)
+    {
+        <MudExpansionPanel Text="@feature.Name" Icon="icons/material/info" Class="mt-3">
+            <MudText Typo="Typo.body2">@feature.Description</MudText>
+            <MudText Color="Color.Secondary" Typo="Typo.body2">Status: @feature.Status</MudText>
+
+            @if (feature.Details != null)
+            {
+                <MudTable Items="GetFeatureDetails(feature)">
+                    <HeaderContent>
+                        <MudTh>Detail</MudTh>
+                        <MudTh>Value</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd>@context.Key</MudTd>
+                        <MudTd>@context.Value</MudTd>
+                    </RowTemplate>
+                </MudTable>
+            }
+
+            @if (feature.Note != null)
+            {
+                <MudText Color="Color.Warning" Typo="Typo.body2">@feature.Note</MudText>
+            }
+        </MudExpansionPanel>
+    }
+
+    <!-- أزرار التفاعل -->
+    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="NavigateToEdit" Class="mt-4">Edit Plan</MudButton>
+    <MudButton Color="Color.Error" Variant="Variant.Outlined" OnClick="DeletePlan" Class="mt-2">Delete Plan</MudButton>
+</MudPaper>
+
+
+
+@code {
+    [Parameter] public string planId { get; set; }
+    private Plan plan;
+
+    protected override void OnInitialized()
+    {
+        // استرجاع الخطة بناءً على المعرف planId
+        plan = new Plan
+        {
+            Id = planId,
+            Name = "Premium",
+            Description = "Premium plan with all features enabled.",
+            RequestCount = new Dictionary<string, string>
+            {
+                { "Total Requests", "3500" },
+                { "Requests Today", "250" },
+                { "Requests Remaining", "500" },
+                { "Limit Per Hour", "1000" }
+            },
+            Features = new List<Feature>
+            {
+                new Feature
+                {
+                    Id = 1,
+                    Category = "Storage",
+                    Name = "Data Storage",
+                    Description = "Provides secure cloud storage for your data.",
+                    Status = "enabled",
+                    Details = new FeatureDetails
+                    {
+                        StorageLimit = "500GB",
+                        FileSizeLimit = "2GB",
+                        Used = "200GB"
+                    }
+                },
+                new Feature
+                {
+                    Id = 2,
+                    Category = "Analytics",
+                    Name = "Advanced Analytics",
+                    Description = "Access to advanced analytics and reporting tools.",
+                    Status = "enabled",
+                    Details = new FeatureDetails
+                    {
+                        RequestsPerHour = 1000,
+                        CurrentUsage = 120
+                    }
+                },
+                new Feature
+                {
+                    Id = 3,
+                    Category = "Branding",
+                    Name = "Custom Branding",
+                    Description = "Allows adding custom logos and themes.",
+                    Status = "disabled",
+                    Note = "Upgrade to Enterprise plan to enable this feature."
+                },
+                new Feature
+                {
+                    Id = 4,
+                    Category = "Support",
+                    Name = "Priority Support",
+                    Description = "Access to 24/7 customer support.",
+                    Status = "enabled",
+                    Details = new FeatureDetails
+                    {
+                        ResponseTime = "Under 1 hour",
+                        Availability = "24/7"
+                    }
+                },
+                new Feature
+                {
+                    Id = 5,
+                    Category = "Security",
+                    Name = "Data Encryption",
+                    Description = "Ensures data security with encryption during transfer and at rest.",
+                    Status = "enabled",
+                    Details = new FeatureDetails
+                    {
+                        EncryptionType = "AES-256",
+                        Compliance = new List<string> { "GDPR", "ISO27001" }
+                    }
+                },
+                new Feature
+                {
+                    Id = 6,
+                    Category = "Performance",
+                    Name = "High Performance Servers",
+                    Description = "Dedicated servers for enhanced performance.",
+                    Status = "enabled",
+                    Details = new FeatureDetails
+                    {
+                        Uptime = "99.99%",
+                        Region = "Global"
+                    }
+                },
+                new Feature
+                {
+                    Id = 7,
+                    Category = "Notifications",
+                    Name = "Real-Time Alerts",
+                    Description = "Receive alerts and notifications in real time.",
+                    Status = "disabled",
+                    Note = "Available in Premium and higher plans."
+                }
+            }
+        };
+    }
+
+    private List<KeyValuePair<string, string>> GetFeatureDetails(Feature feature)
+    {
+        var details = new List<KeyValuePair<string, string>>();
+
+        if (feature.Details != null)
+        {
+            if (!string.IsNullOrEmpty(feature.Details.StorageLimit))
+                details.Add(new KeyValuePair<string, string>("Storage Limit", feature.Details.StorageLimit));
+            if (!string.IsNullOrEmpty(feature.Details.FileSizeLimit))
+                details.Add(new KeyValuePair<string, string>("File Size Limit", feature.Details.FileSizeLimit));
+            if (!string.IsNullOrEmpty(feature.Details.Used))
+                details.Add(new KeyValuePair<string, string>("Used", feature.Details.Used));
+            if (feature.Details.RequestsPerHour > 0)
+                details.Add(new KeyValuePair<string, string>("Requests Per Hour", feature.Details.RequestsPerHour.ToString()));
+            if (feature.Details.CurrentUsage > 0)
+                details.Add(new KeyValuePair<string, string>("Current Usage", feature.Details.CurrentUsage.ToString()));
+            if (!string.IsNullOrEmpty(feature.Details.ResponseTime))
+                details.Add(new KeyValuePair<string, string>("Response Time", feature.Details.ResponseTime));
+            if (!string.IsNullOrEmpty(feature.Details.Availability))
+                details.Add(new KeyValuePair<string, string>("Availability", feature.Details.Availability));
+            if (!string.IsNullOrEmpty(feature.Details.EncryptionType))
+                details.Add(new KeyValuePair<string, string>("Encryption Type", feature.Details.EncryptionType));
+            if (feature.Details.Compliance != null && feature.Details.Compliance.Count > 0)
+                details.Add(new KeyValuePair<string, string>("Compliance", string.Join(", ", feature.Details.Compliance)));
+            if (!string.IsNullOrEmpty(feature.Details.Uptime))
+                details.Add(new KeyValuePair<string, string>("Uptime", feature.Details.Uptime));
+            if (!string.IsNullOrEmpty(feature.Details.Region))
+                details.Add(new KeyValuePair<string, string>("Region", feature.Details.Region));
+        }
+
+        return details;
+    }
+
+    private void NavigateToEdit()
+    {
+        Navigation.NavigateTo($"/edit-plan/{planId}");
+    }
+
+    private void DeletePlan()
+    {
+        // منطق الحذف
+        Console.WriteLine($"Plan {planId} deleted.");
+    }
+
+    public class Plan
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public Dictionary<string, string> RequestCount { get; set; }
+        public List<Feature> Features { get; set; }
+    }
+
+    public class Feature
+    {
+        public int Id { get; set; }
+        public string Category { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Status { get; set; }
+        public FeatureDetails Details { get; set; }
+        public string Note { get; set; }
+    }
+
+    public class FeatureDetails
+    {
+        public string StorageLimit { get; set; }
+        public string FileSizeLimit { get; set; }
+        public string Used { get; set; }
+        public int RequestsPerHour { get; set; }
+        public int CurrentUsage { get; set; }
+        public string ResponseTime
+ *@

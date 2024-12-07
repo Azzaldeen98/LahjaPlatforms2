@@ -1,0 +1,168 @@
+﻿ 
+@using System.Text.Json
+@using CardShopping.Web.VitsModel
+ 
+ 
+@using MudBlazor
+ 
+@inject ISnackbar Snackbar
+ 
+@* <MudPaper Class="pa-4" Elevation="2">
+    <MudForm @ref="fform" Valid="isValid">
+        <MudText Typo="Typo.h6" Class="mb-3">إدخال بيانات المنتج</MudText>
+
+       
+       
+        <MudTextField @bind-Value="_inputPlance.PlanceName" Label="البريد الإلكتروني"
+                      Required="true" For="@(() => _inputPlance.PlanceName)"
+                       Variant="MudBlazor.Variant.Outlined" />
+     
+        <MudSelect T="string" Label="اختر سعرًا" @bind-Value="_inputPlance.PriceId" Required="true" For="@(() => _inputPlance.PriceId)">
+            @foreach (var price in Prices)
+            {
+                <MudSelectItem Value="@price.Id">@price.Name</MudSelectItem>
+            }
+        </MudSelect>
+      >
+
+       
+        <MudSelect T="string" Label="اختر منتجًا" @bind-Value="_inputPlance.ProductId" Required="true" For="@(()=>_inputPlance.ProductId)">
+            @foreach (var product in Products)
+            {
+                <MudSelectItem Value="@product.Id">@product.Name</MudSelectItem>
+            }
+        </MudSelect>
+
+        <MudTextField T="string" Label="المزايا" @bind-Value="_inputPlance.Features" Required="true"  />
+        <ValidationMessage For="@(() => _inputPlance.Features)" NumberRequestsFor="@(()=>_inputPlance.Features)" />
+
+      
+        <MudNumericField T="int" @bind-Value="_inputPlance.NumberRequests" Label="عدد الطلبات" Required="true"
+                         Min="10" HelperText="العدد يجب أن يكون 10 على الأقل" For="@(()=>_inputPlance.NumberRequests)" />
+       
+        <MudButton Variant="MudBlazor.Variant.Filled" Color="MudBlazor.Color.Primary" OnClick="SubmitForm" Class="mt-3">إرسال</MudButton>
+    </MudForm>
+</MudPaper> *@
+
+<MudPaper Class="pa-4" Elevation="2">
+   
+    <EditForm Model="_inputPlance" OnValidSubmit="SubmitForm">
+        <DataAnnotationsValidator />  
+
+        <MudText Typo="Typo.h6" Class="mb-3">إدخال بيانات المنتج</MudText>
+
+    
+        <MudTextField @bind-Value="_inputPlance.PlanceName" Label="اسم الخطة" Required="true" />
+        <ValidationMessage For="@(() => _inputPlance.PlanceName)" />
+
+       
+        <MudSelect T="string" Label="اختر سعرًا" @bind-Value="_inputPlance.PriceId" Required="true">
+            @foreach (var price in Prices)
+            {
+                <MudSelectItem Value="@price.Id">@price.Name</MudSelectItem>
+            }
+        </MudSelect>
+        <ValidationMessage For="@(() => _inputPlance.PriceId)" />
+
+       
+
+        <MudSelect T="string" Label="اختر منتجًا" @bind-Value="_inputPlance.ProductId" Required="true">
+            @foreach (var product in Products)
+            {
+                <MudSelectItem Value="@product.Id">@product.Name</MudSelectItem>
+            }
+        </MudSelect>
+
+        <MudSelect T="string" Label="المزايا" @bind-Value="_inputPlance.Features" Required="true" MultiSelection="true" Dense="true">
+            @foreach (var outPutFeatures in outPutFeaturesPlans)
+            {
+                <MudSelectItem Value="@outPutFeatures.Id">@outPutFeatures.Name</MudSelectItem>
+            }
+        </MudSelect>
+
+    
+      
+
+
+        <MudNumericField T="int" @bind-Value="_inputPlance.NumberRequests" Label="عدد الطلبات" Required="true"
+                         Min="10" HelperText="العدد يجب أن يكون 10 على الأقل" For="@(()=>_inputPlance.NumberRequests)" />
+        <!-- زر الإرسال -->
+        <MudButton Variant="MudBlazor.Variant.Filled" Color="MudBlazor.Color.Primary" ButtonType="MudBlazor.ButtonType.Submit" Class="mt-3">إرسال</MudButton>
+    </EditForm>
+</MudPaper>
+
+
+
+@code 
+{
+    private List<string> _selectedFeatures = new List<string>();
+    [Parameter]
+    public InputPlance __inputPlance { get; set; }
+
+    InputPlance _inputPlance { get; set; }
+    private MudForm fform; // مرجع للنموذج
+    private bool isValid; // حالة النموذج
+                          //private InputPlance _inputPlance = new InputPlance(); 
+
+    private List<OutPutFeaturesPlans> outPutFeaturesPlans = new List<OutPutFeaturesPlans>()
+    {
+        new OutPutFeaturesPlans(){Id="PR001",Name="ميزه 1"},
+        new OutPutFeaturesPlans(){Id="PR001",Name="ميزه 2"}
+    };
+    private List<OutputPrice> Prices = new List<OutputPrice>
+    {
+        new OutputPrice { Id = "PR001", Name = "سعر 1", TypeAmount = "ثابت" },
+        new OutputPrice { Id = "PR002", Name = "سعر 2", TypeAmount = "متغير" }
+    };
+
+    private List<OutProduct> Products = new List<OutProduct>
+    {
+        new OutProduct { Id = "P001", Name = "منتج 1" },
+        new OutProduct { Id = "P002", Name = "منتج 2" }
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (__inputPlance == null)
+                _inputPlance = new InputPlance();
+
+            else
+                _inputPlance = __inputPlance;
+        }
+    catch(Exception ex)
+        {
+            
+        }
+    }
+        private void SubmitForm()
+    {
+        
+        Console.WriteLine($"النموذج صالح: {_inputPlance.PlanceName}, {_inputPlance.PriceId}, {_inputPlance.ProductId}");
+        
+    }
+
+   
+}
+
+
+
+
+ 
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

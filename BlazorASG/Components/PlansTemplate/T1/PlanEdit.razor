@@ -1,0 +1,155 @@
+﻿@page "/edit-plan/{planId}"
+@inject NavigationManager Navigation
+@using MudBlazor
+@using System.Linq
+
+<MudPaper Class="pa-4">
+    <MudText Typo="Typo.h5">Edit Plan</MudText>
+
+    <MudForm @ref="form" Class="mt-4">
+        <!-- Plan Name -->
+        <MudTextField Label="Plan Name" @bind-Value="plan.Name" Variant="Variant.Filled" FullWidth />
+
+        <!-- Plan Description -->
+        <MudTextField Label="Description" @bind-Value="plan.Description" Variant="Variant.Filled" FullWidth />
+
+        <!-- Plan Price -->
+        <MudTextField Label="Price" @bind-Value="plan.Price" Variant="Variant.Filled" FullWidth Type="number" />
+
+        <!-- Billing Cycle -->
+        <MudSelect Label="Billing Cycle" @bind-Value="plan.BillingCycle" FullWidth>
+            <MudSelectItem Value=@p1>Monthly</MudSelectItem>
+            <MudSelectItem Value=@p2>Yearly</MudSelectItem>
+        </MudSelect>
+        Monthly
+        <!-- Features Section -->
+        <MudText Typo="Typo.h6" Class="mt-4">Features</MudText>
+
+        <MudList>
+            @foreach (var featuree in plan.Features)
+            {    
+                var item = featuree;
+                <MudListItem>
+                    <MudTextField @bind-Value="@item" Label="Feature" />
+                    <MudButton Color="Color.Secondary" Variant="Variant.Filled" OnClick="()=>RemoveFeature(item)">Remove</MudButton>
+                </MudListItem>
+            }
+        </MudList>
+
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="AddFeature">Add New Feature</MudButton>
+
+        <!-- Specifications Section -->
+        <MudText Typo="Typo.h6" Class="mt-4">Specifications</MudText>
+
+        <MudTable Items="plan.Specifications">
+            <HeaderContent>
+                <MudTh>Specification</MudTh>
+                <MudTh>Value</MudTh>
+                <MudTh>Action</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Name</MudTd>
+                <MudTd>
+                    <MudTextField @bind-Value="context.Value" FullWidth Variant="Variant.Filled" />
+                </MudTd>
+                <MudTd>
+                    <MudButton Color="Color.Error" Variant="Variant.Filled" OnClick="() => RemoveSpecification(context)">Remove</MudButton>
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="AddSpecification" Class="mt-2">Add New Specification</MudButton>
+
+        <!-- Save Button -->
+        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="SavePlan" Class="mt-4">Save Changes</MudButton>
+    </MudForm>
+</MudPaper>
+
+@code {
+    private string p1 = "Monthly";
+    private string p2 = "Yearly";
+    [Parameter] public string planId { get; set; }
+
+    private Plan plan;
+    private MudForm form;
+
+    protected override void OnInitialized()
+    {
+        // استرجاع تفاصيل الخطة بناءً على planId (يمكن استبداله بمصدر بيانات حقيقي)
+        plan = new Plan
+            {
+                Id = planId,
+                Name = "Basic Plan",
+                Description = "This is a basic subscription plan with essential features.",
+                Price = 19.99m,
+                BillingCycle = "Monthly",
+                Features = new List<string> { "5GB Storage", "10 Users" },
+                Specifications = new List<Specification>
+            {
+                new Specification { Name = "Storage", Value = "5GB" },
+                new Specification { Name = "Users", Value = "10" }
+            }
+            };
+    }
+
+    private void AddFeature()
+    {
+        plan.Features.Add(string.Empty);
+    }
+
+    private void RemoveFeature(string feature)
+    {
+        plan.Features.Remove(feature);
+    }
+
+    private void AddSpecification()
+    {
+        plan.Specifications.Add(new Specification { Name = "New Spec", Value = string.Empty });
+    }
+
+    private void RemoveSpecification(Specification spec)
+    {
+        plan.Specifications.Remove(spec);
+    }
+
+    private void SavePlan()
+    {
+        if (form.IsValid)
+        {
+            // تنفيذ عملية الحفظ (مثل إرسال البيانات إلى API أو قاعدة البيانات)
+            // هنا يتم استخدام Console فقط لعرض البيانات
+            Console.WriteLine("Plan Saved: ");
+            Console.WriteLine($"Name: {plan.Name}");
+            Console.WriteLine($"Description: {plan.Description}");
+            Console.WriteLine($"Price: {plan.Price}");
+            Console.WriteLine($"Billing Cycle: {plan.BillingCycle}");
+            Console.WriteLine("Features: ");
+            foreach (var feature in plan.Features)
+            {
+                Console.WriteLine($"- {feature}");
+            }
+            Console.WriteLine("Specifications: ");
+            foreach (var spec in plan.Specifications)
+            {
+                Console.WriteLine($"{spec.Name}: {spec.Value}");
+            }
+        }
+    }
+
+    public class Plan
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public decimal Price { get; set; }
+        public string BillingCycle { get; set; }
+        public List<string> Features { get; set; }
+        public List<Specification> Specifications { get; set; }
+    }
+
+    public class Specification
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
+    }
+}

@@ -1,0 +1,74 @@
+﻿@page "/feature-details/{featureName}"
+@inject NavigationManager Navigation
+
+@using MudBlazor
+@using System.Linq
+
+
+<style>
+
+    .mud-card {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .mud-card-media {
+        border-radius: 8px 8px 0 0;
+    }
+
+    .mud-card-content {
+        text-align: center;
+    }
+
+    .mud-card-actions {
+        justify-content: center;
+    }
+</style>
+
+<MudPaper Class="pa-4">
+    <MudText Typo="Typo.h4">@feature.Name</MudText>
+    <MudGrid>
+        <MudItem xs="12" sm="12" md="6">
+            <MudCard>
+                <MudCardMedia Image="@feature.ImageUrl" Height="250" />
+                <MudCardContent>
+                    <MudText>@feature.Description</MudText>
+                    <MudText Color="Color.Primary" Typo="Typo.h6">Price: @feature.Price.ToString("C")</MudText>
+                    <MudButton Color="Color.Secondary" Variant="Variant.Text" OnClick="GoBack">Go Back</MudButton>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudPaper>
+
+@code {
+    [Parameter] public string featureName { get; set; }
+    private Feature feature;
+
+    protected override void OnInitialized()
+    {
+        // الحصول على الميزة بناءً على اسم الميزة
+        feature = new List<Feature>
+        {
+            new Feature { Name = "Data Storage", Category = "Storage", Description = "Provides secure cloud storage for your data.", Price = 49.99m, ImageUrl = "https://via.placeholder.com/150" },
+            new Feature { Name = "Advanced Analytics", Category = "Analytics", Description = "Access to advanced analytics and reporting tools.", Price = 99.99m, ImageUrl = "https://via.placeholder.com/150" },
+            new Feature { Name = "Custom Branding", Category = "Branding", Description = "Allows adding custom logos and themes.", Price = 149.99m, ImageUrl = "https://via.placeholder.com/150" },
+            new Feature { Name = "Priority Support", Category = "Support", Description = "24/7 customer support.", Price = 19.99m, ImageUrl = "https://via.placeholder.com/150" }
+        }.FirstOrDefault(f => f.Name.Equals(featureName, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/feature-list");
+    }
+
+    public class Feature
+    {
+        public string Name { get; set; }
+        public string Category { get; set; }
+        public string Description { get; set; }
+        public decimal Price { get; set; }
+        public string ImageUrl { get; set; }
+    }
+}
+

@@ -1,0 +1,147 @@
+﻿ 
+@using CardShopping.Web.VitsModel
+ 
+ @inject IDialogService DialogService
+@using MudBlazor
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-4">
+    <MudCard>
+        <MudCardHeader>
+            <MudText Typo="Typo.h5" Align="Align.Center">البيانات المولدة</MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudTable Items="Plans" Dense="true" Hover="true">
+                <HeaderContent>
+                    <MudTh>المعرف</MudTh>
+                    <MudTh>الاسم</MudTh>
+                    <MudTh>المنتج</MudTh>
+                    <MudTh>السعر</MudTh>
+                    <MudTh>عدد الطلبات</MudTh>
+                    <MudTh>الميزات</MudTh>
+                    <MudTh>الإجراءات</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+
+                    <MudTd>@context.id</MudTd>
+                    <MudTd>@context.name</MudTd>
+                    <MudTd>@context.PaymentPeriod</MudTd>
+                    <MudTd>@context.PaymentPeriod</MudTd>
+                    <MudTd>@context.NumberRequests</MudTd>
+                    <MudTd>@context.Price</MudTd>
+                    <MudTd>
+
+                        <MudButton OnClick="() => CreateCheckout(context.id)"> Checkout </MudButton>
+                        <MudButton OnClick="() => EditPlance(context)">Edit </MudButton>
+                        <MudButton Color="MudBlazor.Color.Primary" OnClick="() => DeletePlance(context)">Delete</MudButton>
+
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        </MudCardContent>
+    </MudCard>
+</MudContainer>
+@code {
+
+
+    [CascadingParameter] MudBlazor.MudDialogInstance MudDialog { get; set; }
+    private List<OutputPlance> GeneratedOutputPlances = new();
+
+    protected override void OnInitialized()
+    {
+        GenerateSeedData();
+    }
+
+    private void GenerateSeedData()
+    {
+        GeneratedOutputPlances = new List<OutputPlance>()
+        {
+
+        };
+
+            
+    }
+    private void EditPlance(OutputPlance plance)
+    {
+
+        Console.WriteLine($"تم اختيار التعديل على: {plance.id} - {plance.name}");
+
+    }
+
+
+    private async Task DeletePlance(OutputPlance plance)
+    {
+        var options = new MudBlazor.DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+        var parameters = new DialogParameters { ["Message"] = "هل أنت متأكد من أنك تريد حذف هذا العنصر؟" };
+        var dialog = await DialogService.ShowAsync<DeletePlans>("تأكيد الحذف", parameters, options);
+
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+
+            await DeleteItem();
+        }
+    }
+    private Task DeleteItem()
+    {
+
+        Console.WriteLine("تم حذف العنصر بنجاح!");
+        return Task.CompletedTask;
+    }
+    private void CreateCheckout(string idplans)
+    {
+        Console.WriteLine("تم حذف العنصر بنجاح!");
+    }
+    private static List<OutputPlance> Plans = new List<OutputPlance>()
+    {
+        new OutputPlance
+        {
+            id = "1",
+            name = "الخطة المجانية",
+            PaymentPeriod = "",
+            NumberRequests = "30",
+            Price = ".00 / mo",
+            featuresList = new List<PlanFeature>
+            {
+                new PlanFeature { Name = "أنواع الأصوات المتحدثة", Features = new List<string> { "ذكر" }
+},
+                new PlanFeature { Name = "الجودة", Features = new List<string> { "متوسطة" } },
+                new PlanFeature { Name = "الحد الأقصى", Features = new List<string> { "300 في الدقيقة" } },
+                new PlanFeature { Name = "التواصل مع فريق الدعم", Features = new List<string> { "غير متاح" } }
+            }
+        },
+        new OutputPlance
+            {
+                id = "2",
+                name = "الخطة الأساسية",
+                PaymentPeriod = "شهري",
+                NumberRequests = "100",
+                Price = "$19.00 / mo",
+                featuresList = new List<PlanFeature>
+                {
+                    new PlanFeature { Name = "أنواع الأصوات المتحدثة", Features = new List<string> { "ذكر", "أنثى" } },
+                    new PlanFeature { Name = "الجودة", Features = new List<string> { "عالية" } },
+                    new PlanFeature { Name = "الحد الأقصى", Features = new List<string> { "500 في الدقيقة" } },
+                    new PlanFeature { Name = "التواصل مع فريق الدعم", Features = new List<string> { "متاح" } }
+                }
+            },
+        new OutputPlance
+            {
+                id = "3",
+                name = "الخطة الاحترافية",
+                PaymentPeriod = "سنوي",
+                NumberRequests = "غير محدود",
+                Price = "$99.00 / yr",
+                featuresList = new List<PlanFeature>
+                {
+                    new PlanFeature { Name = "أنواع الأصوات المتحدثة", Features = new List<string> { "ذكر", "أنثى", "روبوت" } },
+                    new PlanFeature { Name = "الجودة", Features = new List<string> { "عالية جداً" } },
+                    new PlanFeature { Name = "الحد الأقصى", Features = new List<string> { "غير محدود" } },
+                    new PlanFeature { Name = "التواصل مع فريق الدعم", Features = new List<string> { "دعم متميز 24/7" } }
+                }
+            }
+    };
+}
+
+    
+  

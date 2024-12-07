@@ -1,0 +1,101 @@
+﻿@using CardShopping.Web.VitsModel
+<h3>ShowPlansTemplate2</h3>
+@inject NavigationManager NavigationManager
+<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-7">
+    <MudGrid Justify="MudBlazor.Justify.Center">
+        @foreach (var plan in Plans)
+        {
+            <MudItem xs="4" sm="6" md="3">
+                <MudCard Class="pa-4 text-center">
+                   
+                    <MudCardContent>
+                        <MudText Typo="Typo.h6" >@plan.name</MudText>
+                        <MudText Typo="Typo.h6">@plan.Price</MudText>
+                        <MudText Typo="Typo.caption">@($" طلب   / في يوم {plan.NumberRequests}")</MudText>
+                        <MudDivider Class="my-2" />
+                        <MudList Dense="true">
+
+                            @foreach (var feature in plan.featuresList)
+                            {
+                                <MudListItem>
+                                  
+                                    <MudText Typo="Typo.h6">@feature.Name</MudText>
+                                    @foreach (var featuree in feature.Features)
+                                    {
+                                        <MudText Typo="Typo.caption">@featuree</MudText>
+                                    }
+                                    
+                                </MudListItem>
+                            }
+                          
+                        </MudList>
+                        <MudDivider Class="my-2" />
+                      
+                    </MudCardContent>
+                    <MudCardActions>
+                    <MudButton Variant="MudBlazor.Variant.Filled" Color="MudBlazor.Color.Primary" FullWidth="true" @onclick="NavigateToOtherPage">
+                           المزيد 
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private static List<OutputPlance> Plans = new List<OutputPlance>()
+    {
+        new OutputPlance
+        {
+            id = "1",
+            name = "الخطة المجانية",
+            PaymentPeriod = "",
+            NumberRequests = "30",
+            Price = ".00 / mo",
+            featuresList = new List<PlanFeature>
+            {
+                new PlanFeature { Name = "أنواع الأصوات المتحدثة", Features = new List<string> { "ذكر" }
+},
+                new PlanFeature { Name = "الجودة", Features = new List<string> { "متوسطة" } },
+                new PlanFeature { Name = "الحد الأقصى", Features = new List<string> { "300 في الدقيقة" } },
+                new PlanFeature { Name = "التواصل مع فريق الدعم", Features = new List<string> { "غير متاح" } }
+            }
+        },
+        new OutputPlance
+            {
+                id = "2",
+                name = "الخطة الأساسية",
+                PaymentPeriod = "شهري",
+                NumberRequests = "100",
+                Price = "$19.00 / mo",
+                featuresList = new List<PlanFeature>
+                {
+                    new PlanFeature { Name = "أنواع الأصوات المتحدثة", Features = new List<string> { "ذكر", "أنثى" } },
+                    new PlanFeature { Name = "الجودة", Features = new List<string> { "عالية" } },
+                    new PlanFeature { Name = "الحد الأقصى", Features = new List<string> { "500 في الدقيقة" } },
+                    new PlanFeature { Name = "التواصل مع فريق الدعم", Features = new List<string> { "متاح" } }
+                }
+            },
+        new OutputPlance
+            {
+                id = "3",
+                name = "الخطة الاحترافية",
+                PaymentPeriod = "سنوي",
+                NumberRequests = "غير محدود",
+                Price = "$99.00 / yr",
+                featuresList = new List<PlanFeature>
+                {
+                    new PlanFeature { Name = "أنواع الأصوات المتحدثة", Features = new List<string> { "ذكر", "أنثى", "روبوت" } },
+                    new PlanFeature { Name = "الجودة", Features = new List<string> { "عالية جداً" } },
+                    new PlanFeature { Name = "الحد الأقصى", Features = new List<string> { "غير محدود" } },
+                    new PlanFeature { Name = "التواصل مع فريق الدعم", Features = new List<string> { "دعم متميز 24/7" } }
+                }
+            }
+    };
+    private void NavigateToOtherPage()
+    {
+        NavigationManager.NavigateTo("/text-to-speech");
+    }
+
+}
