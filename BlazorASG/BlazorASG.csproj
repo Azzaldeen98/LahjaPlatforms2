@@ -5,6 +5,17 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Infrastructure\**" />
+    <Compile Remove="NewFolder1\**" />
+    <Content Remove="Infrastructure\**" />
+    <Content Remove="NewFolder1\**" />
+    <EmbeddedResource Remove="Infrastructure\**" />
+    <EmbeddedResource Remove="NewFolder1\**" />
+    <None Remove="Infrastructure\**" />
+    <None Remove="NewFolder1\**" />
+  </ItemGroup>
 	<ItemGroup>
 
 		<PackageReference Include="Blazorise.Captcha" Version="1.6.2" />
@@ -46,6 +57,11 @@
 	<ItemGroup>
 	  <Folder Include="NewFolder\" />
 	  <Folder Include="wwwroot\assets\images\Icon\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Application\Application.csproj" />
+	  <ProjectReference Include="..\Domain\Domain.csproj" />
+	  <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
 	</ItemGroup>
  
 

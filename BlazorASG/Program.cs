@@ -16,11 +16,21 @@ using Blazorise;
 using BlazorASG.Nswag;
 using ApexCharts;
 using BlazorASG.VitsModel;
+using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial catalog=MDB_Use;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+/////////////////////////////////////////////////////
+
+
+builder.Services.InstallInfrastructureConfigServices();
+builder.Services.InstallApplicationConfigServices();
+
+
+///////////////////////////////////////////////////
 
 builder.Services.AddDbContext<UseDbContext>(options =>
 {

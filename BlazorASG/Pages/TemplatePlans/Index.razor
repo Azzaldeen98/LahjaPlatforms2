@@ -1,7 +1,10 @@
 ﻿@page "/TemplatePlan"
 
-  <div>
+@using Application.Services.Plans
+@inject PlansService plansService
 
+
+  <div>
 
 
     <BlazorASG.Components.PlansTemplate.T1.ShowPlans1/>
@@ -26,5 +29,7 @@
 <div>
     <BlazorASG.Components.PlansTemplate.T1.PlanEdit/>
 </div>
+
+
 
 }
