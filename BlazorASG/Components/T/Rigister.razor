@@ -93,18 +93,18 @@
     {
 
 
-        // var result = await plansService.getAllPlansAsync();
+        var result = await plansService.getAllPlansAsync();
         // var result2 = await plansService.getPlanByIdAsync("1212");
 
-        // if (result.Succeeded){
-        //     var responseData = result.Data;
-        //     Snackbar.Add("Plans List", Severity.Success);
-        // }
-        // else
-        // {
-        //     var responseErrors = result.Messages;
-        //     Snackbar.Add("Errors", Severity.Error);
-        // }
+        if (result.Succeeded){
+            var responseData = result.Data;
+            Snackbar.Add("Plans List", Severity.Success);
+        }
+        else
+        {
+            var responseErrors = result.Messages;
+            Snackbar.Add("Errors", Severity.Error);
+        }
 
         try
         {

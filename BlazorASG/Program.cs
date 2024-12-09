@@ -17,6 +17,10 @@ using BlazorASG.Nswag;
 using ApexCharts;
 using BlazorASG.VitsModel;
 using Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using Shared.Enums;
+using Shared.Settings;
+using Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial catalog=MDB_Use;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
@@ -28,6 +32,8 @@ builder.Services.AddRazorComponents()
 
 builder.Services.InstallInfrastructureConfigServices();
 builder.Services.InstallApplicationConfigServices();
+builder.Services.InstallSharedConfigServices();
+
 
 
 ///////////////////////////////////////////////////

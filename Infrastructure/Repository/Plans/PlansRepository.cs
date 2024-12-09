@@ -4,11 +4,7 @@ using Domain.Entities.Plans;
 using Domain.Repository.Plans;
 using Infrastructure.DataSource.Seeds;
 using Infrastructure.Models.Plans;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Shared.Settings;
 
 namespace Infrastructure.Repository.Plans
 {
@@ -16,32 +12,41 @@ namespace Infrastructure.Repository.Plans
     {
         private readonly SeedsPlans seedsPlans;
         private readonly IMapper _mapper;
-        public PlansRepository(IMapper mapper) {
+        private readonly ApplicationModeService appModeService;
+        public PlansRepository(IMapper mapper, ApplicationModeService appModeService)
+        {
 
-            seedsPlans= new SeedsPlans();
+            seedsPlans = new SeedsPlans();
             _mapper = mapper;
+            this.appModeService = appModeService;
         }
 
-      public async  Task<IEnumerable<Plan>> getAllPlansAsync()
-      {
-        
-                var res = await seedsPlans.getAllPlansAsync();
-                var result = _mapper.Map<IEnumerable<Plan>>(res);
-                return result;
+        public async Task<IEnumerable<Plan>> getAllPlansAsync()
+        {
 
-          
-      }
+
+            var response = await ExecutorAppMode.ExecuteAsync<IEnumerable<PlanModel>>(
+                 async () => new List<PlanModel>(),
+                 () => seedsPlans.getAllPlansAsync()
+
+             );
+
+            var result = _mapper.Map<IEnumerable<Plan>>(response);
+            return result;
+
+
+        }
 
         public async Task<Plan> getPlanByIdAsync(string id)
         {
-          
-                var res = await seedsPlans.getPlanByIdAsync(id);
-                var result = _mapper.Map<Plan>(res);
-                return result;
 
-        
-      }
+            var res = await seedsPlans.getPlanByIdAsync(id);
+            var result = _mapper.Map<Plan>(res);
+            return result;
 
-  
+
+        }
+
+
     }
 }
