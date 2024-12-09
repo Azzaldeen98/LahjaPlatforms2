@@ -7,7 +7,13 @@
 @inject ISnackbar Snackbar
 
 @using Application.Services.Plans
+@using Domain.Entities.Auth.Request
+@using Infrastructure.Models.Plans
+
+
+@inject SessionManger SessionManger
 @inject PlansService plansService
+@inject Application.Services.Auth.AuthService authService
 
        
 
@@ -79,7 +85,7 @@
     [Parameter]
     public string ReturnUrl { get; set; }
     private string token;
-    private RegisterRequest registerRequest = new RegisterRequest()
+    private VitsModel.Auth.RegisterRequest registerRequest = new VitsModel.Auth.RegisterRequest()
     {
         UserRole="user"
     };
@@ -93,21 +99,51 @@
     {
 
 
-        var result = await plansService.getAllPlansAsync();
+        // var res = await authService.registerAsync(new RegisterRequestEntity {
+        //         email = registerRequest.Email,
+        //         password = registerRequest.Password,
+        //         phoneNumber = registerRequest.PhoneNumber,
+        //         userRole = registerRequest.UserRole
+        //     });
+
+
+
+        // registerRequest.Email,
+        //                                     registerRequest.Password,
+        //                                     registerRequest.PhoneNumber,
+        //                                     registerRequest.UserRole);
+
+        // if (res.Succeeded)
+        // {
+        //     SessionManger.SetSessionData("User", "Accept");
+        //     Snackbar.Add("تم التسجيل بنجاح", Severity.Success);
+
+        //     var rslt = SessionManger.GetSessionData("User");
+
+        // }
+        // else
+        // {
+        //     errorMessage = "فشل تسجيل الدخول !!";
+        //     Snackbar.Add(errorMessage, Severity.Error);
+        // }
+        // var result = await plansService.getAllPlansAsync();
         // var result2 = await plansService.getPlanByIdAsync("1212");
 
-        if (result.Succeeded){
-            var responseData = result.Data;
-            Snackbar.Add("Plans List", Severity.Success);
-        }
-        else
-        {
-            var responseErrors = result.Messages;
-            Snackbar.Add("Errors", Severity.Error);
-        }
+        // if (result.Succeeded){
+        //     var responseData = result.Data;
+        //     Snackbar.Add("Plans List", Severity.Success);
+        // }
+        // else
+        // {
+        //     var responseErrors = result.Messages;
+        //     Snackbar.Add("Errors", Severity.Error);
+        // }
 
         try
         {
+
+         
+
             if (FlagDev)
             {
                 await OpenLoginDialog();
@@ -117,8 +153,6 @@
                 errorMessage = "Api قيد الاصلاح ";
                 Snackbar.Add(errorMessage, Severity.Error);
             }
-
-
         }
         catch(Exception ex)
         {

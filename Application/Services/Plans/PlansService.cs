@@ -1,11 +1,6 @@
 ﻿using Application.UseCase.Plans;
 using Domain.Entities.Plans;
-using Shared.Wrapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Wrapper;
 
 namespace Application.Services.Plans
 {

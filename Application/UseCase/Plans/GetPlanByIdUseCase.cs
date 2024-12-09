@@ -1,6 +1,6 @@
 ﻿using Domain.Entities.Plans;
 using Domain.Repository.Plans;
-using Shared.Wrapper;
+using Domain.Wrapper;
 
 namespace Application.UseCase.Plans
 {

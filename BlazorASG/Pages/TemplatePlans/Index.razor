@@ -1,35 +1,60 @@
 ﻿@page "/TemplatePlan"
-
-@using Application.Services.Plans
-@inject PlansService plansService
-
-
-  <div>
-
-
-    <BlazorASG.Components.PlansTemplate.T1.ShowPlans1/>
-
-  
-</div>  
+@using BlazorASG.Data.BlazarComponents.Plans.Category.DataModel
+@using BlazorASG.Token
+@using CardShopping.Web.Token
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@inject TokenService tokenService;
+@inject AuthCheckedService AuthCheckedService;
 
  
-<div>
-    <BlazorASG.Components.PlansTemplate.T1.FeatureList />
+<section  >
 
-</div>
-<div>
-    <BlazorASG.Components.PlansTemplate.T1.FeatureList2 />
-</div>
+    @if(isAuth){
 
-<div>
+        <div style="padding:10px!important">
+    @* 
+            <BlazorASG.Components.PlansTemplate.T1.FeatureList /> *@
+            <BlazorASG.Components.Category_Plans_Template.TemListCategorys OnClick="Submit" Params="@dataPlansCategory._listcategories" />
+        </div>
+    }
 
-    <BlazorASG.Components.PlansTemplate.T1.FeatureList3/>
-</div>
+    
  
-<div>
-    <BlazorASG.Components.PlansTemplate.T1.PlanEdit/>
-</div>
+
+</section>
+
+ 
+}
+@code
+{
+    public  DataPlansCategory dataPlansCategory = new DataPlansCategory();
+    bool isAuth = false;
+    private async void Submit(Data.BlazarComponents.Plans.Category.Model.InputCategory inputCategory)
+    {
+        if (inputCategory != null)
+        {
+            Snackbar.Add(inputCategory.Name, Severity.Success);
+        }
+    }
+
+    // protected override async Task OnInitializedAsync()
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+
+            isAuth = await AuthCheckedService.isAuth();
+            StateHasChanged();
+
+            if (!isAuth)
+            {
+                NavigationManager.NavigateTo("/login", forceLoad: true);
+            }
+        }
 
 
-
+    }
 }

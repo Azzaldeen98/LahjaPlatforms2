@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,10 +10,12 @@ namespace Infrastructure.DataSource.Seeds
 {
     public class SeedsPlans
     {
+      private static List<PlanModel> db= new List<PlanModel>();
 
-        public async Task<IEnumerable<PlanModel>> getAllPlansAsync()
+
+        public SeedsPlans()
         {
-            var result = new List<PlanModel>(){
+            db.AddRange(new List<PlanModel>(){
                 new PlanModel
                 {
                     Id = "1",
@@ -91,43 +94,20 @@ namespace Infrastructure.DataSource.Seeds
                         }
                     }
                 }
-
-            };
-
-            return result;
+            });
+            
+        } 
+    
+        public async Task<IEnumerable<PlanModel>?> getAllPlansAsync()
+        {
+            return db;
         }
 
 
-        public async Task<PlanModel> getPlanByIdAsync(string id)
+        public async Task<PlanModel?> getPlanByIdAsync(string id)
         {
-            var result = new PlanModel
-            {
-                Id = "1",
-                ProductName = "Basic Plan",
-                ProductId = "P001",
-                BillingPeriod = "Monthly",
-                NumberRequests = 100,
-                Amount = 19.99,
-                Active = true,
-                Subscriptions = new List<SubscriptionModel>
-                    {
-                        new SubscriptionModel
-                        {
-                            Id = "S001",
-                            PlanId = "1",
-                            Nr = 1,
-                            CustomerId = "C001",
-                            StartDate = DateTime.Now,
-                            Status = "Active",
-                            BillingPeriod = "Monthly",
-                            CancelAt = null,
-                            CancelAtPeriodEnd = false,
-                            CanceledAt = null
-                        }
-                    }
-            };
 
-            return result;
+            return (db.Count > 0) ? db.FirstOrDefault(x => x.Id == id) : null;
         }
     }
 }

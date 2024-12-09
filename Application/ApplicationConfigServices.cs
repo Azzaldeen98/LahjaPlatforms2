@@ -1,4 +1,5 @@
-﻿using Application.Services.Plans;
+﻿using Application.Services.Auth;
+using Application.Services.Plans;
 using Application.UseCase.Plans;
 using Infrastructure.Mappings.Plans;
 using Infrastructure.Repository.Plans;
@@ -32,11 +33,14 @@ namespace Infrastructure
         {
             serviceCollection.AddScoped<GetAllPlansUseCase>();
             serviceCollection.AddScoped<GetPlanByIdUseCase>();
+            serviceCollection.AddScoped<LoginUseCase>();
+            serviceCollection.AddScoped<RegisterUseCase>();
         }
 
         private static void InstallServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<PlansService>();
+            serviceCollection.AddScoped<AuthService>();
         }
        
     }

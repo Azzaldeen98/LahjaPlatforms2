@@ -18,7 +18,7 @@ namespace CardShopping.Web.Token
        
         public async Task<string> GetTokenAsync()
         {
-            return await _jsRuntime.InvokeAsync<string>("localStorageHelper.getItem", "accessToken");
+            return await _jsRuntime.InvokeAsync<string>("localStorageHelper.getItem", "accessToken")??"";
         }
 
         public async Task RemoveTokenAsync()

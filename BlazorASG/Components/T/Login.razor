@@ -8,8 +8,8 @@
 @using MudBlazor
 @inject TokenService _tokenService
 @using CardShopping.Web.Token
- @inject NavigationManager Navigation
- 
+@inject NavigationManager Navigation
+@inject Application.Services.Auth.AuthService authService
 
 
 
@@ -109,7 +109,15 @@
         try
         {
 
-
+            // var response = await authService.loginAsync(loginRequest.Email, loginRequest.Password);
+            // if (response.Succeeded)
+            // {
+                
+            // }
+            // else
+            // {
+                
+            // }
             _processing = true;
 
             var request = await _createLogin.Createdep(loginRequest);

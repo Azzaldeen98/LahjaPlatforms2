@@ -21,18 +21,33 @@ using Microsoft.Extensions.DependencyInjection;
 using Shared.Enums;
 using Shared.Settings;
 using Shared;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Infrastructure.DataSource.ApiClientFactory;
+using System.Configuration;
+using BlazorASG.Token;
 
 var builder = WebApplication.CreateBuilder(args);
+
 string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial catalog=MDB_Use;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+
+// Add services to the container.  
+
+
+var jwtSettings = builder.Configuration.GetSection("JWTSettings").Get<JWTSettings>();
+builder.Services.AddSingleton<JWTSettings>(jwtSettings);
+
+
 /////////////////////////////////////////////////////
 
-
-builder.Services.InstallInfrastructureConfigServices();
-builder.Services.InstallApplicationConfigServices();
 builder.Services.InstallSharedConfigServices();
+builder.Services.InstallInfrastructureConfigServices(configuration: builder.Configuration);
+builder.Services.InstallApplicationConfigServices();
+
 
 
 
@@ -42,13 +57,35 @@ builder.Services.AddDbContext<UseDbContext>(options =>
 {
     options.UseSqlServer(connectionString);
 });
-// Add services to the container.  
-builder.Services.AddHttpClient("ApiClient", client =>
-{
-    client.BaseAddress = new Uri("http://asg.tryasp.net/");
+
+
+builder.Services.AddHttpContextAccessor();
+//builder.Services.AddScoped<IUserClaimsHelper, UserClaimsHelper>();
+
+builder.Services.AddAuthentication(options => {
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options => {
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings.Issuer,
+        ValidAudience = jwtSettings.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
+    };
 });
-builder.Services.AddScoped<ClientFactory>();
+
+
+
+builder.Services.AddScoped<BlazorASG.Nswag.ClientFactory>();
+
 /////////////////////////////////////////
+
+
+
 
 
 builder.Services
@@ -68,10 +105,11 @@ builder.Services.AddSingleton<ILoggerService,ConsoleLoggerService>();
 builder.Services.AddScoped<IRAuth,RepostryAuth>();
 builder.Services.AddScoped<CreateLogin>();
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<AuthCheckedService>();
 /////////////////////
 builder.Services.AddMudBlazorSnackbar(config =>
 {
-    config.PositionClass = Defaults.Classes.Position.TopCenter;
+    config.PositionClass = Defaults.Classes.Position.BottomRight;
     config.PreventDuplicates = true;
     config.NewestOnTop = true;
     config.ShowCloseIcon = true;
@@ -85,6 +123,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddMudServices();
 builder.Services.AddScoped<ProtectedSessionStorage>();
+
 builder.Services.AddTransient<Auth>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
@@ -94,12 +133,21 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
      .AddUserManager<UserManager<IdentityUser>>()
     .AddEntityFrameworkStores<UseDbContext>();
 
+
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(100);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.AddScoped<SessionManger>();
+
+
+
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -110,9 +158,16 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+//app.UseAuthentication();
+//app.UseAuthorization();
+
+
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+
+app.UseAuthentication(); 
+app.UseAuthorization();
 
 app.UseRouting();
 app.UseSession();

@@ -13,15 +13,19 @@ namespace Infrastructure.Repository.Plans
         private readonly SeedsPlans seedsPlans;
         private readonly IMapper _mapper;
         private readonly ApplicationModeService appModeService;
-        public PlansRepository(IMapper mapper, ApplicationModeService appModeService)
+        public PlansRepository(
+            IMapper mapper,
+            SeedsPlans seedsPlans, 
+            ApplicationModeService appModeService)
         {
 
-            seedsPlans = new SeedsPlans();
+            //seedsPlans = new SeedsPlans();
             _mapper = mapper;
+            this.seedsPlans = seedsPlans;
             this.appModeService = appModeService;
         }
 
-        public async Task<IEnumerable<Plan>> getAllPlansAsync()
+        public async Task<IEnumerable<Plan>?> getAllPlansAsync()
         {
 
 
@@ -31,7 +35,7 @@ namespace Infrastructure.Repository.Plans
 
              );
 
-            var result = _mapper.Map<IEnumerable<Plan>>(response);
+            var result = (response != null) ? _mapper.Map<IEnumerable<Plan>>(response):null;
             return result;
 
 

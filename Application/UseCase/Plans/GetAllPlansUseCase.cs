@@ -1,12 +1,6 @@
 ﻿using Domain.Entities.Plans;
 using Domain.Repository.Plans;
-using Shared.Wrapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Wrapper;
 
 namespace Application.UseCase.Plans
 {
