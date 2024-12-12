@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="DataSource\ApiClient\Plans\" />
-    <Folder Include="Models\Plans\Request\" />
   </ItemGroup>
 
   <ItemGroup>
