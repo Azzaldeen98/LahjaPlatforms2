@@ -4,6 +4,8 @@ using Application.UseCase.Plans;
 using AutoMapper;
 using BlazorASG.Data.BlazarComponents.Plans.Category.Model;
 using BlazorASG.Nswag;
+using Blazorise.Extensions;
+using CardShopping.Web.Token;
 using Domain.Entities.Auth.Request;
 using Domain.Entities.Auth.Response;
 using Domain.Wrapper;
@@ -13,22 +15,28 @@ namespace BlazorASG.ClientServices.Auth
 {
     public class ClientAuthService
     {
+        private readonly TokenService tokenService;
         private readonly AuthService service;
         private readonly IMapper _mapper;
 
 
-        public ClientAuthService(AuthService service, IMapper mapper)
+        public ClientAuthService(AuthService service, IMapper mapper, TokenService tokenService)
         {
 
             this.service = service;
             _mapper = mapper;
+            this.tokenService = tokenService;
         }
 
         public async Task<Result<Domain.Entities.Auth.Response.LoginResponse>> loginAsync(VitsModel.Auth.LoginRequest request)
         {
 
             var model = _mapper.Map<Domain.Entities.Auth.Request.LoginRequest>(request);
-            return await service.loginAsync(model);
+            var response= await service.loginAsync(model);
+            if(response.Succeeded)
+                await tokenService.SaveTokenAsync(response.Data.accessToken);
+
+            return response;
         }
 
         public async Task<Result<RegisterResponse>> registerAsync(VitsModel.Auth.RegisterRequest request)

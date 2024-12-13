@@ -1,16 +1,25 @@
 ﻿@page "/TemplatePlan"
+
+
+
 @using BlazorASG.ClientServices.Auth
 @using BlazorASG.ClientServices.Plans
 @using BlazorASG.Components.TemPlansBlazar.FeaturesPlansTem2
 @using BlazorASG.Data.BlazarComponents.Plans.Category.DataModel
 @using BlazorASG.Data.BlazarComponents.Plans.TemFeturePlans2.DataModel
 @using BlazorASG.Token
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+
 @inject NavigationManager Navigation
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 @inject ClientPlansService ClientPlansService
 @inject ClientAuthService clientAuthService
 @inject AuthCheckedService authChecked
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject AppCustomAuthenticationStateProvider AppCustomAuthenticationStateProvider
+
 
  
 <section>
@@ -35,6 +44,7 @@
 {
 
 
+    // @attribute[Authorize]
 
 
     public  DataPlansCategory dataPlansCategory = new DataPlansCategory();
@@ -47,17 +57,29 @@
 
         try
         {
-            var result = await ClientPlansService.getAllPlansContainersAsync();
 
-            if (result != null && result.Succeeded && result.Data != null)
+       
+
+            // AppCustomAuthenticationStateProvider.SignOut();
+            // var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            // var authState = await AppCustomAuthenticationStateProvider.GetAuthenticationStateAsync();
+
+            // if (authState.User.Identity.IsAuthenticated)
             {
 
-                dataPlansCategory._listcategories = result.Data;
-                StateHasChanged();
-            }
-            else
-            {
 
+                var result = await ClientPlansService.getAllPlansContainersAsync();
+
+                if (result.Succeeded && result.Data != null)
+                {
+
+                    dataPlansCategory._listcategories = result.Data;
+                    StateHasChanged();
+                }
+                else
+                {
+
+                }
             }
 
         }

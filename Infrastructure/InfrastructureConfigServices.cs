@@ -2,6 +2,7 @@
 using Domain.Repository.Plans;
 using Domain.Repository.Users;
 using Infrastructure.DataSource;
+using Infrastructure.DataSource.ApiClient.Auth;
 using Infrastructure.DataSource.ApiClientFactory;
 using Infrastructure.DataSource.Seeds;
 using Infrastructure.Mappings.Plans;
@@ -48,6 +49,7 @@ namespace Infrastructure
             serviceCollection.AddSingleton<SeedsPlans>();
             serviceCollection.AddSingleton<SeedsPlansContainers>();
             serviceCollection.AddScoped<AuthControl>();
+            serviceCollection.AddScoped<AuthApiClient>();
         }
 
         private static  void InstallMapping(this IServiceCollection serviceCollection)

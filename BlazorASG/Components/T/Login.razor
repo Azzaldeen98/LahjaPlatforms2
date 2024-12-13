@@ -2,26 +2,34 @@
  
  
 @inject ISnackbar Snackbar
+@using Application.Common.Model
 @using BlazorASG.Application_Layer.Use_Cases.Auth
 @inject CreateLogin _createLogin
+@using BlazorASG.ClientServices.Auth
 @using BlazorASG.VitsModel.Auth
+@using Microsoft.AspNetCore.Components.Authorization
 @using MudBlazor
 @inject TokenService _tokenService
 @using CardShopping.Web.Token
 @inject NavigationManager Navigation
-@inject Application.Services.Auth.AuthService authService
+@inject AppCustomAuthenticationStateProvider AppCustomAuthenticationStateProvider
+@inject ClientAuthService ClientAuthService
 
 
 
 
+  
 <EditForm @ref="loginForm" Model="loginRequest" OnValidSubmit="HandleRegisterr">
     <DataAnnotationsValidator />
     <MudCard Class="mx-auto mt-10" Style="max-width: 500px;">
     <MudCardContent>
+        
+           
             <MudTextField @bind-Value="loginRequest.Email" Label="البريد الإلكتروني" 
                           Required="true" For="@(() => loginRequest.Email)" 
                           Type="Email" Variant="MudBlazor.Variant.Outlined" />
-                          
+            
+         
             <MudTextField @bind-Value="loginRequest.Password" Label="كلمة المرور" 
                           Required="true" For="@(() => loginRequest.Password)" 
                           Type="Password" Variant="MudBlazor.Variant.Outlined" />
@@ -37,6 +45,7 @@
                     <ValidationSummary />
                 </MudText>
             }
+        
         </MudCardContent>
         <MudCardActions>
             <MudButton ButtonType="ButtonType.Submit" Disabled="@_processing" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
@@ -55,7 +64,9 @@
           
       
     </MudCard>
-        </EditForm>
+ </EditForm>
+    
+
 <MudButtonGroup>
  
 
@@ -109,31 +120,53 @@
         try
         {
 
-            // var response = await authService.loginAsync(loginRequest.Email, loginRequest.Password);
+       
+
+            // var response = await ClientAuthService.loginAsync(loginRequest);
             // if (response.Succeeded)
             // {
-                
+
+            //     AppCustomAuthenticationStateProvider.StoreAuthenticationData(response.Data.accessToken);
+            //     var res = new OutputLogin()
+            //         {
+            //             Token = response.Data.accessToken,
+            //             ReturnUrl = "/"
+            //         };
+            //     if (OnClickLogenDeb.HasDelegate)
+            //     {
+            //         await OnClickLogenDeb.InvokeAsync(res);
+            //     }
             // }
             // else
             // {
-                
+
             // }
+
+
+          
             _processing = true;
 
-            var request = await _createLogin.Createdep(loginRequest);
-            if (request.Success)
+            // var request = await _createLogin.Createdep(loginRequest);
+            // if (request.Success)
+
+             var response = await ClientAuthService.loginAsync(loginRequest);
+            if (response.Succeeded)
             {
+
+                AppCustomAuthenticationStateProvider.StoreAuthenticationData(response.Data.accessToken);
+                var res = ResponseModel<OutputLogin>.SuccessResponse("CreateDep",
+                new OutputLogin{  Token = response.Data.accessToken, ReturnUrl = "/"});
+      
+
                 if (OnClickLogenDeb.HasDelegate)
                 {
-                    await OnClickLogenDeb.InvokeAsync(request);
+                    await OnClickLogenDeb.InvokeAsync(res);
                 }
 
             }
-
-
             else
             {
-                errorMessage = request.Message;
+                errorMessage = response.Messages[0];
             }
             _processing = false;
             StateHasChanged();

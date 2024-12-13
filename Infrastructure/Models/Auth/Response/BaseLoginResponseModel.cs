@@ -1,11 +1,8 @@
-﻿namespace Infrastructure.Models.Plans
+﻿namespace Infrastructure.Models.Auth
 {
     public class BaseLoginResponseModel
     {
-        public string? tokenType { get; set; }
-        public string? accessToken { get; set; }
-        public string? expiresIn { get; set; }
-        public string? refreshToken { get; set; }
+      
     }
 
 

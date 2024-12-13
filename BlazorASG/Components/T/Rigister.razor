@@ -2,6 +2,7 @@
 @inject IDialogService DialogService
 @inject NavigationManager Navigation
 @inject TokenService TokenService
+@using BlazorASG.ClientServices.Auth
 @using BlazorASG.VitsModel.Auth
 @using CardShopping.Web.Token
 @inject ISnackbar Snackbar
@@ -13,8 +14,7 @@
 
 @inject SessionManger SessionManger
 @inject PlansService plansService
-@inject Application.Services.Auth.AuthService authService
-
+@inject ClientAuthService clientAuthService
        
 
 
@@ -99,6 +99,30 @@
     {
 
 
+        try
+        {
+
+            var response = await clientAuthService.registerAsync(registerRequest);
+            if (response.Succeeded)
+            {
+
+                if (FlagDev)
+                {
+                    await OpenLoginDialog();
+                }
+                else
+                {
+                    errorMessage = "Api قيد الاصلاح ";
+                    Snackbar.Add(errorMessage, Severity.Error);
+                }
+
+            }
+            else
+            {
+                errorMessage = response.Messages[0];
+                Snackbar.Add(errorMessage, Severity.Error);
+            }
+
         // var res = await authService.registerAsync(new RegisterRequestEntity {
         //         email = registerRequest.Email,
         //         password = registerRequest.Password,
@@ -139,20 +163,9 @@
         //     Snackbar.Add("Errors", Severity.Error);
         // }
 
-        try
-        {
 
          
 
-            if (FlagDev)
-            {
-                await OpenLoginDialog();
-            }
-            else
-            {
-                errorMessage = "Api قيد الاصلاح ";
-                Snackbar.Add(errorMessage, Severity.Error);
-            }
         }
         catch(Exception ex)
         {

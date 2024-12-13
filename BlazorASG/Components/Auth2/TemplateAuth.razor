@@ -1,0 +1,146 @@
+﻿@inject NavigationManager navigator;
+@inject ISnackbar Snackbar
+<MudDialog DefaultFocus="DefaultFocus.LastChild" @bind-IsVisible=isVisible Options="dialogOptions">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+           
+        </MudText>
+    </TitleContent>
+    <DialogActions>
+        </DialogActions>
+    <DialogContent>
+        <MudContainer class="cuntrer" >
+            @using System.Text.RegularExpressions
+            @using System.ComponentModel.DataAnnotations
+
+        
+              
+            <div style="padding:2% 2%">
+                    
+                        <div class="RCardP fsing" >
+                       
+                        <div id="signupModalFormSignup" data-hs-show-animation-target-group="idForm" style="display: block; opacity: 1.0175;">
+                            <!-- Heading -->
+                            <div class="text-center mb-7">
+                            <h3>   @(nameAuth[indexAuth])</h3>
+                                <p>
+                                    Already have an account?
+                                <MudButton 
+                                         
+                                           Variant="Variant.Text"
+                                           OnClick="ChangeAuth"
+                                           Color="Color.Primary"
+                                           Style="text-transform:none"
+                                           >
+                                    @(nameAuth[1-indexAuth])
+                                </MudButton>
+                                </p>
+                            </div>
+                            <!-- End Heading -->
+                        
+                        <MudDivider />
+                        <br />
+
+                            <div class="d-grid gap-3">
+                                @if (isshowmian)
+                            {
+
+                                <MudButton 
+                                       Variant="Variant.Outlined"
+                                       EndIcon="css/google-icon.svg"
+                                       Color="Color.Primary">
+                                    <img style="width: 1rem; height: 1rem;margin-right:10px" src="css/google-icon.svg" alt="Image Description">
+
+                                    @nameAuth[indexAuth] with Google
+                                </MudButton>
+                                <MudButton 
+                                     
+                                       Variant="Variant.Outlined"
+
+                                       Color="Color.Primary">
+                                    <img style="width: 1.5rem; height: 1.5rem;margin-right:10px" src="css/fb-icon.svg" alt="Image Description">
+
+                                    @nameAuth[indexAuth] with Facebook
+                                </MudButton>
+                                <MudButton 
+                                       OnClick="ClickFormEmaill"
+                                       Variant="Variant.Filled"
+                                       
+                                       Color="Color.Primary"
+                                       >
+                                    @nameAuth[indexAuth] with Email
+                                </MudButton>
+                            }
+                            else
+                            {
+                                <TemplateAuthForm IsLogin=@(indexAuth==1) />
+                            }
+                            <br />
+                            <MudDivider />
+                             <br />
+                                <div class="text-center">
+                                    <p class="small mb-0">By continuing you agree to our <a href="#">Terms and Conditions</a></p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                 
+                    
+                       
+                    
+                    </div>
+
+
+            </div>
+            <img src="css/icon.jpg" class="imglogin" />
+</MudContainer>
+    </DialogContent>
+    
+</MudDialog>
+@code {
+    bool success;
+    string[] errors = { };
+    MudTextField<string> pwField1;
+    MudForm form;
+    bool isshowmian = true;
+    string[] nameAuth = { "Sign up", "Login" };
+    int indexAuth=0;
+    void ChangeAuth()
+    {
+        indexAuth = 1 - indexAuth;
+        isshowmian = true;
+        StateHasChanged();
+    }
+
+    void ClickFormEmaill()
+    {
+        isshowmian = false;
+        StateHasChanged();
+    }
+    private IEnumerable<string> PasswordStrength(string pw)
+    {
+        if (string.IsNullOrWhiteSpace(pw))
+        {
+            yield return "Password is required!";
+            yield break;
+        }
+        if (pw.Length < 8)
+            yield return "Password must be at least of length 8";
+        if (!Regex.IsMatch(pw, @"[A-Z]"))
+            yield return "Password must contain at least one capital letter";
+        if (!Regex.IsMatch(pw, @"[a-z]"))
+            yield return "Password must contain at least one lowercase letter";
+        if (!Regex.IsMatch(pw, @"[0-9]"))
+            yield return "Password must contain at least one digit";
+    }
+
+    private string PasswordMatch(string arg)
+    {
+        if (pwField1.Value != arg)
+            return "Passwords don't match";
+        return null;
+    }
+    private bool isVisible = true;
+    private DialogOptions dialogOptions = new() { CloseButton = true };
+}

@@ -17,7 +17,9 @@ using Shared;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using BlazorASG.Token;
+using Shared.Helpers;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +27,8 @@ string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial catalog=M
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+//builder.Services.AddAuthorizationCore();
+//builder.Services.AddCascadingAuthenticationState();
 
 // Add services to the container.  
 
@@ -54,7 +58,7 @@ builder.Services.AddDbContext<UseDbContext>(options =>
 
 
 builder.Services.AddHttpContextAccessor();
-//builder.Services.AddScoped<IUserClaimsHelper, UserClaimsHelper>();
+builder.Services.AddScoped<IUserClaimsHelper, UserClaimsHelper>();
 
 builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -73,11 +77,41 @@ builder.Services.AddAuthentication(options => {
 });
 
 
+///////////////////////////////////////////////////////TODO
+builder.Services.AddAuthentication(options => {
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+}).AddCookie(options => {
+    options.LoginPath = "/login";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+});
+//builder.Services.AddScoped<AuthenticationStateProvider, AppCustomAuthenticationStateProvider>();
+builder.Services.AddScoped<AppCustomAuthenticationStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
+    provider.GetRequiredService<AppCustomAuthenticationStateProvider>());
+
+//builder.Services.AddScoped<AppCustomAuthenticationStateProvider>();
+builder.Services.AddScoped<IAppUserClaimsHelper, AppUserClaimsHelper>();
+//builder.Services.AddAuthorizationCore();
+
+builder.Services.AddAuthorization();
+
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+//builder.Services.AddAuthentication().Add(options =>
+//{
+//    var clientid = builder.Configuration["Google:ClientId"];
+//    options.ClientId = builder.Configuration["Google:ClientId"];
+//    options.ClientSecret = builder.Configuration["Google:ClientSecret"];
+//});
+//builder.Services.AddHttpContextAccessor();
+//builder.Services.AddScoped<HttpContextAccessor>();
+//builder.Services.AddHttpClient();
+//builder.Services.AddScoped<HttpClient>();
 
 builder.Services.AddScoped<BlazorASG.Nswag.ClientFactory>();
 
 /////////////////////////////////////////
-
 
 
 
@@ -140,7 +174,25 @@ builder.Services.AddScoped<SessionManger>();
 
 
 
-builder.Services.AddAuthorization();
+
+
+
+
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {
+//    options.LoginPath = "/login";
+//});
+
+
+
+
+ 
+
+//builder.Services.AddAuthorization(options =>
+//{
+//    //options.AddPolicy("AdminPolicy",policy => policy.RequireRole("Admin"));
+//    options.AddPolicy("UserPolicy",policy => policy.RequireRole("User"));
+//});
+
 
 var app = builder.Build();
 
@@ -152,8 +204,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-//app.UseAuthentication();
-//app.UseAuthorization();
+
 
 
 app.UseHttpsRedirection();

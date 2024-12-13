@@ -7,6 +7,7 @@ using BlazorASG.VitsModel;
 using BlazorASG.VitsModel.Auth;
 using CardShopping.Web.Token;
 using Newtonsoft.Json.Linq;
+using System.Security.Claims;
 using LoginRequest = BlazorASG.VitsModel.Auth.LoginRequest;
 
 namespace BlazorASG.Application_Layer.Use_Cases.Auth
@@ -25,7 +26,22 @@ namespace BlazorASG.Application_Layer.Use_Cases.Auth
             _logger = consoleLogger;
             _tokenService = tokenService;
         }
+        //public async void SaveUserInSession(string email, string role = "User")
+        //{
 
+
+        //    var claims = new List<Claim>
+        //                    {
+        //                        new Claim("id" ,  ""),
+        //                        new Claim("email",email),
+        //                        new Claim("role",role),
+
+        //                    };
+        //    var userIdentity = new ClaimsIdentity(claims, "Bearer");
+        //    ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
+        //    // قم بتسجيل المستخدم في الجلسة
+        //    //await HttpContext.SignInAsync(principal);
+        //}
         public async Task<ResponseModel<OutputLogin>> Createdep(LoginRequest loginRequest)
         {
             try
@@ -39,6 +55,8 @@ namespace BlazorASG.Application_Layer.Use_Cases.Auth
                     string[] x = tokenn.Split(',');
                     if (loginRequest.Email == x[0])
                     {
+
+                     
                         var request = new OutputLogin()
                         {
                             Token = "ddddd",

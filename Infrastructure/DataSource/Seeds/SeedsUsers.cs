@@ -21,6 +21,7 @@ namespace Infrastructure.DataSource.Seeds
         
             new UserApp{ id="12345",name="Test User",email="test@gmail.com",password="Test@2025",phoneNumber="771211417",active=true },
             new UserApp{ id="1345678",name="User",email="user@gmail.com",password="Test@2025",phoneNumber="781211417",active=true },
+            new UserApp{ id="1345678",name="Azdeen",email="Azdeenedghg@gmail.com",password="Azdeen2024$$$",phoneNumber="781211417",active=true },
         
         };
 
@@ -45,7 +46,7 @@ namespace Infrastructure.DataSource.Seeds
         }
         public async Task<bool> createUserAsync(UserApp model) {
 
-            if (db != null && db.FirstOrDefault(x => x.email == model.email && x.phoneNumber == model.phoneNumber) == null)
+            if (db != null && db.FirstOrDefault(x => x.email == model.email) == null)
             {
                 model.id = Guid.NewGuid().ToString();
                 model.active = true;

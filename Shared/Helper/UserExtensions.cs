@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 
-namespace Helper
+namespace Shared.Helpers
 {
 
     public static class UserExtensions

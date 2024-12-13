@@ -11,12 +11,10 @@
 
         public string? name { get; set; }
 
-        public string? token { get; set; }
-
-        //public string? tokenType { get; set; }
-        //public string? accessToken { get; set; }
-        //public string? expiresIn { get; set; }
-        //public string? refreshToken { get; set; }
+        public string? tokenType { get; set; }
+        public string? accessToken { get; set; }
+        public string? expiresIn { get; set; }
+        public string? refreshToken { get; set; }
 
 
     }
