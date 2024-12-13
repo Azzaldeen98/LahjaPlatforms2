@@ -5039,9 +5039,9 @@ namespace Infrastructure.Nswag
         [Newtonsoft.Json.JsonProperty("twoFactorRecoveryCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string TwoFactorRecoveryCode { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("planId", Required = Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DataAnnotations.Required]
-        public string PlanId { get; set; }
+        //[Newtonsoft.Json.JsonProperty("planId", Required = Newtonsoft.Json.Required.Always)]
+        //[System.ComponentModel.DataAnnotations.Required]
+        //public string PlanId { get; set; }
 
     }
 

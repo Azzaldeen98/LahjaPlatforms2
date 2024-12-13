@@ -133,6 +133,7 @@ builder.Services.AddSingleton<ILoggerService,ConsoleLoggerService>();
 builder.Services.AddScoped<IRAuth,RepostryAuth>();
 builder.Services.AddScoped<CreateLogin>();
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<ITokenService,TokenService>();
 //builder.Services.AddScoped<AuthCheckedService>();
 /////////////////////
 builder.Services.AddMudBlazorSnackbar(config =>

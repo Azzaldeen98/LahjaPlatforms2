@@ -9,8 +9,9 @@
 @using BlazorASG.VitsModel.Auth
 @using Microsoft.AspNetCore.Components.Authorization
 @using MudBlazor
-@inject TokenService _tokenService
+@inject ITokenService _tokenService
 @using CardShopping.Web.Token
+@using global::Shared.Helpers
 @inject NavigationManager Navigation
 @inject AppCustomAuthenticationStateProvider AppCustomAuthenticationStateProvider
 @inject ClientAuthService ClientAuthService

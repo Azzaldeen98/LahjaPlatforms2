@@ -34,10 +34,10 @@ namespace Infrastructure.DataSource.ApiClient.Auth
             _config = config;
         }
 
-        public  AuthClient GetApiClient()
+        public  async Task<AuthClient> GetApiClient()
         {
 
-            var client =  _clientFactory.CreateClientAsync<AuthClient>("ApiClient");
+            var client = await _clientFactory.CreateClientAsync<AuthClient>("ApiClient");
             return client;
         }
 
@@ -52,7 +52,8 @@ namespace Infrastructure.DataSource.ApiClient.Auth
                 //    Email = request.email,
                 //    Password = request.password
                 //};
-                var response = await GetApiClient().LoginAsync(true, true, model);
+                var client = await GetApiClient();
+                var response =await client.LoginAsync(true, true, model);
                 var resModel = _mapper.Map<LoginResponseModel>(response);
                 return Result<LoginResponseModel>.Success(resModel);
                 //return resModel;
@@ -79,8 +80,8 @@ namespace Infrastructure.DataSource.ApiClient.Auth
                 //    Email = request.email,
                 //    Password = request.password
                 //};
-
-                await GetApiClient().RegisterAsync(model);
+                var client = await GetApiClient();
+               await client.RegisterAsync(model);
 
                 //var resModel = _mapper.Map<RegisterResponseModel>(response);
 

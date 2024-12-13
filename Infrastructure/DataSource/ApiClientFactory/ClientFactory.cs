@@ -7,16 +7,19 @@ namespace Infrastructure.DataSource.ApiClientFactory
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly BaseUrl baseUrl;
+        private readonly ITokenService tokenService;
         private readonly IUserClaimsHelper userClaimsHelper;
 
-        public ClientFactory(IHttpClientFactory httpClientFactory, BaseUrl baseUrl, IUserClaimsHelper userClaimsHelper)
+        public ClientFactory(IHttpClientFactory httpClientFactory,
+            BaseUrl baseUrl, IUserClaimsHelper userClaimsHelper, ITokenService tokenService)
         {
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory), "HttpClientFactory cannot be null.");
             this.baseUrl = baseUrl;
             this.userClaimsHelper = userClaimsHelper;
+            this.tokenService = tokenService;
         }
 
-        public TClient CreateClientAsync<TClient>(string clientName="ApiClient") where TClient : class
+        public async Task<TClient> CreateClientAsync<TClient>(string clientName="ApiClient") where TClient : class
         {
 
           
@@ -54,11 +57,11 @@ namespace Infrastructure.DataSource.ApiClientFactory
                 throw new InvalidOperationException($"An error occurred while creating the client: {ex.Message}", ex);
             }
         }
-        public TClient CreateClientWithAuthAsync<TClient>(string clientName = "ApiClient") where TClient : class
+        public async Task<TClient> CreateClientWithAuthAsync<TClient>(string clientName = "ApiClient") where TClient : class
         {
 
 
-
+         
 
             if (string.IsNullOrWhiteSpace(clientName))
             {
@@ -68,8 +71,12 @@ namespace Infrastructure.DataSource.ApiClientFactory
             try
             {
 
+                var token = await tokenService.GetTokenAsync();
+                if (token == null)
+                    throw new Exception("invalid token!!");
+
                 var httpClient = _httpClientFactory.CreateClient(clientName);
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userClaimsHelper.AccessToken);
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",token);
 
 
                 if (Activator.CreateInstance(typeof(TClient), baseUrl.Api, httpClient) is TClient client)

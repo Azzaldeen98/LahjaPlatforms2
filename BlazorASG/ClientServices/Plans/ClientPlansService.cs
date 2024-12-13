@@ -3,6 +3,7 @@ using Application.UseCase.Plans;
 using AutoMapper;
 using BlazorASG.Data.BlazarComponents.Plans.Category.Model;
 using BlazorASG.Data.BlazarComponents.Plans.TemFeturePlans2.Model;
+using CardShopping.Web.Token;
 using Domain.Entities.Plans;
 using Domain.Wrapper;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -12,14 +13,17 @@ namespace BlazorASG.ClientServices.Plans
     public class ClientPlansService
     {
         private readonly PlansService plansService;
+        private readonly TokenService tokenService;
         private readonly IMapper _mapper;
 
 
-        public ClientPlansService(PlansService plansService, IMapper mapper)
+
+        public ClientPlansService(PlansService plansService, IMapper mapper, TokenService tokenService)
         {
 
             this.plansService = plansService;
             _mapper = mapper;
+            this.tokenService = tokenService;
         }
 
         public async Task<Result<List<PlansFeture>>> getAllBasicPlansAsync()

@@ -1,9 +1,10 @@
 ﻿using Domain.Entities.User;
 using Microsoft.JSInterop;
+using Shared.Helpers;
 using System.Threading.Tasks;
 namespace CardShopping.Web.Token
 {
-    public class TokenService
+    public class TokenService : ITokenService
     {
         private readonly IJSRuntime _jsRuntime;
 

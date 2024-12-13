@@ -42,6 +42,8 @@ namespace Infrastructure
             serviceCollection.AddHttpClient("ApiClient", client => { client.BaseAddress = new Uri(baseUrl.Api); });
 
             serviceCollection.AddScoped<ClientFactory>();
+            //serviceCollection.AddScoped<ITokenProvider, TokenProvider>();
+
         }
         private static void InstallSeeds(this IServiceCollection serviceCollection)
         {
