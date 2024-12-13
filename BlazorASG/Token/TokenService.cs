@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Domain.Entities.User;
+using Microsoft.JSInterop;
 using System.Threading.Tasks;
 namespace CardShopping.Web.Token
 {

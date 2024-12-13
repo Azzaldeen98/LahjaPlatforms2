@@ -4,28 +4,19 @@ using BlazorASG.Application_Layer.Repositories;
 using BlazorASG.Application_Layer.Use_Cases.Auth;
 using BlazorASG.Data;
 using CardShopping.Web.Token;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using MudBlazor.Services;
 using Blazorise.Captcha.ReCaptcha;
 using Blazorise;
-using BlazorASG.Nswag;
-using ApexCharts;
-using BlazorASG.VitsModel;
 using Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
-using Shared.Enums;
 using Shared.Settings;
 using Shared;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Infrastructure.DataSource.ApiClientFactory;
-using System.Configuration;
 using BlazorASG.Token;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,9 +38,12 @@ builder.Services.AddSingleton<JWTSettings>(jwtSettings);
 builder.Services.InstallSharedConfigServices();
 builder.Services.InstallInfrastructureConfigServices(configuration: builder.Configuration);
 builder.Services.InstallApplicationConfigServices();
+builder.Services.InstallBlazorAppConfigServices();
+
+//builder.Services.AddScoped<ClientPlansService>();
 
 
-
+//builder.Services.AddAutoMapper(typeof(BlazorAppMappingConfig));
 
 ///////////////////////////////////////////////////
 
@@ -105,7 +99,7 @@ builder.Services.AddSingleton<ILoggerService,ConsoleLoggerService>();
 builder.Services.AddScoped<IRAuth,RepostryAuth>();
 builder.Services.AddScoped<CreateLogin>();
 builder.Services.AddScoped<TokenService>();
-builder.Services.AddScoped<AuthCheckedService>();
+//builder.Services.AddScoped<AuthCheckedService>();
 /////////////////////
 builder.Services.AddMudBlazorSnackbar(config =>
 {

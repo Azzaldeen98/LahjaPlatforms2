@@ -25,13 +25,13 @@ namespace Application.Services.Auth
             this.registerUseCase = registerUseCase;
         }
 
-        public async Task<Result<LoginResponse>> loginAsync(string email,string password)
+        public async Task<Result<LoginResponse>> loginAsync(LoginRequest request)
         {
-            return await loginUseCase.ExecuteAsync(new LoginRequest { email=email,password=password});
+            return await loginUseCase.ExecuteAsync(request);
 
         }
 
-        public async Task<Result<RegisterResponse>> registerAsync(RegisterRequestEntity request)
+        public async Task<Result<RegisterResponse>> registerAsync(RegisterRequest request)
         {
             return await registerUseCase.ExecuteAsync(request);
                 

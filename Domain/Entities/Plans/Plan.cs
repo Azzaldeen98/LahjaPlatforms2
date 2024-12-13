@@ -19,4 +19,5 @@ namespace Domain.Entities.Plans
         public ICollection<Subscription>? Subscriptions { get; set; }
 
     }
+
 }

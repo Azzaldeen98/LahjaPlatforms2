@@ -26,13 +26,15 @@ namespace Infrastructure
 
        private static  void InstallMapping(this IServiceCollection serviceCollection)
         {
-            //serviceCollection.AddAutoMapper(typeof(PlansMappingConfig));
+            serviceCollection.AddAutoMapper(typeof(ApplicationMappingConfig));
         }
 
         private static void InstallUsaCases(this IServiceCollection serviceCollection)
         {
+            serviceCollection.AddScoped<GetAllBasicPlansUseCase>();
             serviceCollection.AddScoped<GetAllPlansUseCase>();
             serviceCollection.AddScoped<GetPlanByIdUseCase>();
+            serviceCollection.AddScoped<GetAllPlansContainersUseCase>();
             serviceCollection.AddScoped<LoginUseCase>();
             serviceCollection.AddScoped<RegisterUseCase>();
         }

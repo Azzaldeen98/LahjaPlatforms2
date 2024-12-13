@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Xml.Linq;
-using AutoMapper;
-using Infrastructure.Models.Plans;
-using Domain.Entities.Plans;
+﻿using Infrastructure.Models.Plans;
 using Domain.Entities.User;
 using Infrastructure.Models.User;
-using Infrastructure.Models;
 using Infrastructure.DataSource.Seeds.Models;
-using Infrastructure.Nswag;
 using Domain.Entities.Auth.Response;
+using Domain.Entities.Auth.Request;
 
 namespace Infrastructure.Mappings.Plans
 {
@@ -30,6 +19,7 @@ namespace Infrastructure.Mappings.Plans
             CreateMap<UserModel, RegisterRequestModel>().ReverseMap();
         
             CreateMap<UserModel, UserApp>().ReverseMap();
+
             CreateMap<LoginRequestModel, LoginRequest>().ReverseMap();
             CreateMap<RegisterRequestModel, UserApp>().ReverseMap();
             CreateMap<RegisterRequestModel,  RegisterRequest>().ReverseMap();

@@ -1,15 +1,18 @@
-﻿using Shared.BaseModels.Plans;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.ShareData.Base;
 
 namespace Infrastructure.Models.Plans.Response
 {
     public class PlansContainerModel : BasePlansContainer 
     {
             public string Id { get; set; }
+            public string Name { get; set; }
+
+            //public string Category { get; set; }
+            public string Description { get; set; }
+            public decimal Price { get; set; }
+            public string ImageUrl { get; set; }
+
+            public List<PlanModel>? plans { get; set; }
         
     }
 }

@@ -1,60 +1,142 @@
 ﻿@page "/TemplatePlan"
+@using BlazorASG.ClientServices.Auth
+@using BlazorASG.ClientServices.Plans
+@using BlazorASG.Components.TemPlansBlazar.FeaturesPlansTem2
 @using BlazorASG.Data.BlazarComponents.Plans.Category.DataModel
+@using BlazorASG.Data.BlazarComponents.Plans.TemFeturePlans2.DataModel
 @using BlazorASG.Token
-@using CardShopping.Web.Token
-@using Microsoft.EntityFrameworkCore.Metadata.Internal
-@inject NavigationManager NavigationManager
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
 @inject ISnackbar Snackbar
-@inject TokenService tokenService;
-@inject AuthCheckedService AuthCheckedService;
+@inject ClientPlansService ClientPlansService
+@inject ClientAuthService clientAuthService
+@inject AuthCheckedService authChecked
 
  
-<section  >
+<section>
 
-    @if(isAuth){
 
-        <div style="padding:10px!important">
-    @* 
-            <BlazorASG.Components.PlansTemplate.T1.FeatureList /> *@
-            <BlazorASG.Components.Category_Plans_Template.TemListCategorys OnClick="Submit" Params="@dataPlansCategory._listcategories" />
-        </div>
-    }
+    <div style="padding:10px!important">
 
-    
  
+        <BlazorASG.Components.TemPlansBlazar.Category_Plans_Template.TemListCategorys OnClick="Submit" Params="@dataPlansCategory._listcategories" />
+    </div>
 
+    <div style="padding:10px!important">
+
+        <BlazorASG.Components.TemPlansBlazar.FeaturesPlansTem1.ListFeature Params="@dataFeature.featureList" OnClick="SubmitListFeature" />
+        
+    </div>
 </section>
 
  
-}
+ 
 @code
 {
+
+
+
+
     public  DataPlansCategory dataPlansCategory = new DataPlansCategory();
-    bool isAuth = false;
+    public Data.BlazarComponents.Plans.TemFeturePlans1.DataModel.DataFeature dataFeature = new Data.BlazarComponents.Plans.TemFeturePlans1.DataModel.DataFeature();
+    public DataFeature dataFeaturee= new DataFeature();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        try
+        {
+            var result = await ClientPlansService.getAllPlansContainersAsync();
+
+            if (result != null && result.Succeeded && result.Data != null)
+            {
+
+                dataPlansCategory._listcategories = result.Data;
+                StateHasChanged();
+            }
+            else
+            {
+
+            }
+
+        }
+        catch (Exception e)
+        {
+
+        }
+
+
+    }
+
+
     private async void Submit(Data.BlazarComponents.Plans.Category.Model.InputCategory inputCategory)
     {
         if (inputCategory != null)
         {
-            Snackbar.Add(inputCategory.Name, Severity.Success);
+
+            await ShowFeatureService(inputCategory);
+
+
         }
     }
-
-    // protected override async Task OnInitializedAsync()
-    
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    private async void SubmitListFeature(BlazorASG.Data.BlazarComponents.Plans.TemFeturePlans1.Model.FeaturesPlansTem1 plans)
     {
-        if (firstRender)
+        if (plans != null)
+        {
+            Snackbar.Add(plans.ProductName, Severity.Success);
+        }
+    }
+    private async Task ShowFeatureService(Data.BlazarComponents.Plans.Category.Model.InputCategory inputCategory)
+    {
+        try
         {
 
-            isAuth = await AuthCheckedService.isAuth();
-            StateHasChanged();
+            var response = await ClientPlansService.getAllBasicPlansAsync();
 
-            if (!isAuth)
+            if (response.Succeeded)
             {
-                NavigationManager.NavigateTo("/login", forceLoad: true);
+
+                // dataPlansCategory._listcategories = ;
+                // StateHasChanged();
+
+                var dataList = response.Data.ToList();
+
+                Data.BlazarComponents.Authentication.AuthComponent authComponent = new Data.BlazarComponents.Authentication.AuthComponent() { 
+                    Isauth = await authChecked.isAuth(),
+                NamePigeLogin="/login" };
+                var parameters = new DialogParameters<ListFeatureService>
+                {
+
+                    {x => x.TypeTransition,true},
+                    {x => x.IdCategry,inputCategory.IdPlans},
+                    {x=>x.auth,authComponent},
+                    {x =>x.Params,dataList} //dataFeaturee.plansList1}
+                };
+
+
+                var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraLarge,FullWidth=true};
+                var dialog = await DialogService.ShowAsync<ListFeatureService>("",parameters, options);
+                var result = await dialog.Result;
+                if (!result.Canceled)
+                {
+                    var pbj =(Data.BlazarComponents.Plans.TemFeturePlans2.Model.PlansFeture)result.Data;
+                    Snackbar.Add(pbj.Name, Severity.Error);
+                }
             }
+            else
+            {
+                throw new Exception(response?.Messages[0]??"");
+            }
+
+            
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
         }
 
 
     }
+
 }

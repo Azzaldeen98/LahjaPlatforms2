@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Models.Plans;
+using Infrastructure.Models.Plans.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Infrastructure.DataSource.Seeds
     public class SeedsPlans
     {
       private static List<PlanModel> db= new List<PlanModel>();
+      private static List<BasicPlanModel> basicDB= new List<BasicPlanModel>();
 
 
         public SeedsPlans()
@@ -25,9 +27,9 @@ namespace Infrastructure.DataSource.Seeds
                     NumberRequests = 100,
                     Amount = 19.99,
                     Active = true,
-                    Subscriptions = new List<SubscriptionModel>
+                    Subscriptions = new List<PlanSubscriptionModel>
                     {
-                        new SubscriptionModel
+                        new PlanSubscriptionModel
                         {
                             Id = "S001",
                             PlanId = "1",
@@ -51,9 +53,9 @@ namespace Infrastructure.DataSource.Seeds
                     NumberRequests = 500,
                     Amount = 49.99,
                     Active = true,
-                    Subscriptions = new List<SubscriptionModel>
+                    Subscriptions = new List<PlanSubscriptionModel>
                     {
-                        new SubscriptionModel
+                        new PlanSubscriptionModel
                         {
                             Id = "S002",
                             PlanId = "2",
@@ -77,9 +79,9 @@ namespace Infrastructure.DataSource.Seeds
                     NumberRequests = 2000,
                     Amount = 499.99,
                     Active = true,
-                    Subscriptions = new List<SubscriptionModel>
+                    Subscriptions = new List<PlanSubscriptionModel>
                     {
-                        new SubscriptionModel
+                        new PlanSubscriptionModel
                         {
                             Id = "S003",
                             PlanId = "3",
@@ -95,12 +97,96 @@ namespace Infrastructure.DataSource.Seeds
                     }
                 }
             });
-            
-        } 
-    
-        public async Task<IEnumerable<PlanModel>?> getAllPlansAsync()
+
+       
+            var plans = new List<BasicPlanModel>
+        {
+            new BasicPlanModel
+            {
+                Id = "1",
+                ProductName = "Basic Plan",
+                Active = true,
+                SubscriptionFeatures = new List<PlanSubscriptionFeaturesModel>
+                {
+                     new PlanSubscriptionFeaturesModel { Id = "1",Name="TextToSpeechService",Description="Basic text-to-speech service", BillingPeriod = "week", NumberRequests = 250, Amount = 9.99, Active = true },
+                    new PlanSubscriptionFeaturesModel { Id = "2",Name="Voice Quality",Description="Basic text-to-speech service", BillingPeriod = "Monthly", NumberRequests = 3000, Amount = 29.99, Active = true },
+                    new PlanSubscriptionFeaturesModel { Id = "3",Name="Voice Type",Description="Basic text-to-speech service", BillingPeriod = "Yearly", NumberRequests = 36000, Amount = 299.99, Active = true },
+                    new PlanSubscriptionFeaturesModel { Id = "4",Name="support Types",Description="Basic text-to-speech service", BillingPeriod = "Yearly", NumberRequests = 36000, Amount = 299.99, Active = true },
+                    new PlanSubscriptionFeaturesModel { Id = "5",Name="server Speeds",Description="Basic text-to-speech service", BillingPeriod = "Yearly", NumberRequests = 36000, Amount = 299.99, Active = true },
+                },
+                TechnicalFeatures = new List<PlanTechnicalFeaturesModel>
+                {
+                    new PlanTechnicalFeaturesModel { Id = "1", Name = "Number of Requests", Description = "Unlimited requests", Price = 19.99, Count = 10, Status = "Active" },
+                    new PlanTechnicalFeaturesModel { Id = "2", Name = "Scope Android", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "3", Name = "Scope Web", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "4", Name = "Scope Report", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "5", Name = "Scope Word Count", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
+                }
+            },
+            new BasicPlanModel
+            {
+                Id = "2",
+                ProductName = "Standard Plan",
+                Active = true,
+                SubscriptionFeatures = new List<PlanSubscriptionFeaturesModel>
+                {
+                      new PlanSubscriptionFeaturesModel { Id = "1",Name="TextToSpeechService",Description="Basic text-to-speech service", BillingPeriod = "week", NumberRequests = 250, Amount = 9.99, Active = true },
+                    new PlanSubscriptionFeaturesModel { Id = "2",Name="Voice Quality",Description="Basic text-to-speech service", BillingPeriod = "Monthly", NumberRequests = 3000, Amount = 29.99, Active = true },
+                    new PlanSubscriptionFeaturesModel { Id = "3",Name="Voice Type",Description="Basic text-to-speech service", BillingPeriod = "Yearly", NumberRequests = 36000, Amount = 299.99, Active = true },
+                    new PlanSubscriptionFeaturesModel { Id = "4",Name="support Types",Description="Basic text-to-speech service", BillingPeriod = "Yearly", NumberRequests = 36000, Amount = 299.99, Active = true },
+                    new PlanSubscriptionFeaturesModel { Id = "5",Name="server Speeds",Description="Basic text-to-speech service", BillingPeriod = "Yearly", NumberRequests = 36000, Amount = 299.99, Active = true },
+                },
+                TechnicalFeatures = new List<PlanTechnicalFeaturesModel>
+                {
+
+                    new PlanTechnicalFeaturesModel { Id = "1", Name = "Number of Requests", Description = "Unlimited requests", Price = 19.99, Count = 10, Status = "Active" },
+                    new PlanTechnicalFeaturesModel { Id = "2", Name = "Scope Android", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "3", Name = "Scope Web", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "4", Name = "Scope Report", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "5", Name = "Scope Word Count", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
+                }
+            },
+            new BasicPlanModel
+            {
+                Id = "3",
+                ProductName = "Premium Plan",
+                Active = true,
+                SubscriptionFeatures = new List<PlanSubscriptionFeaturesModel>
+                {
+                     new PlanSubscriptionFeaturesModel { Id = "1",Name="TextToSpeechService",Description="Basic text-to-speech service", BillingPeriod = "week", NumberRequests = 250, Amount = 9.99, Active = true },
+                    new PlanSubscriptionFeaturesModel { Id = "2",Name="Voice Quality",Description="Basic text-to-speech service", BillingPeriod = "Monthly", NumberRequests = 3000, Amount = 29.99, Active = true },
+                    new PlanSubscriptionFeaturesModel { Id = "3",Name="Voice Type",Description="Basic text-to-speech service", BillingPeriod = "Yearly", NumberRequests = 36000, Amount = 299.99, Active = true },
+                    new PlanSubscriptionFeaturesModel { Id = "4",Name="support Types",Description="Basic text-to-speech service", BillingPeriod = "Yearly", NumberRequests = 36000, Amount = 299.99, Active = true },
+                    new PlanSubscriptionFeaturesModel { Id = "5",Name="server Speeds",Description="Basic text-to-speech service", BillingPeriod = "Yearly", NumberRequests = 36000, Amount = 299.99, Active = true },
+                },
+                TechnicalFeatures = new List<PlanTechnicalFeaturesModel>
+                {
+
+                    new PlanTechnicalFeaturesModel { Id = "1", Name = "Number of Requests", Description = "Unlimited requests", Price = 19.99, Count = 10, Status = "Active" },
+                    new PlanTechnicalFeaturesModel { Id = "2", Name = "Scope Android", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "3", Name = "Scope Web", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "4", Name = "Scope Report", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "5", Name = "Scope Word Count", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
+                }
+            }
+        };
+
+            basicDB.AddRange(plans);
+
+
+
+
+
+    }
+
+    public async Task<IEnumerable<PlanModel>?> getAllPlansAsync()
         {
             return db;
+        }   
+        
+        public async Task<IEnumerable<BasicPlanModel>?> getAllBasicPlansAsync()
+        {
+            return basicDB;
         }
 
 

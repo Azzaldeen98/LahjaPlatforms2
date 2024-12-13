@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using AutoMapper;
 using Infrastructure.Models.Plans;
 using Domain.Entities.Plans;
+using Infrastructure.Models.Plans.Response;
 
 namespace Infrastructure.Mappings.Plans
 {
@@ -22,7 +23,11 @@ namespace Infrastructure.Mappings.Plans
 
 
             CreateMap<PlanModel, Plan>().ReverseMap();
-            CreateMap<SubscriptionModel, Subscription>().ReverseMap();
+            CreateMap<PlansContainerModel, PlansContainer>().ReverseMap();
+            CreateMap<PlanSubscriptionModel, Subscription>().ReverseMap();
+            CreateMap<BasicPlanModel, BasicPlan>().ReverseMap();
+            CreateMap<PlanSubscriptionFeaturesModel, PlanSubscriptionFeatures>().ReverseMap();
+            CreateMap<PlanTechnicalFeaturesModel, PlanTechnicalFeatures>().ReverseMap();
 
             //    .ForMember(dest => dest.likes, opt => opt.MapFrom(src => src.likes != null ? src.likes.Count : 0))
             //.ReverseMap();

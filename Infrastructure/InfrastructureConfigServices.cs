@@ -46,6 +46,7 @@ namespace Infrastructure
         {
             serviceCollection.AddSingleton<SeedsUsers>();
             serviceCollection.AddSingleton<SeedsPlans>();
+            serviceCollection.AddSingleton<SeedsPlansContainers>();
             serviceCollection.AddScoped<AuthControl>();
         }
 
@@ -53,11 +54,13 @@ namespace Infrastructure
         {
             serviceCollection.AddAutoMapper(typeof(InfrastructureMappingConfig));
             serviceCollection.AddAutoMapper(typeof(PlansMappingConfig));
+            serviceCollection.AddAutoMapper(typeof(PlansRemoteMappingConfig));
             serviceCollection.AddAutoMapper(typeof(InfrastructureRemoteMappingConfig));
         }
 
         private static void InstallRepositories(this IServiceCollection serviceCollection)
         {
+            serviceCollection.AddScoped<IPlansContainerRepository, PlansContainerRepository>();
             serviceCollection.AddScoped<IPlansRepository,PlansRepository>();
             serviceCollection.AddScoped<IUsersRepository,UsersRepository>();
             serviceCollection.AddScoped<IAuthRepository,AuthRepository>();

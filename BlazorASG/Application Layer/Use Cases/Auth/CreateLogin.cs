@@ -31,6 +31,7 @@ namespace BlazorASG.Application_Layer.Use_Cases.Auth
             try
             {
                 var tokenn = await _tokenService.GetTokenAsync();
+
                 if (!string.IsNullOrEmpty(tokenn))
                 {
 

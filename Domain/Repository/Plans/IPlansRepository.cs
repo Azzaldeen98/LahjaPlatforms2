@@ -11,5 +11,8 @@ namespace Domain.Repository.Plans
     {
         public  Task<IEnumerable<Plan>> getAllPlansAsync();
         public  Task<Plan> getPlanByIdAsync(string id);
+        public  Task<IEnumerable<PlansContainer>> getAllPlansContainerAsync();
+        public  Task<IEnumerable<BasicPlan>> getAllBasicPlansAsync();
+
     }
 }

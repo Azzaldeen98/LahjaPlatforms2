@@ -1,0 +1,53 @@
+﻿@*  
+
+
+@code 
+{
+    [Parameter]
+    public PageTransitionTypes TransitionType { get; set; }
+
+    [Parameter]
+    public string? Uri { get; set; }
+
+    [Parameter]
+    public string? DialogTitle { get; set; }
+
+  
+
+ 
+
+    [Parameter]
+    public DialogOptions? DialogOptions { get; set; }  
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+
+ 
+
+
+
+
+    public async Task<TResult?> ShowDialogWithResultAsync<TComponent, TResult>(
+          string dialogTitle,
+          Dictionary<string, object>? parameterss = null,
+          DialogOptions? options = null
+      ) where TComponent : ComponentBase
+    {
+        var dialogReference = await DialogService.ShowAsync<TComponent>(dialogTitle, parameterss, options);
+
+        var result = await dialogReference.Result;
+
+        if (!result.Cancelled && result.Data is TResult data)
+        {
+            return data;
+        }
+
+        return default;
+    }
+    
+    public enum PageTransitionTypes
+    {
+        Url = 0,
+        Dialog = 1,
+    }
+} *@

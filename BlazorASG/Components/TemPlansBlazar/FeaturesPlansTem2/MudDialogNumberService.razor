@@ -1,0 +1,45 @@
+﻿<MudDialog>
+    <DialogContent>
+@if(@ButtonText=="Edit")
+{
+           
+
+            <MudNumericField @bind-Value="@Params.Count" DebounceInterval="500" Label="@Params.Name" HelperText="@Params.Name" Variant="Variant.Outlined" />
+            <MudText>@Params.Price</MudText>
+            
+            
+}
+else
+{
+     <MudText>@ContentText</MudText>
+}
+        
+       
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@ButtonText</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+
+    int count = 0;
+    [CascadingParameter]
+    private MudDialogInstance ?MudDialog { get; set; }
+
+    [Parameter]
+    public string ?ContentText { get; set; }
+    [Parameter] public Data.BlazarComponents.Plans.TemFeturePlans2.Model.NumberOfService? Params { get; set; }
+    [Parameter]
+    public string ?ButtonText { get; set; }
+
+    [Parameter]
+    public Color Color { get; set; }
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(Params));
+
+    private void Cancel() => MudDialog.Cancel();
+}

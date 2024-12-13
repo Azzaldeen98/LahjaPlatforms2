@@ -1,6 +1,9 @@
-﻿namespace Infrastructure.Models.Plans
+﻿using Domain.Entities.Plans;
+
+namespace Infrastructure.Models.Plans
 {
-    public class SubscriptionModel
+
+    public class PlanSubscriptionModel
     {
 
 
