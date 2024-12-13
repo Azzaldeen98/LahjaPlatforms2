@@ -1,10 +1,16 @@
 ﻿@page "/Login"
+@using BlazorASG.ClientServices.Auth
+@using BlazorASG.Components.Auth2
 @using BlazorASG.VitsModel.Auth
 @inject NavigationManager Navigation
+@inject ClientAuthService ClientAuthService
+@inject AppCustomAuthenticationStateProvider AppCustomAuthenticationStateProvider
+@inject ISnackbar Snackbar
+
 <div style="padding:10%!important">
 
-
-    <BlazorASG.Components.T.Login OnClickLogenDeb="@HandelLogout"  FlagDev=true />
+    <TemplateAuth OnLoginSubmit="HandleLoginSubmit" OnRegisterSubmit="HandRegisterSubmit" IsToLoginMode="toLoginMode" />
+    
 
 
 </div>
@@ -12,7 +18,57 @@
 
 @code
 {
-  
+    bool toLoginMode = false;
+
+    private async Task HandleLoginSubmit(LoginRequest data)
+    {
+        if (data != null)
+        {
+
+            var response = await ClientAuthService.loginAsync(data);
+            if (response.Succeeded)
+            {
+
+                AppCustomAuthenticationStateProvider.StoreAuthenticationData(response.Data.accessToken);
+                Snackbar.Add("Successfully", Severity.Success);
+                Navigation.NavigateTo("/", forceLoad: true);
+            }
+            else
+            {
+                Snackbar.Add(response.Messages[0], Severity.Error);
+            }
+
+
+        }
+
+
+    }
+    private async Task HandRegisterSubmit(RegisterRequest data)
+    {
+        if (data != null)
+        {
+
+            var response = await ClientAuthService.registerAsync(data);
+            if (response.Succeeded)
+            {
+                toLoginMode = true;
+
+                Snackbar.Add("Successfully", Severity.Success);
+               
+                StateHasChanged();
+
+            }
+            else
+            {
+                Snackbar.Add(response.Messages[0], Severity.Error);
+            }
+
+
+        }
+
+
+    }
+    //<BlazorASG.Components.T.Login OnClickLogenDeb="@HandelLogout"  FlagDev=true />
     private async void HandelLogout(Application.Common.Model.ResponseModel<OutputLogin>request)
     {
         if (request != null)

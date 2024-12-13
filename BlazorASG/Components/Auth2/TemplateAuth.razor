@@ -1,5 +1,12 @@
-﻿@inject NavigationManager navigator;
+﻿@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+@using BlazorASG.VitsModel.Auth
+
+
+@inject NavigationManager navigator;
 @inject ISnackbar Snackbar
+
+
 <MudDialog DefaultFocus="DefaultFocus.LastChild" @bind-IsVisible=isVisible Options="dialogOptions">
     <TitleContent>
         <MudText Typo="Typo.h6">
@@ -10,8 +17,7 @@
         </DialogActions>
     <DialogContent>
         <MudContainer class="cuntrer" >
-            @using System.Text.RegularExpressions
-            @using System.ComponentModel.DataAnnotations
+
 
         
               
@@ -73,7 +79,7 @@
                             }
                             else
                             {
-                                <TemplateAuthForm IsLogin=@(indexAuth==1) />
+                                <TemplateAuthForm IsLogin=@(indexAuth==1) OnLoginSubmit="OnLoginSubmit" OnRegisterSubmit="OnRegisterSubmit" />
                             }
                             <br />
                             <MudDivider />
@@ -93,19 +99,38 @@
 
 
             </div>
-            <img src="css/icon.jpg" class="imglogin" />
+             <img src="logo1.svg" class="imglogin" />
 </MudContainer>
     </DialogContent>
     
 </MudDialog>
 @code {
+
+    [Parameter] public EventCallback<LoginRequest> OnLoginSubmit { get; set; }
+    [Parameter] public EventCallback<RegisterRequest> OnRegisterSubmit { get; set; }
+    [Parameter] public bool IsToLoginMode {
+        set { 
+            _isToLogin = value;
+            if (_isToLogin) ChangeAuth();
+        }
+        get { return _isToLogin; }
+    }
+
     bool success;
+    bool _isToLogin=false;
     string[] errors = { };
     MudTextField<string> pwField1;
     MudForm form;
     bool isshowmian = true;
     string[] nameAuth = { "Sign up", "Login" };
     int indexAuth=0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+    }
+
+
     void ChangeAuth()
     {
         indexAuth = 1 - indexAuth;
@@ -118,6 +143,7 @@
         isshowmian = false;
         StateHasChanged();
     }
+    
     private IEnumerable<string> PasswordStrength(string pw)
     {
         if (string.IsNullOrWhiteSpace(pw))
@@ -143,4 +169,6 @@
     }
     private bool isVisible = true;
     private DialogOptions dialogOptions = new() { CloseButton = true };
+
+ 
 }

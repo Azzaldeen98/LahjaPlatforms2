@@ -75,6 +75,7 @@ namespace Infrastructure.DataSource.ApiClient.Auth
             try
             {
                 var model = _mapper.Map<RegisterRequest>(request);
+             
                 //var model = new LoginRequest
                 //{
                 //    Email = request.email,
