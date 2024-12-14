@@ -1,6 +1,9 @@
 ﻿@using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations
 @using BlazorASG.VitsModel.Auth
+
+
+
 <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
     @if (!IsLogin)
     {
@@ -21,6 +24,50 @@
         <MudCheckBox T="bool" Required="true" RequiredError="You must agree" Label="I agree!" />
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="onSubmitForm" Disabled="@(!success)" Class="ml-auto">@(IsLogin ? "Login" : "Register")</MudButton>
     </div>
+
+        <div class="d-flex align-center justify-space-between">
+            <MudButton OnClick="onClickForgetPassword" Color="Color.Surface"  >Forgot Password?</MudButton>
+    </div>
+
+
+    @if (errors != null && errors.Count() > 0)
+    {
+        <MudAlert Severity="Severity.Error" Class="mt-3">
+            <ul>
+                @foreach (var error in errors)
+                {
+                    <li>@error</li>
+                }
+            </ul>
+        </MudAlert>
+    }
+
+    <MudDialog Class="col-5 w-50" Style="width:30% !important" DefaultFocus="DefaultFocus.LastChild" @bind-IsVisible=isVisible>
+        <TitleContent>
+            <MudText Typo="Typo.h6">
+                <h3 class="d-flex align-center justify-content-center flex-column">Reset Password</h3>
+            </MudText>
+        </TitleContent>
+        <DialogActions>
+
+        </DialogActions>
+        <DialogContent>
+            <MudContainer Style="width:100% !important" class="w-100 border  d-flex align-center justify-content-center flex-column">
+                <MudForm Style="width:100% !important" @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+                    <div class="d-flex align-center justify-content-center flex-column" style="padding:2% 2%;margin:auto 10px;width:100% !important ">
+                        <MudTextField T="string" Class="my-5" FullWidth Label="Email" Required="true" RequiredError="Email is required!"
+                                      Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" @bind-Value="@email" />
+
+                        <MudButton Variant="Variant.Filled" FullWidth Color="Color.Primary" OnClick="onSubmitConfirmEmail" Class="ml-auto my-5">Confirm</MudButton>
+
+                    </div>
+                </MudForm>
+
+            </MudContainer>
+        </DialogContent>
+
+    </MudDialog>
+
 </MudForm>
 
 
@@ -29,9 +76,15 @@
     [Parameter] public bool IsLogin { set; get; } = false;
     [Parameter] public EventCallback<LoginRequest> OnLoginSubmit { get; set; }
     [Parameter] public EventCallback<RegisterRequest> OnRegisterSubmit { get; set; }
+    [Parameter] public List<string> ErrorMessages {  set {
+            if (value!=null &&  value.Count()>0)
+                errors = value.ToArray();
+        } }
 
     bool success;
+    bool isVisible=false;
     string[] errors = { };
+
     MudTextField<string> pwField1;
     MudForm form;
 
@@ -69,14 +122,35 @@
         return null;
     }
 
+    private async Task onClickForgetPassword()
+    {
+        isVisible = true;
+        StateHasChanged();
+    }
+
+
+    private async Task onSubmitConfirmEmail()
+    {
+        await form.Validate();
+        if (success)
+        {
+            
+            // if (OnLoginSubmit.HasDelegate)
+            // {
+            //     await OnLoginSubmit.InvokeAsync(email);
+            // }
+
+        }
+    }
     private async Task onSubmitForm()
     {
         await form.Validate();
-
+      
         if (success)
         {
             if (IsLogin)
             {
+               
                 var data = new LoginRequest
                     {
                   
@@ -84,6 +158,8 @@
                         Password = password,
                     };
 
+  
+          
                 // استدعاء المفوض وتمرير البيانات
                 if (OnLoginSubmit.HasDelegate)
                 {

@@ -47,6 +47,12 @@ namespace BlazorASG.ClientServices.Auth
 
         }
 
+        public async Task<Result<string>> forgetPasswordAsync(string email)
+        {
+            return await service.forgetPasswordAsync(email);
+
+        }
+
 
     }
 }

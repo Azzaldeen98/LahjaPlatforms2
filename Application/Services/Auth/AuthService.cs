@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain.Entities.Auth.Response;
 using Domain.Entities.Auth.Request;
+using Application.UseCase.Auth;
 
 namespace Application.Services.Auth
 {
@@ -16,13 +17,15 @@ namespace Application.Services.Auth
     {
         private readonly LoginUseCase loginUseCase;
         private readonly RegisterUseCase registerUseCase;
+        private readonly ForgetPasswordUseCase forgetPasswordUseCase;
 
-        public AuthService(LoginUseCase loginUseCase, RegisterUseCase registerUseCase)
+        public AuthService(LoginUseCase loginUseCase, RegisterUseCase registerUseCase, ForgetPasswordUseCase forgetPasswordUseCase)
         {
 
 
             this.loginUseCase = loginUseCase;
             this.registerUseCase = registerUseCase;
+            this.forgetPasswordUseCase = forgetPasswordUseCase;
         }
 
         public async Task<Result<LoginResponse>> loginAsync(LoginRequest request)
@@ -34,6 +37,13 @@ namespace Application.Services.Auth
         public async Task<Result<RegisterResponse>> registerAsync(RegisterRequest request)
         {
             return await registerUseCase.ExecuteAsync(request);
+                
+            
+
+        }
+        public async Task<Result<string>> forgetPasswordAsync(string email)
+        {
+            return await forgetPasswordUseCase.ExecuteAsync(email);
                 
             
 

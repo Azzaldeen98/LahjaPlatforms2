@@ -49,7 +49,7 @@
 
 <MudLayout>
     
-
+    
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="position:fixed;width:100%;z-index:9999" aria-label="Ninth navbar example">
             <div class="container-xl ">
             <MudIcon Size="Size.Large" Color="Color.Success" Icon="@Icons.Material.Filled.BlurOn" Title="API" />
@@ -59,32 +59,33 @@
                 <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample07XL" aria-controls="navbarsExample07XL" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
-                <div class="navbar-collapse collapse" id="navbarsExample07XL" style="">
+                @if (isDisplay)
+                {
+                    <div class="navbar-collapse collapse" id="navbarsExample07XL" style="">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/Admin">Home</a>
+                            <a class="nav-link active" aria-current="page" href="/Admin">Home</a>
                         </li>
 
 
 
 
-                    @if (@flagauth)
-                    {
-                        <li class="nav-item">
+                        @if (@flagauth)
+                        {
+                            <li class="nav-item">
 
-                            <a class="nav-link" href="/Rigist">Rigister</a>
-                        </li>
+                                <a class="nav-link" href="/Rigist">Rigister</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Login">Login</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="nav-item">
-                            
-                           <BlazorASG.Components.T.Logout OnClickLogout="Handellogout"/>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Login">Login</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+
+                                <BlazorASG.Components.T.Logout OnClickLogout="loginOrlogout" />
                         </li>
                         <li class="nav-item">
                            
@@ -117,8 +118,10 @@
                         <input class="form-control" type="search" placeholder="Search" aria-label="Search">
                     </form>
                 </div>
+                }
             </div>
         </nav>
+    
        
            
 
@@ -147,6 +150,8 @@
     bool _drawerOpen = true;
 
     bool _isauth = false;
+    bool isDisplay = false;
+
     string? idprofile;
 
     bool flagauth = true;
@@ -172,47 +177,15 @@
     }
     private async void Handellogout(bool flag)
     {
-          flagauth = flag;
-         StateHasChanged();
+        flagauth = flag;
+        StateHasChanged();
     }
+
     protected async override Task OnInitializedAsync()
 
     {
 
 
-        try
-        {
-
-            tokenn = await _tokenService.GetTokenAsync();
-            if (!string.IsNullOrEmpty(tokenn))
-            {
-
-                flagauth = false;
-                string[] x = tokenn.Split(',');
-                nameemail = x[1];
-            }
-
-            idprofile = (await pass.GetAsync<string?>("_token")).Value;
-            _isauth = idprofile != null;
-            islogin = false;
-
-            if (idprofile != null)
-            {
-                profile = contextDB.Profiles.Include(p => p.User).FirstOrDefault(x => x.Id == idprofile);
-                profile = contextDB.Profiles.Include(p => p.BK).FirstOrDefault(x => x.Id == idprofile);
-                // profile.Images = contextDB.Images.Where(x => profile.Id == x.IdProfiles).ToList();
-
-                //profile.Imagess = contextDB.Imagess.Where(x => profile.Id == x.IdProfiles).ToList();
-                StateHasChanged();
-
-            }
-
-        }
-        catch
-        {
-
-        }
-        StateHasChanged();
 
 
 
@@ -222,6 +195,42 @@
     public void editpro(string link)
     {
         NavigationManager.NavigateTo(link);
+
+    }
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        if (firstRender)
+        {
+            try
+            {
+
+                tokenn = await _tokenService.GetTokenAsync();
+                if (!string.IsNullOrEmpty(tokenn))
+                {
+                    await pass.SetAsync("accessToken", tokenn);
+
+                    flagauth = false;
+                    string[] x = tokenn.Split(',');
+                    nameemail = x[1];
+                }
+                else
+                {
+                    await pass.SetAsync("accessToken", "$$$$$");
+                }
+
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                isDisplay = true;
+            }
+            StateHasChanged();
+
+        }
 
     }
     public void ahr()
@@ -240,28 +249,19 @@
     {
         _drawerOpen = !_drawerOpen;
     }
-    void loginOrlogout(bool isauth)
+
+    async void loginOrlogout(bool isauth)
     {
 
-        if (!isauth)
-        {
-           isauth=islogin = true;
-
-
+        
+            flagauth = isauth;
+            await pass.DeleteAsync("accessToken");
+            await _tokenService.RemoveTokenAsync();
             StateHasChanged();
             // loginOrlogout(_isauth);
+            NavigationManager.NavigateTo("/Login", forceLoad: true);
 
-
-        }
-        else
-        {
-
-            pass.DeleteAsync("_token");
-            StateHasChanged();
-            // loginOrlogout(_isauth);
-            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
-
-        }
+        
 
     }
     void linkEditProfile()

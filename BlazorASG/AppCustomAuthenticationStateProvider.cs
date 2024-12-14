@@ -68,7 +68,7 @@ namespace BlazorASG
             var claims = new List<Claim>
             {
                 new Claim("AccessToken", token),
-                new Claim(ClaimTypes.Role, role)
+                //new Claim(ClaimTypes.Role, role)
             };
 
              var identity = new ClaimsIdentity(claims, "CustomAuth");
@@ -77,13 +77,13 @@ namespace BlazorASG
        
             var cookieOptions = new CookieOptions { HttpOnly = true, Secure = true };
 
-            //_httpContextAccessor.HttpContext.Response.OnStarting(() =>
-            //if (!_httpContextAccessor.HttpContext.Response.HasStarted)
-            //{
-            //    _httpContextAccessor.HttpContext.Response.Cookies.Append("AccessToken", token, new CookieOptions { HttpOnly = true });
-            //    _httpContextAccessor.HttpContext.Response.Cookies.Append("Role", role, new CookieOptions { HttpOnly = true });
             
-            //}
+                //if (!_httpContextAccessor.HttpContext.Response.HasStarted)
+                //{
+                //_httpContextAccessor.HttpContext.Response.Cookies.Append("AccessToken", token, cookieOptions);
+                //_httpContextAccessor.HttpContext.Response.Cookies.Append("Role", role, cookieOptions);
+
+            
 
             //_httpContextAccessor.HttpContext.Response.Cookies.Append("AccessToken", token, cookieOptions);
             //_httpContextAccessor.HttpContext.Response.Cookies.Append("Role", role, cookieOptions);

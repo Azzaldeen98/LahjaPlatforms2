@@ -1,5 +1,6 @@
 ﻿using Application.Services.Auth;
 using Application.Services.Plans;
+using Application.UseCase.Auth;
 using Application.UseCase.Plans;
 using Infrastructure.Mappings.Plans;
 using Infrastructure.Repository.Plans;
@@ -34,6 +35,7 @@ namespace Infrastructure
             serviceCollection.AddScoped<GetAllBasicPlansUseCase>();
             serviceCollection.AddScoped<GetAllPlansUseCase>();
             serviceCollection.AddScoped<GetPlanByIdUseCase>();
+            serviceCollection.AddScoped<ForgetPasswordUseCase>();
             serviceCollection.AddScoped<GetAllPlansContainersUseCase>();
             serviceCollection.AddScoped<LoginUseCase>();
             serviceCollection.AddScoped<RegisterUseCase>();

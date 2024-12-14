@@ -219,5 +219,5 @@ app.UseRouting();
 app.UseSession();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-await ATTK.Load();
+//await ATTK.Load();
 app.Run();

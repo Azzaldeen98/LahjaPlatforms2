@@ -1,8 +1,22 @@
 ﻿@page "/Rigist"
+@using BlazorASG.Components.Auth2
+@inherits BaseInitializationComponent
+
 <div style="padding:10%!important">
 
+         @if (IsAuth)
+         {
+              Navigation.NavigateTo("/");
+        }
+        else
+        {
+            <TemplateAuth IsToLoginMode="false" />
+        }
 
-    <BlazorASG.Components.T.Rigister />
-
+    
 
 </div>
+
+@code{
+    // <BlazorASG.Components.T.Rigister />
+}

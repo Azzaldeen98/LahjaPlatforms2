@@ -5,12 +5,21 @@
 @inject NavigationManager Navigation
 @inject ClientAuthService ClientAuthService
 @inject AppCustomAuthenticationStateProvider AppCustomAuthenticationStateProvider
+
+
+@inherits BaseInitializationComponent
+
 @inject ISnackbar Snackbar
 
 <div style="padding:10%!important">
-
-    <TemplateAuth OnLoginSubmit="HandleLoginSubmit" OnRegisterSubmit="HandRegisterSubmit" IsToLoginMode="toLoginMode" />
-    
+ 
+   @if(_isShow){
+        <TemplateAuth IsToLoginMode="true" />
+    }
+    else
+    {
+        
+    }
 
 
 </div>
@@ -18,56 +27,78 @@
 
 @code
 {
-    bool toLoginMode = false;
-
-    private async Task HandleLoginSubmit(LoginRequest data)
+    private bool _isShow = false;
+    protected override async Task OnInitializedAsync()
     {
-        if (data != null)
+        var t =await getAuthAsync();
+        if (t)
         {
-
-            var response = await ClientAuthService.loginAsync(data);
-            if (response.Succeeded)
-            {
-
-                AppCustomAuthenticationStateProvider.StoreAuthenticationData(response.Data.accessToken);
-                Snackbar.Add("Successfully", Severity.Success);
-                Navigation.NavigateTo("/", forceLoad: true);
-            }
-            else
-            {
-                Snackbar.Add(response.Messages[0], Severity.Error);
-            }
-
-
+            Navigation.NavigateTo("/");
         }
-
-
+        _isShow = true;
+        StateHasChanged();
+       
     }
-    private async Task HandRegisterSubmit(RegisterRequest data)
-    {
-        if (data != null)
-        {
 
-            var response = await ClientAuthService.registerAsync(data);
-            if (response.Succeeded)
-            {
-                toLoginMode = true;
+    // <TemplateAuth OnLoginSubmit="HandleLoginSubmit" OnRegisterSubmit="HandRegisterSubmit" IsToLoginMode="toLoginMode" ErrorMessages="errorMessages" />
+    // bool toLoginMode = false;
+    // List<string> errorMessages { get; set; } = new List<string>();
 
-                Snackbar.Add("Successfully", Severity.Success);
-               
-                StateHasChanged();
+    // private async Task HandleLoginSubmit(LoginRequest data)
+    // {
+    //     if (data != null)
+    //     {
 
-            }
-            else
-            {
-                Snackbar.Add(response.Messages[0], Severity.Error);
-            }
+    //         var response = await ClientAuthService.loginAsync(data);
+    //         if (response.Succeeded)
+    //         {
+
+    //             AppCustomAuthenticationStateProvider.StoreAuthenticationData(response.Data.accessToken);
+    //             Snackbar.Add("Successfully", Severity.Success);
+    //             Navigation.NavigateTo("/", forceLoad: true);
+    //         }
+    //         else
+    //         {
+    //             if (response.Messages != null && response.Messages.Count() > 0)
+    //             {
+    //                 errorMessages.AddRange(response.Messages);
+    //                 Snackbar.Add(response.Messages[0], Severity.Error);
+    //             }
+    //         }
 
 
-        }
+    //     }
 
 
-    }
+    // }
+    // private async Task HandRegisterSubmit(RegisterRequest data)
+    // {
+    //     if (data != null)
+    //     {
+
+    //         var response = await ClientAuthService.registerAsync(data);
+    //         if (response.Succeeded)
+    //         {
+    //             toLoginMode = true;
+
+    //             Snackbar.Add("Successfully", Severity.Success);
+
+    //             StateHasChanged();
+
+    //         }
+    //         else
+    //         {
+    //             if (response.Messages != null && response.Messages.Count() > 0)
+    //             {
+    //                 errorMessages.AddRange(response.Messages);
+    //                 Snackbar.Add(response.Messages[0], Severity.Error);
+    //             }
+    //         }
+
+
+    //     }
+
+    // }
     //<BlazorASG.Components.T.Login OnClickLogenDeb="@HandelLogout"  FlagDev=true />
     private async void HandelLogout(Application.Common.Model.ResponseModel<OutputLogin>request)
     {

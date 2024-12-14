@@ -65,6 +65,19 @@ namespace Infrastructure.DataSource
 
            
         }
+
+        public async Task<Result<string>> forgetPasswordAsync(string email)
+        {
+
+            var response = await ExecutorAppMode.ExecuteAsync<Result<string>>(
+                async () =>   await authApiClient.forgetPasswordAsync(email),
+                 async () => Result<string>.Success("Success !!"));
+
+
+            return response;
+
+
+        }
         public async Task<Result<RegisterResponseModel>> registerAsync(RegisterRequestModel model)
         {
 

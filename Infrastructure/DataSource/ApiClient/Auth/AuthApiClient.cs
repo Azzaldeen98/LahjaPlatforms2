@@ -42,6 +42,10 @@ namespace Infrastructure.DataSource.ApiClient.Auth
         }
 
 
+        public async Task<Result<string>> forgetPasswordAsync(string email)
+        {
+            return Result<string>.Success(email);
+        }
         public async Task<Result<LoginResponseModel>> loginAsync(LoginRequestModel request)
         {
             try

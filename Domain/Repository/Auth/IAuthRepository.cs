@@ -9,5 +9,6 @@ namespace Domain.Repository.Auth
 
         public Task<Result<LoginResponse>> loginAsync(LoginRequest model);
         public Task<Result<RegisterResponse>> registerAsync(RegisterRequest model);
+        public Task<Result<string>> forgetPasswordAsync(string email);
     }
 }

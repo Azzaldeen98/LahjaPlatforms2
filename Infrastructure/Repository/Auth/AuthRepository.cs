@@ -34,7 +34,16 @@ namespace Infrastructure.Repository.Auth
             this.seedsUsers = seedsUsers;
         }
 
+   
+        public async Task<Result<string>?> forgetPasswordAsync(string email)
+        {
+         
 
+            var response = await authControl.forgetPasswordAsync(email);
+            return response;
+
+
+        }
 
         public async Task<Result<LoginResponse>> loginAsync(LoginRequest request)
         {

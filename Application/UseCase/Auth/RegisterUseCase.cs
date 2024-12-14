@@ -6,7 +6,7 @@ using Domain.Wrapper;
 using Domain.Entities.Auth.Response;
 using Domain.Entities.Auth.Request;
 
-namespace Application.UseCase.Plans
+namespace Application.UseCase.Auth  
 {
     public class RegisterUseCase
     {
@@ -35,5 +35,5 @@ namespace Application.UseCase.Plans
 
 
         }
-    }
+    } 
 }

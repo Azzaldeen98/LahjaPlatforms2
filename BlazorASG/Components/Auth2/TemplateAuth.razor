@@ -1,89 +1,85 @@
 ﻿@using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations
+@using BlazorASG.ClientServices.Auth
 @using BlazorASG.VitsModel.Auth
 
 
-@inject NavigationManager navigator;
+@inject NavigationManager Navigation;
 @inject ISnackbar Snackbar
+@inject ClientAuthService ClientAuthService
+@inject AppCustomAuthenticationStateProvider AppCustomAuthenticationStateProvider
 
 
-<MudDialog DefaultFocus="DefaultFocus.LastChild" @bind-IsVisible=isVisible Options="dialogOptions">
-    <TitleContent>
-        <MudText Typo="Typo.h6">
-           
-        </MudText>
-    </TitleContent>
-    <DialogActions>
+
+
+
+
+    <MudDialog DefaultFocus="DefaultFocus.LastChild" @bind-IsVisible=isVisible Options="dialogOptions">
+        <TitleContent>
+            <MudText Typo="Typo.h6">
+
+            </MudText>
+        </TitleContent>
+        <DialogActions>
+
         </DialogActions>
-    <DialogContent>
-        <MudContainer class="cuntrer" >
+        <DialogContent>
+            <MudContainer class="cuntrer">
 
+                <div style="padding:2% 2%">
 
-        
-              
-            <div style="padding:2% 2%">
-                    
-                        <div class="RCardP fsing" >
-                       
+                    <div class="RCardP fsing">
+
                         <div id="signupModalFormSignup" data-hs-show-animation-target-group="idForm" style="display: block; opacity: 1.0175;">
                             <!-- Heading -->
                             <div class="text-center mb-7">
-                            <h3>   @(nameAuth[indexAuth])</h3>
+                                <h3>   @(nameAuth[indexAuth])</h3>
                                 <p>
                                     Already have an account?
-                                <MudButton 
-                                         
-                                           Variant="Variant.Text"
-                                           OnClick="ChangeAuth"
-                                           Color="Color.Primary"
-                                           Style="text-transform:none"
-                                           >
-                                    @(nameAuth[1-indexAuth])
-                                </MudButton>
+                                    <MudButton Variant="Variant.Text"
+                                               OnClick="ChangeAuth"
+                                               Color="Color.Primary"
+                                               Style="text-transform:none">
+                                        @(nameAuth[1 - indexAuth])
+                                    </MudButton>
                                 </p>
                             </div>
                             <!-- End Heading -->
-                        
-                        <MudDivider />
-                        <br />
+
+                            <MudDivider />
+                            <br />
 
                             <div class="d-grid gap-3">
                                 @if (isshowmian)
-                            {
+                                {
 
-                                <MudButton 
-                                       Variant="Variant.Outlined"
-                                       EndIcon="css/google-icon.svg"
-                                       Color="Color.Primary">
-                                    <img style="width: 1rem; height: 1rem;margin-right:10px" src="css/google-icon.svg" alt="Image Description">
+                                    <MudButton Variant="Variant.Outlined" OnClick="onClickGoogleAccount"
+                                               EndIcon="css/google-icon.svg"
+                                               Color="Color.Primary">
+                                        <img style="width: 1rem; height: 1rem;margin-right:10px" src="css/google-icon.svg" alt="Image Description">
 
-                                    @nameAuth[indexAuth] with Google
-                                </MudButton>
-                                <MudButton 
-                                     
-                                       Variant="Variant.Outlined"
+                                        @nameAuth[indexAuth] with Google
+                                    </MudButton>
+                                    <MudButton Variant="Variant.Outlined" OnClick="onClickFacebookAccount"
+                                               Color="Color.Primary">
+                                        <img style="width: 1.5rem; height: 1.5rem;margin-right:10px" src="css/fb-icon.svg" alt="Image Description">
 
-                                       Color="Color.Primary">
-                                    <img style="width: 1.5rem; height: 1.5rem;margin-right:10px" src="css/fb-icon.svg" alt="Image Description">
-
-                                    @nameAuth[indexAuth] with Facebook
-                                </MudButton>
-                                <MudButton 
-                                       OnClick="ClickFormEmaill"
-                                       Variant="Variant.Filled"
-                                       
-                                       Color="Color.Primary"
-                                       >
-                                    @nameAuth[indexAuth] with Email
-                                </MudButton>
-                            }
-                            else
-                            {
-                                <TemplateAuthForm IsLogin=@(indexAuth==1) OnLoginSubmit="OnLoginSubmit" OnRegisterSubmit="OnRegisterSubmit" />
-                            }
-                            <br />
-                            <MudDivider />
-                             <br />
+                                        @nameAuth[indexAuth] with Facebook
+                                    </MudButton>
+                                    <MudButton OnClick="ClickFormEmaill"
+                                               Variant="Variant.Filled"
+                                               Color="Color.Primary">
+                                        @nameAuth[indexAuth] with Email
+                                    </MudButton>
+                                }
+                                else
+                                {
+                                    <TemplateAuthForm IsLogin=@(indexAuth==1) OnLoginSubmit="HandleLoginSubmit"
+                                                      OnRegisterSubmit="HandRegisterSubmit" ErrorMessages="errorMessages" />
+                                }
+                                <br />
+                                <MudDivider />
+                                <br />
                                 <div class="text-center">
                                     <p class="small mb-0">By continuing you agree to our <a href="#">Terms and Conditions</a></p>
                                 </div>
@@ -91,25 +87,33 @@
                         </div>
 
 
-                 
-                    
-                       
-                    
+
+
+
+
                     </div>
 
 
-            </div>
-             <img src="logo1.svg" class="imglogin" />
-</MudContainer>
-    </DialogContent>
+                </div>
+                <img src="css/icon.jpg" class="imglogin" />
+            </MudContainer>
+        </DialogContent>
+
+    </MudDialog>
     
-</MudDialog>
+
+
 @code {
 
-    [Parameter] public EventCallback<LoginRequest> OnLoginSubmit { get; set; }
-    [Parameter] public EventCallback<RegisterRequest> OnRegisterSubmit { get; set; }
-    [Parameter] public bool IsToLoginMode {
-        set { 
+    // [Parameter] public EventCallback<LoginRequest> OnLoginSubmit { get; set; }
+    // [Parameter] public EventCallback<RegisterRequest> OnRegisterSubmit { get; set; }
+    // [Parameter] public List<string> ErrorMessages{ get; set; }
+
+    [Parameter]
+    public bool IsToLoginMode
+    {
+        set
+        {
             _isToLogin = value;
             if (_isToLogin) ChangeAuth();
         }
@@ -117,18 +121,27 @@
     }
 
     bool success;
-    bool _isToLogin=false;
+    bool _isToLogin = false;
     string[] errors = { };
     MudTextField<string> pwField1;
     MudForm form;
     bool isshowmian = true;
     string[] nameAuth = { "Sign up", "Login" };
-    int indexAuth=0;
+    int indexAuth = 0;
+    // bool toLoginMode = false;
+    List<string> errorMessages { get; set; } = new List<string>();
+    // protected override async Task OnInitializedAsync()
+    // {
 
-    protected override async Task OnInitializedAsync()
-    {
-        
-    }
+    // }
+
+    // protected override Task OnInitializedAsync()
+    // {
+
+
+    //     StateHasChanged();
+    //     return base.OnInitializedAsync();
+    // }
 
 
     void ChangeAuth()
@@ -138,12 +151,28 @@
         StateHasChanged();
     }
 
+    void onClickFacebookAccount()
+    {
+        if (indexAuth == 1)
+            Navigation.NavigateTo("https://www.facebook.com/login");
+        else
+            Navigation.NavigateTo("https://www.facebook.com/r.php");
+    }    
+    void onClickGoogleAccount()
+    {
+        if (indexAuth == 1)
+            Navigation.NavigateTo("https://accounts.google.com/ServiceLogin");
+        else
+            Navigation.NavigateTo("https://accounts.google.com/signup");
+    }
+
+
     void ClickFormEmaill()
     {
         isshowmian = false;
         StateHasChanged();
     }
-    
+
     private IEnumerable<string> PasswordStrength(string pw)
     {
         if (string.IsNullOrWhiteSpace(pw))
@@ -170,5 +199,66 @@
     private bool isVisible = true;
     private DialogOptions dialogOptions = new() { CloseButton = true };
 
- 
+
+
+
+
+
+    private async Task HandleLoginSubmit(LoginRequest data)
+    {
+        if (data != null)
+        {
+
+            var response = await ClientAuthService.loginAsync(data);
+            if (response.Succeeded)
+            {
+
+                AppCustomAuthenticationStateProvider.StoreAuthenticationData(response.Data.accessToken);
+                Snackbar.Add("Successfully", Severity.Success);
+                Navigation.NavigateTo("/", forceLoad: true);
+            }
+            else
+            {
+                if (response.Messages != null && response.Messages.Count() > 0)
+                {
+                    errorMessages.AddRange(response.Messages);
+                    Snackbar.Add(response.Messages[0], Severity.Error);
+                }
+            }
+
+
+        }
+
+
+    }
+    private async Task HandRegisterSubmit(RegisterRequest data)
+    {
+        if (data != null)
+        {
+
+            var response = await ClientAuthService.registerAsync(data);
+            if (response.Succeeded)
+            {
+                // toLoginMode = true;
+
+
+                Snackbar.Add("Successfully", Severity.Success);
+                ChangeAuth();
+
+            }
+            else
+            {
+                if (response.Messages != null && response.Messages.Count() > 0)
+                {
+                    errorMessages.AddRange(response.Messages);
+                    Snackbar.Add(response.Messages[0], Severity.Error);
+                }
+            }
+
+
+        }
+
+    }
+
+
 }
