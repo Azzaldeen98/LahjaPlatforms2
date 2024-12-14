@@ -3,6 +3,8 @@ using CardShopping.Web.Token;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Newtonsoft.Json.Linq;
+using Shared.Constants;
+
 
 namespace BlazorASG
 {
@@ -29,7 +31,7 @@ namespace BlazorASG
                 var token = await TokenService.GetTokenAsync();
                 if (!string.IsNullOrEmpty(token))
                 {
-                    await ProtectedSessionStorage.SetAsync("accessToken", token);
+                    await ProtectedSessionStorage.SetAsync(ConstantsApp.ACCESS_TOKEN, token);
 
 
                     _isAuth = true;
@@ -48,8 +50,8 @@ namespace BlazorASG
         {
             try
             {
-                string?  token  = (await ProtectedSessionStorage.GetAsync<string?>("accessToken")).Value; ;
-                if (!string.IsNullOrEmpty(token)&&token!= "$$$$$")
+                string?  token  = (await ProtectedSessionStorage.GetAsync<string?>(ConstantsApp.ACCESS_TOKEN)).Value; ;
+                if (!string.IsNullOrEmpty(token)&&token!= ConstantsApp.PROTECT_SESSION_DEVAULT_VALUE)
                 {
                     //token = await TokenService.GetTokenAsync();
                     //if (!string.IsNullOrEmpty(token))
@@ -60,7 +62,7 @@ namespace BlazorASG
                     StateHasChanged();
                     return true;
                 }
-                StateHasChanged();
+               
                 return false;
 
             }

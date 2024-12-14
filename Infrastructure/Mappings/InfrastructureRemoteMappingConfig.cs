@@ -16,7 +16,6 @@ namespace Infrastructure.Mappings.Plans
             CreateMap<LoginRequestModel, LoginRequest>().ReverseMap();
             CreateMap<RegisterRequestModel,  RegisterRequest>().ReverseMap();
             CreateMap<LoginResponseModel, AccessTokenResponse>().ReverseMap();
-
             CreateMap<LoginResponseModel, PlanResponse>().ReverseMap();
 
 

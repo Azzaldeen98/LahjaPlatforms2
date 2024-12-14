@@ -1,5 +1,6 @@
 ﻿@page "/Login"
 @using BlazorASG.ClientServices.Auth
+@using BlazorASG.Components
 @using BlazorASG.Components.Auth2
 @using BlazorASG.VitsModel.Auth
 @inject NavigationManager Navigation
@@ -11,15 +12,29 @@
 
 @inject ISnackbar Snackbar
 
+
 <div style="padding:10%!important">
- 
-   @if(_isShow){
-        <TemplateAuth IsToLoginMode="true" />
+
+    @if (!_isLoaded)
+    {
+
+        if (isAuth)
+        {
+            <LoaderComponent ViewProgress="true" />
+        }
+        else
+        {
+            <TemplateAuth IsToLoginMode="true" />
+        }
+
+
     }
     else
     {
-        
+        <LoaderComponent ViewProgress="true" />
+
     }
+
 
 
 </div>
@@ -27,17 +42,39 @@
 
 @code
 {
-    private bool _isShow = false;
-    protected override async Task OnInitializedAsync()
+    private bool _isLoaded = true;
+    private bool isAuth = false;
+    // protected override async void OnAfterRender(bool firstRender)
+    // {
+    //     base.OnAfterRender(firstRender);
+
+    //     if (firstRender)
+    //     {
+    //         var isAuth =await getAuthAsync();
+    // if (isAuth)
+    // {
+    //     Navigation.NavigateTo("/");
+    // }
+    // _isLoaded = false;
+    // StateHasChanged();
+    //     }
+
+    // }
+    protected override async void OnAfterRender(bool firstRender)
     {
-        var t =await getAuthAsync();
-        if (t)
+        if (firstRender)
         {
-            Navigation.NavigateTo("/");
+            isAuth = await getAuthAsync();
+            StateHasChanged();
+            if (isAuth)
+            {
+                Navigation.NavigateTo("/");
+            }
+            _isLoaded = false;
+            StateHasChanged();
+
         }
-        _isShow = true;
-        StateHasChanged();
-       
+
     }
 
     // <TemplateAuth OnLoginSubmit="HandleLoginSubmit" OnRegisterSubmit="HandRegisterSubmit" IsToLoginMode="toLoginMode" ErrorMessages="errorMessages" />
