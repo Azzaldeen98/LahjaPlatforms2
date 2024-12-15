@@ -1,8 +1,8 @@
 ﻿using Domain.ShareData.Base;
 
-namespace Domain.Entities.Plans
+namespace Domain.Entities.Plans.Response
 {
-    public class PlanSubscriptionFeatures: BaseSubscriptionFeatures
+    public class PlanSubscriptionFeaturesResponse : BaseSubscriptionFeatures
     {
         public string? Status { get; set; } = "Active";
         public string? Name { get; set; }

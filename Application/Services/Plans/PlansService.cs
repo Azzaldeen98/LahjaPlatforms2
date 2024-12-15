@@ -1,13 +1,14 @@
 ﻿using Application.UseCase.Plans;
-using Domain.Entities.Plans;
+using Domain.Entities.Plans.Response;
 using Domain.Wrapper;
+using Infrastructure.Models.Profile.Response;
 
 namespace Application.Services.Plans
 {
     public class PlansService
     {
         private readonly GetAllPlansUseCase getAllPlansUseCase;
-        private readonly GetAllBasicPlansUseCase getAllBasicPlansUseCase;
+        private readonly GetPlansGroupUseCase getPlansGroupUseCase;
         private readonly GetPlanByIdUseCase getPlanByIdUseCase;
         private readonly GetAllPlansContainersUseCase getAllPlansContainersUseCase;
 
@@ -15,37 +16,38 @@ namespace Application.Services.Plans
             GetAllPlansUseCase getAllPlansUseCase,
             GetPlanByIdUseCase getPlanByIdUseCase,
             GetAllPlansContainersUseCase getAllPlansContainersUseCase,
-            GetAllBasicPlansUseCase getAllBasicPlansUseCase)
+            GetPlansGroupUseCase getPlansGroupUseCase)
         {
 
             this.getAllPlansUseCase = getAllPlansUseCase;
             this.getPlanByIdUseCase = getPlanByIdUseCase;
             this.getAllPlansContainersUseCase = getAllPlansContainersUseCase;
-            this.getAllBasicPlansUseCase = getAllBasicPlansUseCase;
+            this.getPlansGroupUseCase = getPlansGroupUseCase;
         }
 
-        public async Task<Result<IEnumerable<Plan>>> getAllPlansAsync()
+        public async Task<Result<IEnumerable<PlanResponse>>> getAllPlansAsync()
         {
             return await getAllPlansUseCase.ExecuteAsync();
 
         }
-        public async Task<Result<IEnumerable<BasicPlan>>> getAllBasicPlansAsync()
-        {
-            return await getAllBasicPlansUseCase.ExecuteAsync();
-
-        }
+      
 
 
-        public async Task<Result<IEnumerable<PlansContainer>>> getAllPlansContainersAsync()
+        public async Task<Result<IEnumerable<PlansContainerResponse>>> getAllPlansContainersAsync()
         {
             return await getAllPlansContainersUseCase.ExecuteAsync();
 
+        } 
+        public async Task<Result<IEnumerable<PlansGroupResponse>>> getPlansGroupAsync()
+        {
+            return await getPlansGroupUseCase.ExecuteAsync();
+
         }
 
-        public async Task<Result<Plan>> getPlanByIdAsync(string id)
+        public async Task<Result<PlanResponse>> getPlanByIdAsync(string id)
         {
             return await getPlanByIdUseCase.ExecuteAsync(id);
 
         }
-    }
+    } 
 }

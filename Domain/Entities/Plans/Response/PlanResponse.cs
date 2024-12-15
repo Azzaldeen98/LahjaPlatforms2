@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.ShareData.Base;
 
-namespace Domain.Entities.Plans
+namespace Domain.Entities.Plans.Response
 {
-    public class Plan
+    public class PlanResponse
     {
         public string? Id { get; set; }
         public string? ProductName { get; set; }
@@ -16,7 +17,7 @@ namespace Domain.Entities.Plans
         public double? Amount { get; set; }
         public bool Active { get; set; } = false;
         //public DateTime? CreatedAt { get; set; }
-        public ICollection<Subscription>? Subscriptions { get; set; }
+        public ICollection<BaseSubscription>? Subscriptions { get; set; }
 
     }
 

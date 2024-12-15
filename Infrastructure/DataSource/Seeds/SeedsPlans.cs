@@ -11,14 +11,14 @@ namespace Infrastructure.DataSource.Seeds
 {
     public class SeedsPlans
     {
-      private static List<PlanModel> db= new List<PlanModel>();
-      private static List<BasicPlanModel> basicDB= new List<BasicPlanModel>();
+      private static List<PlanResponseModel> db= new List<PlanResponseModel>();
+      private static List<PlansGroupModel> basicDB= new List<PlansGroupModel>();
 
 
         public SeedsPlans()
         {
-            db.AddRange(new List<PlanModel>(){
-                new PlanModel
+            db.AddRange(new List<PlanResponseModel>(){
+                new PlanResponseModel
                 {
                     Id = "1",
                     ProductName = "Basic Plan",
@@ -27,9 +27,9 @@ namespace Infrastructure.DataSource.Seeds
                     NumberRequests = 100,
                     Amount = 19.99,
                     Active = true,
-                    Subscriptions = new List<PlanSubscriptionModel>
+                    Subscriptions = new List<PlanSubscriptionResponseModel>
                     {
-                        new PlanSubscriptionModel
+                        new PlanSubscriptionResponseModel
                         {
                             Id = "S001",
                             PlanId = "1",
@@ -44,7 +44,7 @@ namespace Infrastructure.DataSource.Seeds
                         }
                     }
                 },
-                new PlanModel
+                new PlanResponseModel
                 {
                     Id = "2",
                     ProductName = "Standard Plan",
@@ -53,9 +53,9 @@ namespace Infrastructure.DataSource.Seeds
                     NumberRequests = 500,
                     Amount = 49.99,
                     Active = true,
-                    Subscriptions = new List<PlanSubscriptionModel>
+                    Subscriptions = new List<PlanSubscriptionResponseModel>
                     {
-                        new PlanSubscriptionModel
+                        new PlanSubscriptionResponseModel
                         {
                             Id = "S002",
                             PlanId = "2",
@@ -70,7 +70,7 @@ namespace Infrastructure.DataSource.Seeds
                         }
                     }
                 },
-                new PlanModel
+                new PlanResponseModel
                 {
                     Id = "3",
                     ProductName = "Premium Plan",
@@ -79,9 +79,9 @@ namespace Infrastructure.DataSource.Seeds
                     NumberRequests = 2000,
                     Amount = 499.99,
                     Active = true,
-                    Subscriptions = new List<PlanSubscriptionModel>
+                    Subscriptions = new List<PlanSubscriptionResponseModel>
                     {
-                        new PlanSubscriptionModel
+                        new PlanSubscriptionResponseModel
                         {
                             Id = "S003",
                             PlanId = "3",
@@ -99,9 +99,9 @@ namespace Infrastructure.DataSource.Seeds
             });
 
        
-            var plans = new List<BasicPlanModel>
+            var plans = new List<PlansGroupModel>
         {
-            new BasicPlanModel
+            new PlansGroupModel
             {
                 Id = "1",
                 ProductName = "Basic Plan",
@@ -123,7 +123,7 @@ namespace Infrastructure.DataSource.Seeds
                     new PlanTechnicalFeaturesModel { Id = "5", Name = "Scope Word Count", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
                 }
             },
-            new BasicPlanModel
+            new PlansGroupModel
             {
                 Id = "2",
                 ProductName = "Standard Plan",
@@ -146,7 +146,7 @@ namespace Infrastructure.DataSource.Seeds
                     new PlanTechnicalFeaturesModel { Id = "5", Name = "Scope Word Count", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
                 }
             },
-            new BasicPlanModel
+            new PlansGroupModel
             {
                 Id = "3",
                 ProductName = "Premium Plan",
@@ -179,18 +179,18 @@ namespace Infrastructure.DataSource.Seeds
 
     }
 
-    public async Task<IEnumerable<PlanModel>?> getAllPlansAsync()
+    public async Task<IEnumerable<PlanResponseModel>?> getAllPlansAsync()
         {
             return db;
         }   
         
-        public async Task<IEnumerable<BasicPlanModel>?> getAllBasicPlansAsync()
+        public async Task<IEnumerable<PlansGroupModel>> getPlansGroupAsync()
         {
             return basicDB;
         }
 
 
-        public async Task<PlanModel?> getPlanByIdAsync(string id)
+        public async Task<PlanResponseModel?> getPlanByIdAsync(string id)
         {
 
             return (db.Count > 0) ? db.FirstOrDefault(x => x.Id == id) : null;

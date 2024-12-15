@@ -1,5 +1,6 @@
 ﻿using Application.Services.Auth;
 using Application.Services.Plans;
+using Application.Services.Profile;
 using Application.UseCase.Auth;
 using Application.UseCase.Plans;
 using Infrastructure.Mappings.Plans;
@@ -18,7 +19,7 @@ namespace Infrastructure
         public static void InstallApplicationConfigServices(this IServiceCollection serviceCollection)
         {
 
-            //InstallMapping(serviceCollection);
+            InstallMapping(serviceCollection);
             InstallUsaCases(serviceCollection);
             InstallServices(serviceCollection);
 
@@ -32,19 +33,33 @@ namespace Infrastructure
 
         private static void InstallUsaCases(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<GetAllBasicPlansUseCase>();
-            serviceCollection.AddScoped<GetAllPlansUseCase>();
-            serviceCollection.AddScoped<GetPlanByIdUseCase>();
-            serviceCollection.AddScoped<ForgetPasswordUseCase>();
-            serviceCollection.AddScoped<GetAllPlansContainersUseCase>();
+            /// Auth
             serviceCollection.AddScoped<LoginUseCase>();
             serviceCollection.AddScoped<RegisterUseCase>();
+            serviceCollection.AddScoped<ForgetPasswordUseCase>();
+
+            /// Plans
+            serviceCollection.AddScoped<GetPlansGroupUseCase>();
+            serviceCollection.AddScoped<GetAllPlansUseCase>();
+            serviceCollection.AddScoped<GetPlanByIdUseCase>();
+            serviceCollection.AddScoped<GetAllPlansContainersUseCase>();
+
+
+            /// Profile
+            serviceCollection.AddScoped<GetProfileUseCase>();
+
+            /// Payment
+            //serviceCollection.AddScoped<GetPaymentUseCase>();
+
+
         }
 
         private static void InstallServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<PlansService>();
             serviceCollection.AddScoped<AuthService>();
+            serviceCollection.AddScoped<ProfileService>();
+            //serviceCollection.AddScoped<PaymentService>();
         }
        
     }

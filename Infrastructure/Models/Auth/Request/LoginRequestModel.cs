@@ -17,16 +17,16 @@ namespace Infrastructure.Models.Plans
         [Required]
         [DataType(DataType.Password)]
         [MaxLength(50)]
-        public required string password { get; set; } 
-        
-     
-        [DataType(DataType.PostalCode)]
-        [MaxLength(50)]
-        public  string? twoFactorCode { get; set; }
+        public required string password { get; set; }
+
 
         [DataType(DataType.PostalCode)]
         [MaxLength(50)]
-        public string? twoFactorRecoveryCode { get; set; }
+        public string? twoFactorCode { get; set; } = "string";
+
+        [DataType(DataType.PostalCode)]
+        [MaxLength(50)]
+        public string? twoFactorRecoveryCode { get; set; } = "string";
 
 
     }

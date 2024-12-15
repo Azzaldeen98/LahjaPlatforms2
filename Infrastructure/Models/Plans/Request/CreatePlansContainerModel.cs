@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Models.Plans.Response
 {
-    public class CreatePlansContainerModel : BasePlansContainer 
+    public class CreatePlansContainerModel : BaseProduct 
     {
             //public string Id { get; set; }
         

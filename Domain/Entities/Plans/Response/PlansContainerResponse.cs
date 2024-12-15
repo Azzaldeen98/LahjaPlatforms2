@@ -1,6 +1,6 @@
-﻿namespace Domain.Entities.Plans
+﻿namespace Domain.Entities.Plans.Response
 {
-    public class PlansContainer 
+    public class PlansContainerResponse
     {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -9,7 +9,7 @@
         public string Description { get; set; }
         public decimal Price { get; set; }
         public string ImageUrl { get; set; }
-        public List<Plan>? plans { get; set; }
+        public List<PlanResponse>? plans { get; set; }
 
     }
 }

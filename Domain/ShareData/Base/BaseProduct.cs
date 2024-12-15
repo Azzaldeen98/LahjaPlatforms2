@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.ShareData.Base
 {
-    public class BasePlansContainer
+    public class BaseProduct
     {
 
         public string Name { get; set; }

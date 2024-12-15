@@ -1,4 +1,4 @@
-﻿using Domain.Entities.Plans;
+﻿using Domain.Entities.Plans.Response;
 using Domain.Repository.Plans;
 using Domain.Wrapper;
 
@@ -13,18 +13,9 @@ namespace Application.UseCase.Plans
         }
 
 
-        public async Task<Result<IEnumerable<PlansContainer>>> ExecuteAsync(){
+        public async Task<Result<IEnumerable<PlansContainerResponse>>> ExecuteAsync(){
 
-           var data=await repository.getAllPlansContainerAsync();
-
-            if (data != null)
-            {
-                return Result<IEnumerable<PlansContainer>>.Success(data);
-            }
-            else
-            {
-               return  Result<IEnumerable<PlansContainer>>.Fail();
-            }
+          return await repository.getAllPlansContainerAsync();
 
            
         }

@@ -20,7 +20,8 @@ namespace Infrastructure.DataSource.ApiClient.Auth
 
 
 
-    public class AuthApiClient
+
+        public class AuthApiClient
     {
 
 
@@ -34,14 +35,19 @@ namespace Infrastructure.DataSource.ApiClient.Auth
             _config = config;
         }
 
-        public  async Task<AuthClient> GetApiClient()
+        private  async Task<AuthClient> GetApiClient()
         {
 
             var client = await _clientFactory.CreateClientAsync<AuthClient>("ApiClient");
             return client;
         }
 
-
+        /// TODO : link to Api
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         public async Task<Result<string>> forgetPasswordAsync(string email)
         {
             return Result<string>.Success(email);
@@ -51,16 +57,10 @@ namespace Infrastructure.DataSource.ApiClient.Auth
             try
             {
                 var model = _mapper.Map<LoginRequest>(request);
-                //var model = new LoginRequest
-                //{
-                //    Email = request.email,
-                //    Password = request.password
-                //};
                 var client = await GetApiClient();
-                var response =await client.LoginAsync(true, true, model);
+                var response =await client.LoginAsync(null, null, model);
                 var resModel = _mapper.Map<LoginResponseModel>(response);
                 return Result<LoginResponseModel>.Success(resModel);
-                //return resModel;
 
             }catch(ApiException e)
             {
@@ -68,7 +68,7 @@ namespace Infrastructure.DataSource.ApiClient.Auth
                 return Result<LoginResponseModel>.Fail(e.Response);
                
             }
-            //var token = response.AccessToken;
+   
 
 
         }
@@ -79,25 +79,18 @@ namespace Infrastructure.DataSource.ApiClient.Auth
             try
             {
                 var model = _mapper.Map<RegisterRequest>(request);
-             
-                //var model = new LoginRequest
-                //{
-                //    Email = request.email,
-                //    Password = request.password
-                //};
+
                 var client = await GetApiClient();
                await client.RegisterAsync(model);
 
-                //var resModel = _mapper.Map<RegisterResponseModel>(response);
-
                 return Result<RegisterResponseModel>.Success();
-                //return resModel;
+      
 
             }
             catch (ApiException e)
             {
 
-                return Result<RegisterResponseModel>.Fail(e.Response);
+                return Result<RegisterResponseModel>.Fail(e.Message);
 
             }
             //var token = response.AccessToken;
@@ -182,91 +175,7 @@ namespace Infrastructure.DataSource.ApiClient.Auth
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        //public async Task<ResponseModel<OutputLogin>> Login(LoginRequest loginRequest)
-        //{
-        //    try
-        //    {
-        //        Nswag.LoginRequest loginRequestd = new Nswag.LoginRequest()
-        //        {
-        //            Email = "afgffgfgfgf@gmail.com",
-        //            Password = "Azdeen2025$$$",
-        //            TwoFactorCode = "string",
-        //            TwoFactorRecoveryCode = "string",
-        //            PlanId = "string"
-        //        };
-
-
-        //        _logger.Logg("RepostryAuth Insert login", "info");
-
-        //        var request = new OutputLogin()
-        //        {
-        //            Token = "ddddd",
-        //            ReturnUrl = "/"
-        //        };
-        //        var ob = await GetApiClientAsync();
-        //        if (ob != null)
-        //        {
-        //            var reuslt = await ob.LoginAsync(false, false, loginRequestd);
-        //        }
-
-
-        //        return ResponseModel<OutputLogin>.SuccessResponse("OutputLogin", request);
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.Logg("Error RepostryAuth Login" + ex.Message, "error");
-        //        throw new NotImplementedException(ex.Message);
-        //    }
-
-
-        //}
-
-        //public async Task<ResponseModel<OutputLogout>> Logout(string Token)
-        //{
-        //    try
-        //    {
-        //        _logger.Logg("RepostryAuth Insert login", "info");
-        //        var request = new OutputLogout()
-        //        {
-
-        //            ReturnUrl = ""
-        //        };
-
-        //        return ResponseModel<OutputLogout>.SuccessResponse("OutputLogin", request);
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.Logg("Error RepostryAuth Login" + ex.Message, "error");
-        //        throw new NotImplementedException(ex.Message);
-        //    }
-        //}
-
-        //public async Task<ResponseModel<OutputRigister>> Rigister(VitsModel.Auth.RegisterRequest registerRequest)
-        //{
-        //    try
-        //    {
-        //        _logger.Logg("RepostryAuth Insert OutputRigister", "info");
-        //        var request = new OutputRigister()
-        //        {
-
-        //            ReturnUrl = ""
-        //        };
-
-
-        //        return ResponseModel<OutputRigister>.SuccessResponse("Rigister", request);
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.Logg("Error RepostryAuth OutputRigister" + ex.Message, "error");
-        //        throw new NotImplementedException(ex.Message);
-        //    }
-        //}
+      
 
 
     }

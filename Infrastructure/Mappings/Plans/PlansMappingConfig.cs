@@ -8,8 +8,9 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Xml.Linq;
 using AutoMapper;
 using Infrastructure.Models.Plans;
-using Domain.Entities.Plans;
 using Infrastructure.Models.Plans.Response;
+using Domain.Entities.Plans.Response;
+using Domain.ShareData.Base;
 
 namespace Infrastructure.Mappings.Plans
 {
@@ -22,12 +23,13 @@ namespace Infrastructure.Mappings.Plans
 
 
 
-            CreateMap<PlanModel, Plan>().ReverseMap();
-            CreateMap<PlansContainerModel, PlansContainer>().ReverseMap();
-            CreateMap<PlanSubscriptionModel, Subscription>().ReverseMap();
-            CreateMap<BasicPlanModel, BasicPlan>().ReverseMap();
-            CreateMap<PlanSubscriptionFeaturesModel, PlanSubscriptionFeatures>().ReverseMap();
-            CreateMap<PlanTechnicalFeaturesModel, PlanTechnicalFeatures>().ReverseMap();
+            CreateMap<PlanResponseModel, PlanResponse>().ReverseMap();
+            CreateMap<PlansContainerModel, PlansContainerResponse>().ReverseMap();
+            CreateMap<PlanSubscriptionResponseModel, BaseSubscription>().ReverseMap();
+            CreateMap<PlansGroupModel, PlansGroupResponse>().ReverseMap();
+            CreateMap<PlanSubscriptionFeaturesModel, PlanSubscriptionFeaturesResponse>().ReverseMap();
+            CreateMap<PlanTechnicalFeaturesModel, PlanTechnicalFeaturesResponse>().ReverseMap();
+            CreateMap<PlanSubscriptionResponseModel, PlanSubscriptionResponse>().ReverseMap();
 
             //    .ForMember(dest => dest.likes, opt => opt.MapFrom(src => src.likes != null ? src.likes.Count : 0))
             //.ReverseMap();

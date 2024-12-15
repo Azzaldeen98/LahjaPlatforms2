@@ -20,6 +20,7 @@ using System.Text;
 using Shared.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
+using Shared.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,8 @@ builder.Services.InstallInfrastructureConfigServices(configuration: builder.Conf
 builder.Services.InstallApplicationConfigServices();
 builder.Services.InstallBlazorAppConfigServices();
 
+builder.Services.Configure<ReCaptchaSettings>(builder.Configuration.GetSection("ReCaptchaSettings"));
+builder.Services.AddOptions<ReCaptchaSettings>().BindConfiguration("ReCaptchaSettings");
 //builder.Services.AddScoped<ClientPlansService>();
 
 

@@ -11,8 +11,8 @@
                 <MudTextField Label="Verification  code" @bind-Value="VerificationCode" Required="true" Placeholder="Verification Code" />  
             </MudCardContent>
             <MudCardActions Class="justify-end">
-                <MudButton OnClick="SubmitLogin" Variant="Variant.Filled" Color="Color.Primary">Enter</MudButton>
-                <MudButton OnClick="CloseDialog" Variant="Variant.Text" Color="Color.Secondary">Close</MudButton>
+                <MudButton OnClick="onSubmitConfirm" Variant="Variant.Filled" Color="Color.Primary">Confirm</MudButton>
+                <MudButton OnClick="onCloseDialog" Variant="Variant.Text" Color="Color.Secondary">Cancel</MudButton>
             </MudCardActions>
         </MudCard>
     </DialogActions>
@@ -20,19 +20,18 @@
 
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-    private string PhoneNumber { get; set; } = "000000000";
+
     private string VerificationCode { get; set; }
 
-    private void CloseDialog()
+    private void onCloseDialog()
     {
         MudDialog.Cancel();
 
     }
 
-    private async Task SubmitLogin()
+    private async Task onSubmitConfirm()
     {
        
-    
-        MudDialog.Close(DialogResult.Ok(true));
+        MudDialog.Close(DialogResult.Ok(VerificationCode));
     }
 }

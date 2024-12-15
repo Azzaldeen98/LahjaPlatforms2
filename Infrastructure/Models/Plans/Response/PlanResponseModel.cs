@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Models.Plans
 {
-    public class PlanModel 
+    public class PlanResponseModel 
     {
         public string? Id { get; set; }
         public string? ProductName { get; set; }
@@ -17,7 +17,7 @@ namespace Infrastructure.Models.Plans
         public double? Amount { get; set; }
         public bool Active { get; set; } = false;
 
-        public ICollection<PlanSubscriptionModel>? Subscriptions { get; set; }
+        public ICollection<PlanSubscriptionResponseModel>? Subscriptions { get; set; }
 
 
     }

@@ -1,8 +1,12 @@
 ﻿using Domain.Repository.Auth;
 using Domain.Repository.Plans;
+using Domain.Repository.Profile;
 using Domain.Repository.Users;
 using Infrastructure.DataSource;
 using Infrastructure.DataSource.ApiClient.Auth;
+using Infrastructure.DataSource.ApiClient.Base;
+using Infrastructure.DataSource.ApiClient.Plans;
+using Infrastructure.DataSource.ApiClient.Profile;
 using Infrastructure.DataSource.ApiClientFactory;
 using Infrastructure.DataSource.Seeds;
 using Infrastructure.Mappings.Plans;
@@ -27,9 +31,11 @@ namespace Infrastructure
 
 
             InstallConfiguration(serviceCollection,configuration);
+            InstallApiClients(serviceCollection);
             InstallSeeds(serviceCollection);
             InstallMapping(serviceCollection);
             InstallRepositories(serviceCollection);
+            InstallControls(serviceCollection);
 
         
         }
@@ -45,13 +51,28 @@ namespace Infrastructure
             //serviceCollection.AddScoped<ITokenProvider, TokenProvider>();
 
         }
+        private static void InstallControls(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddScoped<AuthControl>();
+        }
+        private static void InstallApiClients(this IServiceCollection serviceCollection)
+        {
+          
+
+            serviceCollection.AddScoped<BaseApiClient>();
+            serviceCollection.AddScoped<AuthApiClient>();
+            serviceCollection.AddScoped<PlansApiClient>();
+            serviceCollection.AddScoped<ProfileApiClient>();
+        }
         private static void InstallSeeds(this IServiceCollection serviceCollection)
         {
+            serviceCollection.AddSingleton<SeedsProfile>();
             serviceCollection.AddSingleton<SeedsUsers>();
             serviceCollection.AddSingleton<SeedsPlans>();
             serviceCollection.AddSingleton<SeedsPlansContainers>();
-            serviceCollection.AddScoped<AuthControl>();
-            serviceCollection.AddScoped<AuthApiClient>();
+           
+
+       
         }
 
         private static  void InstallMapping(this IServiceCollection serviceCollection)
@@ -65,9 +86,10 @@ namespace Infrastructure
         private static void InstallRepositories(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IPlansContainerRepository, PlansContainerRepository>();
-            serviceCollection.AddScoped<IPlansRepository,PlansRepository>();
+            serviceCollection.AddScoped<IPlansRepository,BaseRepository>();
             serviceCollection.AddScoped<IUsersRepository,UsersRepository>();
             serviceCollection.AddScoped<IAuthRepository,AuthRepository>();
+            serviceCollection.AddScoped<IProfileRepository, ProfileRepository>();
         }    
       
     }

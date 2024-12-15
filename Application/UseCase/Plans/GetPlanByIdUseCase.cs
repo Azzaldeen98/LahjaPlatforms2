@@ -1,4 +1,4 @@
-﻿using Domain.Entities.Plans;
+﻿using Domain.Entities.Plans.Response;
 using Domain.Repository.Plans;
 using Domain.Wrapper;
 
@@ -14,19 +14,11 @@ namespace Application.UseCase.Plans
         }
 
 
-        public async Task<Result<Plan>> ExecuteAsync(string id)
+        public async Task<Result<PlanResponse>> ExecuteAsync(string id)
         {
 
-            var data = await repository.getPlanByIdAsync(id);
+          return await repository.getPlanByIdAsync(id);
 
-            if (data != null)
-            {
-                return Result<Plan>.Success(data);
-            }
-            else
-            {
-                return Result<Plan>.Fail();
-            }
 
 
         }

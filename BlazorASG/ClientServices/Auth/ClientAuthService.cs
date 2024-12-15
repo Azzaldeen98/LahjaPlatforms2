@@ -33,8 +33,14 @@ namespace BlazorASG.ClientServices.Auth
 
             var model = _mapper.Map<Domain.Entities.Auth.Request.LoginRequest>(request);
             var response= await service.loginAsync(model);
-            if(response.Succeeded)
-                await tokenService.SaveTokenAsync(response.Data.accessToken);
+            if (response.Succeeded)
+            {
+                await tokenService.SaveAllTokensAsync(response.Data.accessToken,
+                                                    response.Data.refreshToken,
+                                                    response.Data.expiresIn,
+                                                    response.Data.tokenType);
+            }
+              
 
             return response;
         }

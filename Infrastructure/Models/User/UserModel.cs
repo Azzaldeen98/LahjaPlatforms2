@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Models.User
 {
+
+
     public class UserModel
     {
         public string id { get; set; }

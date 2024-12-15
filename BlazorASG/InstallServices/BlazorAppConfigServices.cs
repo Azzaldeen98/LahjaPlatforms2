@@ -3,11 +3,14 @@ using Application.Services.Plans;
 using Application.UseCase.Plans;
 using BlazorASG.ClientServices.Auth;
 using BlazorASG.ClientServices.Plans;
+using BlazorASG.ClientServices.Profile;
+using BlazorASG.HelperServices;
 using BlazorASG.Mappings;
 using BlazorASG.Token;
 using Infrastructure.Mappings.Plans;
 using Infrastructure.Repository.Plans;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +26,7 @@ namespace Infrastructure
 
             InstallMapping(serviceCollection);
             InstallServices(serviceCollection);
+            InstallHelperServices(serviceCollection);
 
         }
 
@@ -34,11 +38,19 @@ namespace Infrastructure
         }
 
 
+        private static void InstallHelperServices(this IServiceCollection serviceCollection)
+        {
+            //serviceCollection.AddTransient<RecaptchaService>();
+        
+
+        }
         private static void InstallServices(this IServiceCollection serviceCollection)
         {
+     
             serviceCollection.AddScoped<ClientAuthService>();
             serviceCollection.AddScoped<AuthCheckedService>();
             serviceCollection.AddScoped<ClientPlansService>();
+            serviceCollection.AddScoped<ClientProfileService>();
            
            
         }

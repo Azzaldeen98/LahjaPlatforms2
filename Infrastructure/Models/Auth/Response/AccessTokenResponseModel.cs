@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Models.Plans
 {
-    public class AccessTokenResponseModel : BaseAccessTokenResponse { }
+    public class AccessTokenResponseModel : BaseAccessToken { }
 
 
 }

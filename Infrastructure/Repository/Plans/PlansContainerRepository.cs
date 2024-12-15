@@ -1,6 +1,6 @@
 ﻿
 using AutoMapper;
-using Domain.Entities.Plans;
+using Domain.Entities.Plans.Response;
 using Domain.Repository.Plans;
 using Infrastructure.DataSource.Seeds;
 using Shared.Settings;
@@ -25,7 +25,7 @@ namespace Infrastructure.Repository.Plans
 
 
 
-        public Task<IEnumerable<PlansContainer>> getAllPlansContainerAsync()
+        public Task<IEnumerable<PlansContainerResponse>> getAllPlansContainerAsync()
         {
             throw new NotImplementedException();
         }

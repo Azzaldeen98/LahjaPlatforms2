@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Models.Plans
 {
-    public class BasicPlanModel
+    public class PlansGroupModel
     {
         public string? Id { get; set; }
         //public string? ContainerId { get; set; }

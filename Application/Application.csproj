@@ -15,4 +15,9 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Payment\" />
+    <Folder Include="UseCase\Payment\" />
+  </ItemGroup>
+
 </Project>

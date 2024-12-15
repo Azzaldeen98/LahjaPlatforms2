@@ -176,7 +176,7 @@
     private async Task OpenLoginDialog()
     {
         var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth =false };
-        var dialog = DialogService.Show<Verification_code>("Verification code", options);
+        var dialog = DialogService.Show<TempVerificationCode>("Verification code", options);
 
         var result = await dialog.Result;
 

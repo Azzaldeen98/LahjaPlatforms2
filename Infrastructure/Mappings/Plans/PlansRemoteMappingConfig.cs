@@ -10,6 +10,7 @@ using AutoMapper;
 using Infrastructure.Models.Plans;
 using Domain.Entities.Plans;
 using Infrastructure.Models.Plans.Response;
+using Infrastructure.Nswag;
 
 namespace Infrastructure.Mappings.Plans
 {
@@ -20,7 +21,7 @@ namespace Infrastructure.Mappings.Plans
         {
 
 
-
+            CreateMap<PlanResponseModel, PlanResponse>().ReverseMap();
 
             //CreateMap<PlanModel, Plan>().ReverseMap();
             //CreateMap<PlansContainerModel, PlansContainer>().ReverseMap();

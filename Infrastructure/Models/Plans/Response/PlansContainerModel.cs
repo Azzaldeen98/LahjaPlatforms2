@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Models.Plans.Response
 {
-    public class PlansContainerModel : BasePlansContainer 
+    public class PlansContainerModel : BaseProduct 
     {
             public string Id { get; set; }
             public string Name { get; set; }
@@ -12,7 +12,8 @@ namespace Infrastructure.Models.Plans.Response
             public decimal Price { get; set; }
             public string ImageUrl { get; set; }
 
-            public List<PlanModel>? plans { get; set; }
+            public List<PlanResponseModel>? plans { get; set; }
         
     }
+
 }

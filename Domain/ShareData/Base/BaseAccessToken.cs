@@ -1,6 +1,6 @@
 ﻿namespace Domain.ShareData.Base
 {
-    public class BaseAccessTokenResponse
+    public class BaseAccessToken
     {
         public string? tokenType { get; set; }
         public string? accessToken { get; set; }

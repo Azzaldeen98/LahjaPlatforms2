@@ -1,9 +1,6 @@
-﻿using Domain.Entities.Plans;
-
-namespace Infrastructure.Models.Plans
+﻿namespace Domain.ShareData.Base
 {
-
-    public class PlanSubscriptionModel
+    public class BaseSubscription
     {
 
 
@@ -17,10 +14,7 @@ namespace Infrastructure.Models.Plans
         public DateTime? CancelAt { get; set; }
         public bool CancelAtPeriodEnd { get; set; }
         public DateTime? CanceledAt { get; set; }
-        //public PlanModel? Plan { get; set; }
-        //public UserModel? User { get; set; }
+
 
     }
-
-
 }

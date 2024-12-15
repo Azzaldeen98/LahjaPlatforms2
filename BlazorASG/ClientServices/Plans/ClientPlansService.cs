@@ -26,10 +26,10 @@ namespace BlazorASG.ClientServices.Plans
             this.tokenService = tokenService;
         }
 
-        public async Task<Result<List<PlansFeture>>> getAllBasicPlansAsync()
+        public async Task<Result<List<PlansFeture>>> GetPlansGroupAsync()
         {
 
-            var result = await plansService.getAllBasicPlansAsync();
+            var result = await plansService.getPlansGroupAsync();
 
             if ( result.Succeeded)
             {

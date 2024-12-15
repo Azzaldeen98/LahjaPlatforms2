@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Models.Plans
 {
-    public class LoginResponseModel: BaseAccessTokenResponse
+    public class LoginResponseModel: BaseAccessToken
     {
 
         public string? userId { get; set; }

@@ -8,14 +8,14 @@ namespace Infrastructure.DataSource.ApiClientFactory
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly BaseUrl baseUrl;
         private readonly ITokenService tokenService;
-        private readonly IUserClaimsHelper userClaimsHelper;
+        //private readonly IUserClaimsHelper userClaimsHelper;
 
         public ClientFactory(IHttpClientFactory httpClientFactory,
             BaseUrl baseUrl, IUserClaimsHelper userClaimsHelper, ITokenService tokenService)
         {
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory), "HttpClientFactory cannot be null.");
             this.baseUrl = baseUrl;
-            this.userClaimsHelper = userClaimsHelper;
+            //this.userClaimsHelper = userClaimsHelper;
             this.tokenService = tokenService;
         }
 

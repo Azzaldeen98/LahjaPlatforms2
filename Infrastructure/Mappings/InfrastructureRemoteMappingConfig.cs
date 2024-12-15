@@ -1,6 +1,4 @@
 ﻿using Infrastructure.Models.Plans;
-using Infrastructure.Models.User;
-using Infrastructure.DataSource.Seeds.Models;
 using Infrastructure.Nswag;
 
 
@@ -12,12 +10,19 @@ namespace Infrastructure.Mappings.Plans
         public InfrastructureRemoteMappingConfig()
         {
 
-     
+            /// Auth
             CreateMap<LoginRequestModel, LoginRequest>().ReverseMap();
             CreateMap<RegisterRequestModel,  RegisterRequest>().ReverseMap();
             CreateMap<LoginResponseModel, AccessTokenResponse>().ReverseMap();
-            CreateMap<LoginResponseModel, PlanResponse>().ReverseMap();
 
+            /// Plans
+
+
+            /// Profile
+            //CreateMap<ProfileResponseModel, >().ReverseMap();
+
+
+            /// Payment
 
         }
     }
