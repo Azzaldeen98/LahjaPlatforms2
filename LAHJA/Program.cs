@@ -22,8 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-//builder.Services.AddAuthorizationCore();
-//builder.Services.AddCascadingAuthenticationState();
+
 
 // Add services to the container.  
 
@@ -41,10 +40,6 @@ builder.Services.InstallBlazorAppConfigServices();
 
 builder.Services.Configure<ReCaptchaSettings>(builder.Configuration.GetSection("ReCaptchaSettings"));
 builder.Services.AddOptions<ReCaptchaSettings>().BindConfiguration("ReCaptchaSettings");
-//builder.Services.AddScoped<ClientPlansService>();
-
-
-//builder.Services.AddAutoMapper(typeof(BlazorAppMappingConfig));
 
 ///////////////////////////////////////////////////
 
@@ -85,7 +80,7 @@ builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
 
 //builder.Services.AddScoped<AppCustomAuthenticationStateProvider>();
 builder.Services.AddScoped<IAppUserClaimsHelper, AppUserClaimsHelper>();
-//builder.Services.AddAuthorizationCore();
+
 
 builder.Services.AddAuthorization();
 
@@ -137,11 +132,6 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
-builder.Services.AddScoped<SessionManger>();
-
-
-
 
 
 
