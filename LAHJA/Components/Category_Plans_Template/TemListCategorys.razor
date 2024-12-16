@@ -1,0 +1,53 @@
+﻿
+@using LAHJA.Data.BlazarComponents.Authentication
+@using LAHJA.Data.BlazarComponents.Plans.Category.Model
+@inject ISnackbar Snackbar
+
+
+
+@if (@Params != null)
+{
+
+    <MudGrid Gutter="3" Class="plan-grid">
+
+
+    @foreach (var item in Params)
+    {
+            <TemCategory Params="@item" OnClick="@Submit"/>
+    }
+
+    </MudGrid>
+}
+else
+{
+    <MudAlert Severity="Severity.Error">@Error</MudAlert>
+}
+
+
+
+@code
+{
+
+    public string Error { get; set; } = "No Data";
+
+    [Parameter] public List<InputCategory>? Params { get; set; }
+    [Parameter] public AuthComponent? auth { get; set; }
+    [Parameter] public EventCallback<InputCategory> OnClick { get; set; }
+
+    private async void  Submit(InputCategory inputCategory)
+    {
+        try
+        {
+
+            if (OnClick.HasDelegate)
+            {
+                await OnClick.InvokeAsync(inputCategory);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+}

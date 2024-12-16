@@ -1,0 +1,114 @@
+﻿@using LAHJA.Data.BlazarComponents
+@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model
+@using LAHJA.Data.UI.Components.Authentication
+@inject NavigationManager Navigation
+ 
+@inject ISnackbar Snackbar
+<style>
+
+
+</style> 
+
+@if (Params != null)
+{
+
+
+        <MudDialog>
+            <DialogContent>
+
+                <MudGrid   Class="plan-grid" Justify="Justify.SpaceAround">
+
+
+                    @foreach (var item in Params)
+                    {
+                    <MudItem xs="12" sm="6" md="4">
+
+                        <PlanInfo_ auth="auth" Params="@item" OnClickSelect="Submit" />
+                     
+                    </MudItem>
+                    }
+
+
+               
+
+                </MudGrid>
+
+            </DialogContent>
+            <DialogActions>
+                   
+            <MudButton OnClick="Cancel" Color="Color.Primary" Variant="Variant.Filled">Cancel</MudButton>
+       
+   
+            </DialogActions>
+
+        </MudDialog>
+  
+    
+
+
+
+}
+   
+  
+ 
+
+else
+{
+    <MudAlert Severity="Severity.Error">@Error</MudAlert>
+}
+
+
+@code
+
+{
+    [CascadingParameter]
+    private MudDialogInstance? MudDialog { get; set; }
+    [Parameter]
+    public bool TypeTransition { get; set; } = false;
+    public string Error { get; set; } = "No Data";
+    [Parameter]
+    public string IdCategry { get; set; }
+    [Parameter]
+    public Data.BlazarComponents.Shared.PageTransition PageTransition{ get; set;}
+
+    [Parameter] public List<PlanInfo>? Params { get; set; } = null;
+
+    [Parameter] public AuthComponent? auth { get; set; }
+    [Parameter] public EventCallback<PlanInfo> OnClick { get; set; }
+
+
+ 
+    protected override void OnInitialized()
+    {
+         
+    }
+
+
+ 
+
+    private void Cancel() => MudDialog.Cancel();
+    private async void Submit(PlanInfo input)
+    {
+        try
+        {
+           @*   if (OnClick.HasDelegate)
+            {
+                await OnClick.InvokeAsync(input);
+            }   *@
+
+
+
+            MudDialog.Close(DialogResult.Ok(input));
+ 
+
+           // Snackbar.Add(input.Name, Severity.Success);
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+            StateHasChanged();
+        }
+    }
+    
+
+}

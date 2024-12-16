@@ -1,0 +1,70 @@
+﻿@using LAHJA.Data.BlazarComponents.Authentication
+@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans1.Model
+@inject ISnackbar Snackbar
+@if (@Params != null)
+{
+    <MudItem xs="12" sm="6" md="4">
+        <MudCard Class="plan-card">
+
+            <MudText Typo="Typo.body1" Align="Align.Center"><strong>@Params.ProductName</strong></MudText>
+            <MudCardContent>
+                <MudText Typo="Typo.body1" Class="mb-1"><strong>Price:</strong> @Params.Amount</MudText>
+
+
+                <MudText Typo="Typo.body1" Class="mb-1"><strong>BillingPeriod:</strong> @Params.BillingPeriod</MudText>
+                <MudText Typo="Typo.body1" Class="mb-1"><strong>Number of Requests:</strong>@Params.NumberRequests</MudText>
+                <MudText Typo="Typo.body1" Class="mb-1"><strong>Status:</strong>
+
+                    <MudChip Color="@GetChipColor(@Params.Active)">
+
+                                                      @Params.Active
+                                                </MudChip>
+                                               </MudText> 
+             
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" Class="select-button" OnClick="@(()=>Submit(@Params))">Select Plan</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+}
+else
+{
+    
+        <MudAlert Severity="Severity.Error">@Error</MudAlert>
+  
+}
+
+
+@code 
+{
+    public string Error { get; set; } = "No Data";
+    [Parameter]
+    public Data.BlazarComponents.Shared.PageTransition PageTransition { get; set; }
+    [Parameter] public FeaturesPlansTem1? Params { get; set; }
+    [Parameter] public AuthComponent? auth { get; set; }
+    [Parameter] public EventCallback<FeaturesPlansTem1> OnClick { get; set; }
+
+
+    private Color GetChipColor(bool status)
+    {
+        return status == true ? Color.Success : Color.Error;
+    }
+    private async Task Submit(FeaturesPlansTem1 input)
+    {
+        try
+        {
+            if (OnClick.HasDelegate)
+            {
+                await OnClick.InvokeAsync(input);
+            }
+
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+    }
+
+}

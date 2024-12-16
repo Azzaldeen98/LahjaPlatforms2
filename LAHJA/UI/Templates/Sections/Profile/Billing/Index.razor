@@ -1,0 +1,21 @@
+﻿@using LAHJA.UI.Components.Billing.Shared
+
+ 
+
+<MudLayout>
+    <MudAppBar Color="Color.Primary" Elevation="4">
+        <MudText Typo="Typo.h6" Class="ml-2">Billing Information</MudText>
+    </MudAppBar>
+    <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="pa-4">
+        <BillingHeader />
+        <BillingMethodsSection/>
+        <MudDivider Class="my-4" />
+        <PaymentMethodsSection />
+     
+        <MudDivider Class="my-4" />
+        <LastPayment/>
+        <MudDivider Class="my-4" />
+        <InvoicesSection />
+    </MudContainer>
+</MudLayout>
+

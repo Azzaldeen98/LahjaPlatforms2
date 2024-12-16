@@ -1,0 +1,104 @@
+﻿ @using MudBlazor
+
+
+ 
+  
+     
+ 
+ 
+    <MudCard>
+
+        <MudCardContent>
+            <MudText Typo="Typo.h5">@Subscription.PlanName</MudText>
+            <MudText Typo="Typo.subtitle1">@Subscription.Description</MudText>
+
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudText Typo="Typo.h6">Included Features</MudText>
+                    <MudList>
+                        @foreach (var feature in Subscription.IncludedFeatures)
+                        {
+                            <MudListItem>@feature</MudListItem>
+                        }
+                    </MudList>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudText Typo="Typo.h6">Not Included</MudText>
+                    <MudList>
+                        @foreach (var feature in Subscription.ExcludedFeatures)
+                        {
+                            <MudListItem>@feature</MudListItem>
+                        }
+                    </MudList>
+                </MudItem>
+            </MudGrid>
+
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="UpgradePlan">
+                Upgrade
+            </MudButton>
+        </MudCardContent>
+    </MudCard>
+ 
+
+
+@code
+{
+
+
+    private SubscriptionPlan Subscription { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Subscription = new SubscriptionPlan
+            {
+                PlanName = "Lhja Free",
+                Description = "The basics for all developers",
+                IncludedFeatures = new List<string>
+            {
+                "Unlimited public/private repos",
+                "Unlimited collaborators",
+                "Max Request /200",
+                "500MB of Packages storage",
+                "120 core-hours of Codespaces compute per developer",
+                "15GB of Codespaces storage per developer",
+                "Community support"
+            },
+                ExcludedFeatures = new List<string>
+            {
+                "Free Codespaces usage per organization",
+                "Protected branches on all repos",
+                "Increase Codespaces spend limits",
+                "Multiple reviewers in pull requests",
+                "Required status checks",
+                "Code owners",
+                "Required reviewers",
+                "Pages for static website hosting",
+                "Web-based support"
+            }
+            };
+    }
+
+    private void UpgradePlan()
+    {
+        
+    }
+
+
+    public class SubscriptionPlan
+    {
+        public string PlanName { get; set; }
+        public string Description { get; set; }
+        public List<string> IncludedFeatures { get; set; }
+        public List<string> ExcludedFeatures { get; set; }
+    }
+
+    private void ComparePlans()
+    {
+        
+    }
+
+    
+}
+
+ 

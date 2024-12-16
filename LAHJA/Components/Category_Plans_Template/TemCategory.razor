@@ -1,0 +1,60 @@
+﻿@using LAHJA.Data.BlazarComponents.Authentication
+@using LAHJA.Data.BlazarComponents.Plans.Category.Model
+ 
+ 
+@inject ISnackbar Snackbar
+
+
+@if (@Params != null)
+{
+    
+
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard Class="plan-card">
+                <MudCard Class="pa-4 text-center">
+
+                <MudCardMedia Image="@Params.ImageUrl" Height="140" />
+                    <MudCardContent>
+                    <MudText Typo="Typo.h6">@Params.Name</MudText>
+                    <MudText>@Params.Description</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Color="Color.Primary" OnClick="@(()=>Submit(@Params))" Variant="Variant.Outlined">Details</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudCard>
+    </MudItem>
+
+}
+else
+{
+    <MudAlert Severity="Severity.Error">@Error</MudAlert>
+}
+
+
+@code
+{
+
+    public string Error { get; set; } = "No Data";
+
+    [Parameter] public InputCategory?Params { get; set; }
+    [Parameter] public AuthComponent? auth{ get; set; }
+    [Parameter] public EventCallback<InputCategory> OnClick{ get; set; }
+
+    private async Task Submit(InputCategory inputCategory)
+    {
+        try
+        {
+
+            if (OnClick.HasDelegate)
+            {
+                await OnClick.InvokeAsync(inputCategory);
+            }
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+}

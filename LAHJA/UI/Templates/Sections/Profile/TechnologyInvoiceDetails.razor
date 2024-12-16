@@ -1,0 +1,76 @@
+﻿
+
+<MudCard Class="m-4" Outlined="true">
+
+    <MudCardHeader>
+        <MudText Typo="Typo.h5" Align="Align.Center">Select Technologies</MudText>
+    </MudCardHeader>
+
+    <MudCardContent>
+
+        <MudGrid Justify="Justify.SpaceBetween">
+            @foreach (var tech in technologies)
+            {
+                <MudItem xs="12" sm="3">
+                    <MudCheckBox T="bool" Label="@tech.ProductName" @bind-Checked="tech.IsSelected">  <MudText Typo="Typo.h5">   Price:@tech.Price</MudText></MudCheckBox>
+                  
+                </MudItem>
+            }
+        </MudGrid>
+    </MudCardContent>
+    <MudCardActions>
+        
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ShowSelectedTechnologies">
+            Show Selected
+        </MudButton>
+    </MudCardActions>
+</MudCard>
+
+@code 
+{
+
+
+    private List<Technology> technologies = new List<Technology>
+    {
+
+        new Technology { Id = "P001", ProductName = "Laptop",Price=300, IsSelected = false },
+        new Technology { Id = "P002", ProductName = "Smartphone",Price=40 ,IsSelected = false },
+        new Technology { Id = "P003", ProductName = "Tablet",Price=10, IsSelected = false }
+      
+    };
+
+
+    private void ShowSelectedTechnologies()
+    {
+        var selectedTechnologies = technologies.Where(t => t.IsSelected).ToList();
+        foreach (var tech in selectedTechnologies)
+        {
+            Console.WriteLine($"Selected: {tech.ProductName}");
+        }
+    }
+
+
+    public class Technology
+    {
+        public string Id { get; set; }
+        public string ProductName { get; set; }
+        public int Price{ get; set; }
+        public bool IsSelected { get; set; } 
+    }
+    public class TechnologyProduct
+    {
+        public string Id { get; set; }
+        public string ProductName { get; set; }
+        public List<TechnologyInvoiceDetail> InvoiceDetails { get; set; }
+    }
+
+    public class TechnologyInvoiceDetail
+    {
+        public string Id { get; set; }
+        public string ProductName { get; set; }
+        public decimal UnitPrice { get; set; }
+    }
+}
+
+
+ 

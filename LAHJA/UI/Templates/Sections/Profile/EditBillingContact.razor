@@ -1,0 +1,176 @@
+﻿@page "/edit-billing-contact"
+@using LAHJA.Data.UI.Components.Payment.BillingContact
+@using MudBlazor
+<style>
+    
+ /*    .mud-input {
+        margin-bottom: 15px;
+    }
+
+    .mud-select {
+        margin-bottom: 15px;
+    }
+
+    .mud-button {
+        display: block;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .mud-card {
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .mud-form {
+        max-width: 700px;
+        margin: 0 auto;
+    } */
+
+
+
+
+
+</style>
+
+ 
+   
+   
+
+
+ 
+<MudContainer MaxWidth="MaxWidth.Large">
+    <MudCard>
+        <MudCardContent>
+            <MudText Typo="Typo.h6" Class="mb-4">Edit Billing Contact</MudText>
+
+            <MudForm @ref="form" Model="billingContact">
+              
+                <MudTextField Label="Full Name / Company" Variant="Variant.Text" @bind-Value="billingContact.FullName" Required="true" />
+
+              
+                <MudTextField Label="Email" Variant="Variant.Text" @bind-Value="billingContact.Email" Required="true" />
+                <MudTextField Label="Secondary Email" Variant="Variant.Text" @bind-Value="billingContact.SecondaryEmail" />
+
+              
+                <MudTextField Label="Mobile Phone Number" Variant="Variant.Text" @bind-Value="billingContact.MobilePhoneNumber" />
+                <MudTextField Label="Address 1" Variant="Variant.Text" @bind-Value="billingContact.Address1" />
+                <MudTextField Label="Address 2" Variant="Variant.Text" @bind-Value="billingContact.Address2" />
+
+                
+                <MudGrid Class="mt-3" Spacing="3">
+                    <MudItem xs="4">
+                        <MudTextField Label="City" Variant="Variant.Text" @bind-Value="billingContact.City" />
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudTextField Label="State" Variant="Variant.Text" @bind-Value="billingContact.State" />
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudTextField Label="Zip Code" Variant="Variant.Text" @bind-Value="billingContact.ZipCode" />
+                    </MudItem>
+                </MudGrid>
+
+                <MudGrid Class="mt-3" Spacing="3">
+                    <MudItem xs="6">
+                        <MudSelect Label="Country" @bind-Value="billingContact.Country" Required="true">
+                            <MudSelectItem Value="@("YE")">Yemen</MudSelectItem>
+                            <MudSelectItem Value="@("US")">United States</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudSelect Label="Currency" @bind-Value="billingContact.Currency" Required="true">
+                            <MudSelectItem Value="@("USD")">USD (Dollar)</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+               
+
+                </MudGrid>
+               
+                <MudTextField Label="Billing Registration Number" Variant="Variant.Text" @bind-Value="billingContact.BillingRegistrationNumber" />
+                <MudTextField Label="VAT Number" Variant="Variant.Text" @bind-Value="billingContact.VatNumber" />
+
+                
+               
+
+                
+                <div class="d-flex justify-end mt-4">
+                    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="SaveChanges">Save</MudButton>
+                    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Cancle">Cancle</MudButton>
+                </div>
+            </MudForm>
+        </MudCardContent>
+    </MudCard>
+</MudContainer>
+
+
+
+
+
+@code {
+    private MudForm form;
+    [Parameter]
+    public BillingContact?Params{ get; set; }
+    [Parameter] public EventCallback<BillingContact> OnClick { get; set; }
+    [Parameter] public EventCallback<bool> OnClickCancle { get; set; }
+    public BillingContact billingContact;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (Params != null)
+            {
+                billingContact = Params;
+            }
+            else
+            {
+                billingContact = new BillingContact();
+            }
+            StateHasChanged();
+        }
+        catch
+        {
+
+        }
+
+
+
+    }
+
+    private  async Task   SaveChanges()
+    {
+        try
+        {
+            //   if (form.IsValid)
+            //  {
+
+            if (OnClick.HasDelegate)
+            {
+                await OnClick.InvokeAsync(billingContact);
+            }
+            //  }
+
+        }
+        catch
+        {
+
+        }
+
+    }
+    private async void Cancle()
+    {
+        try
+        {
+            if (OnClickCancle.HasDelegate)
+            {
+                await OnClickCancle.InvokeAsync(true);
+            }
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+   
+}

@@ -1,0 +1,59 @@
+﻿
+<section style="padding:3%!important">
+@if (Params == null)
+{
+    <MudAlert Severity="Severity.Error">@Error</MudAlert>
+}
+else
+{
+        <MudGrid Justify="Justify.SpaceAround" Style="padding:2%!important">
+
+        <MonthlyCharges/>
+
+        </MudGrid>
+
+
+        <MudGrid Justify="Justify.SpaceAround" Style="padding:2%!important">
+
+             <PieChart/>
+
+        </MudGrid>
+
+        <MudGrid Justify="Justify.SpaceAround" Style="padding:2%!important">
+
+            <SubscriptionsUser/>
+
+        </MudGrid>
+}
+
+
+    
+
+
+</section>
+
+
+
+
+@code 
+{
+
+    public string Error { get; set; } = "No Data";
+
+    public List<Subscriptions> Params = new List<Subscriptions>() { };
+
+     
+
+   
+
+    public class Subscriptions
+    {
+        public string Id { get; set; }
+        public string APIname { get; set; }
+        public bool Status { get; set; }
+        public int Totalamount { get; set; }
+        public string Planname { get; set; }
+        public DateTimeOffset createdat { get; set; }
+        public DateTimeOffset Expirationdat { get; set; }
+    }
+}

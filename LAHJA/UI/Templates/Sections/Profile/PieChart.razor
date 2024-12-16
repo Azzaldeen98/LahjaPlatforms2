@@ -1,0 +1,118 @@
+﻿ 
+@using ApexCharts
+
+
+@if (Params == null)
+{
+    <MudAlert Severity="Severity.Error">@Error</MudAlert>
+}
+else
+{
+    <MudGrid Justify="Justify.SpaceBetween"  >
+      <MudItem xs="12" sm="6" md="4">
+    <ApexChart TItem="MyData"
+               Title="Sample Data">
+
+        <ApexPointSeries TItem="MyData"
+                         Items="Params"
+                         Name="Net Profit"
+                         SeriesType="SeriesType.RadialBar"
+                         XValue="e => e.Category"
+                         YValue="e => (decimal)e.RemainingNumber / e.TotalNumber * 100" />
+
+
+    </ApexChart>
+     </MudItem>
+
+
+
+
+    <MudItem xs="12" sm="6" md="4">
+
+          
+                <ApexChart TItem="MyData"
+                           Title="Sample Data">
+                    <ApexPointSeries TItem="MyData"
+                                     Items="Params"
+                                     Name="Net Profit"
+                                     SeriesType="SeriesType.Pie"
+                                     XValue="e => e.Category"
+                                     YValue="e => (decimal)e.RemainingNumber / e.TotalNumber * 100" />
+
+
+                </ApexChart>
+
+           
+
+
+    </MudItem>
+
+    <MudItem xs="12" sm="6" md="4">
+
+            <ApexChart TItem="MyData"
+                       Title="Sample Data">
+
+                <ApexPointSeries TItem="MyData"
+                                 Items="Params"
+                                 Name="Net Profit"
+                                 SeriesType="SeriesType.Donut"
+                                 XValue="e => e.Category"
+                                 YValue="e => (decimal)e.RemainingNumber / e.TotalNumber * 100" />
+
+
+            </ApexChart>
+
+
+    </MudItem>
+
+    </MudGrid>
+
+}
+
+
+   
+
+   
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+@code
+{
+    // [Parameter] public List<MyData> Params  {get;set;}
+
+    public string Error { get; set; } = "No Data";
+    public class MyData
+    {
+        public string Category { get; set; }  
+        public decimal TotalNumber { get; set; }  
+        public decimal RemainingNumber { get; set; }  
+    }
+    private List<MyData>Params = new List<MyData>
+    {
+
+        new MyData { Category = "Request Max", TotalNumber = 100, RemainingNumber = 10 },
+        new MyData { Category = "Scope Indroid", TotalNumber = 30, RemainingNumber = 20 },
+        new MyData { Category = "Scope Web", TotalNumber = 30, RemainingNumber = 10 },
+        new MyData { Category = "Scope Report", TotalNumber = 20, RemainingNumber = 10 }
+    };
+    
+
+    
+}

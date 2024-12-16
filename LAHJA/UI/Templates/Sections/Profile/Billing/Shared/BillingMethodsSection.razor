@@ -1,0 +1,80 @@
+﻿@using LAHJA.Data.UI.Components.Payment.BillingContact
+@using LAHJA.UI.Templates.Sections.Profile.Billing.Shared
+<MudText Typo="Typo.h6" Class="mb-4"> Payment information</MudText>
+@if (@billingContact == null)
+{
+    
+    if (@flag)
+    {
+        <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">
+            The reactor temperature exceeds the optimal range
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Add" OnClick="Tabb">
+                + Billing  Method
+            </MudButton>
+
+
+
+        </MudAlert>
+    }
+    else
+    {
+        <EditBillingContact OnClick="@OnclickCreate"/>
+    }
+
+}
+else
+{
+    @if (@flag)
+    {
+        <MudPaper Class="p-4 mb-4" Elevation="1">
+            <MudText>Billing information</MudText>
+            <MudText>@billingContact.FullName</MudText>
+            <MudText>@billingContact.Country</MudText>
+            <MudText>@billingContact.City</MudText>
+            <MudText>@billingContact.MobilePhoneNumber</MudText>
+            <div class="d-flex justify-end mt-2">
+                <MudButton Variant="Variant.Outlined" Class="mr-2" Color="Color.Primary" OnClick="Tabb">Edit</MudButton>
+                <MudButton Variant="Variant.Outlined" Color="Color.Error">Remove</MudButton>
+            </div>
+        </MudPaper>
+    }
+    else
+    {
+        <EditBillingContact OnClickCancle="@Cancle" Params="@billingContact" />
+    }
+
+
+}
+
+
+@code 
+{
+    private bool flag = true;
+    private BillingContact billingContact = null;
+    private void Tabb()
+    {
+        flag = false;
+        StateHasChanged();
+    }
+
+    private async void  Cancle(bool _flag)
+    {
+        flag = true;
+        StateHasChanged();
+    }
+    private async void OnclickCreate(BillingContact _billingContact)
+    {
+        try
+        {
+            billingContact = _billingContact;
+            flag = true;
+            StateHasChanged();
+
+        }
+        catch(Exception ex)
+        {
+            
+        }
+    }
+
+}

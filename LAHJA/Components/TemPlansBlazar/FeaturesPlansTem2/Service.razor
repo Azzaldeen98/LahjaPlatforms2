@@ -1,0 +1,70 @@
+﻿@using LAHJA.Data.BlazarComponents.Authentication
+@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Model
+@inject ISnackbar Snackbar
+@if (@Params != null)
+{ 
+
+
+
+     
+                     
+         <MudText Typo="Typo.body2">
+       <MudIcon Icon="@Icons.Custom.Uncategorized.AlertSuccess" Color="Color.Primary" />
+                 @Params.Name: @string.Join(",", Params.listt)</MudText>
+
+                     
+                  
+
+                   
+          
+
+
+                   
+
+             
+ 
+         
+  
+}
+else
+{
+    
+        <MudAlert Severity="Severity.Error">@Error</MudAlert>
+  
+}
+
+
+@code 
+{
+    [Parameter]
+    public bool flagTypeService{ get; set;}
+    public string Error { get; set; } = "No Data";
+    [Parameter]
+    public Data.BlazarComponents.Shared.PageTransition PageTransition { get; set; }
+    [Parameter] public Data.BlazarComponents.Plans.TemFeturePlans2.Model.Service? Params { get; set; }
+    [Parameter] public AuthComponent? auth { get; set; }
+    [Parameter] public EventCallback<Data.BlazarComponents.Plans.TemFeturePlans2.Model.Service> OnClick { get; set; }
+
+
+    private Color GetChipColor(bool status)
+    {
+        return status == true ? Color.Success : Color.Error;
+    }
+    private async Task Submit(Data.BlazarComponents.Plans.TemFeturePlans2.Model.Service input)
+    {
+        try
+        {
+            if (OnClick.HasDelegate)
+            {
+                await OnClick.InvokeAsync(input);
+            }
+
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+    }
+
+}

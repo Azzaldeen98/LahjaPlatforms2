@@ -1,0 +1,32 @@
+﻿@page "/BillingSummary"
+@using LAHJA.Data.BlazarComponents.Authentication
+@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model
+
+<MudLayout>
+
+    <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Class="pa-4">
+        <LAHJA.Components.Profile.billing.Shared.BillingHeader />
+        <MudDivider Class="my-4" />
+
+
+     <LAHJA.Components.Profile.billing.BillingSummarys.Components.PlansCompire/>
+        <MudDivider Class="my-4" />
+
+
+        <LAHJA.Components.TemPlansBlazar.TemPlan.Components.PlanInfo_ auth="auth" Params="Params" />
+        @*  <MudDivider Class="my-4" />
+        <LAHJA.Components.Profile.billing.BillingSummarys.Components.SubscripPlan/> *@
+
+        <MudDivider Class="my-4" />
+        <PieChart/>
+        <MudDivider Class="my-4" />
+      
+    </MudContainer>
+</MudLayout>
+
+@code
+{
+
+    [Parameter] public PlanInfo? Params { get; set; }
+    [Parameter] public AuthComponent? auth { get; set;}
+}

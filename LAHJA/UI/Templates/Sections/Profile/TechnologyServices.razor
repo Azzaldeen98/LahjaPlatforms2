@@ -1,0 +1,117 @@
+﻿@inject ISnackbar Snackbar
+@using System.Net.Http.Json
+ 
+@inject HttpClient httpClient
+@* <MudExpansionPanel Text="@NameService" >
+    <MudTable Items="listt3" Dense="true" Bordered="true" Hover="true">
+        <HeaderContent>
+
+            <MudTh>Name</MudTh>
+            <MudTh>Price</MudTh>
+            <MudTh>*</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.Name</MudTd>
+            <MudTd>@context.Price</MudTd>
+            <MudTd>
+          <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="@(()=>AddService(@context))">@NameClick</MudButton>  
+                 
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+</MudExpansionPanel>
+<SubscriptionsUsage /> *@
+
+<MudDataGrid T="Elemnt3"  Items="@Elements"  Filterable="false"
+             RowClick="@RowClicked" SelectedItemChanged="@SelectedItemsChanged" SelectedItem="@elemnt3">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">@NameService</MudText>
+        <MudSpacer />
+      
+    </ToolBarContent>
+    <Columns>
+        <SelectColumn T="Elemnt3" />
+        <PropertyColumn Property="x => x.Name"    />
+        <PropertyColumn Property="x => x.Price" />
+        
+    </Columns>
+ 
+</MudDataGrid>
+
+ 
+
+ 
+
+
+
+
+@code
+{
+
+
+
+    [Parameter] public string NameService { get; set;} 
+
+    public class Elemnt3
+
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public int Price { get; set; }
+
+
+    }
+
+    public List<Elemnt3> Elements = new List<Elemnt3>()
+    {
+        new Elemnt3()
+        {
+            Id="1",
+            Name="Male",
+            Price=10
+        },
+        new Elemnt3()
+        {
+            Id="2",
+            Name="Famle",
+            Price=3
+        }
+    };
+
+
+    private string _searchString;
+    private bool _sortNameByLength;
+    private List<string> _events = new();
+    private Elemnt3 elemnt3{ get; set; }=null;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+
+    }
+
+
+    void RowClicked(DataGridRowClickEventArgs<Elemnt3> args)
+    {
+
+        Snackbar.Add(System.Text.Json.JsonSerializer.Serialize(args.Item), Severity.Error);
+        _events.Insert(0, $"Event = RowClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+    }
+
+    void RowRightClicked(DataGridRowClickEventArgs<Elemnt3> args)
+    {
+        _events.Insert(0, $"Event = RowRightClick, Index = {args.RowIndex}, Data = {System.Text.Json.JsonSerializer.Serialize(args.Item)}");
+    }
+
+    void SelectedItemsChanged(Elemnt3 items)
+    {
+        elemnt3 =items!=null?items:null;
+       
+        
+    }
+
+
+
+
+}

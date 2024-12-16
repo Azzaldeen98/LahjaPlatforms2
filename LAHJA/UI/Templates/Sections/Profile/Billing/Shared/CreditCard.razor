@@ -1,0 +1,83 @@
+﻿@using LAHJA.Data.UI.Components.Payment.CreditCards
+@using LAHJA.UI.Templates.Sections.Profile.Billing.Shared
+ 
+@if (Params != null)
+{
+    <MudDialog>
+
+
+
+        <DialogActions>
+            <MudCard>
+
+                <MudCardContent>
+                    <MudTextField @bind-Value="Params.CardNumber" Label="Card Number" />
+                    <MudTextField @bind-Value="Params.ExpiryDate" Label="Expiry Date (MM/YY)" />
+                    <MudTextField @bind-Value="Params.CardHolder" Label="Card Holder" />
+                    <MudSelect @bind-Value="Params.CardType" Label="Card Type">
+                        <MudSelectItem Value=@("MasterCard")>MasterCard</MudSelectItem>
+                        <MudSelectItem Value=@("Visa")>Visa</MudSelectItem>
+                    </MudSelect>
+                </MudCardContent>
+                <MudCardActions Class="justify-end">
+                    <MudButton OnClick="SubmitLogin" Variant="Variant.Filled" Color="Color.Primary">Enter</MudButton>
+                    <MudButton OnClick="CloseDialog" Variant="Variant.Text" Color="Color.Secondary">Close</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </DialogActions>
+    </MudDialog>
+}
+
+
+
+
+
+   
+  
+ 
+
+@code {
+
+
+    [Parameter] public CreditCardInput ? Paramss { get; set; }
+
+
+
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+
+    CreditCardInput Params = null;
+    protected override async Task OnInitializedAsync()
+    {
+          Params = new CreditCardInput();
+
+    }
+    private void CloseDialog()
+    {
+        MudDialog.Cancel();
+
+    }
+
+    private async Task SubmitLogin()
+    {
+        try
+        {
+
+
+            MudDialog.Close(DialogResult.Ok(Params));
+        }
+        catch(Exception ex)
+        {
+
+            
+        }
+
+        
+    }
+
+    
+    
+  
+    
+    
+}

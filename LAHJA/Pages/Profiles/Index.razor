@@ -1,0 +1,94 @@
+﻿@page "/Profile"
+@using LAHJA.UI.Components.Billing.BillingSummarys
+@using LAHJA.UI.Templates.Sections.Profile
+@using LAHJA.UI.Templates.Sections.Profile.Billing
+
+ 
+
+<MudLayout Style="padding:2%!important">
+    <MudAppBar Elevation="1" Dense="@_dense">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Href="https://github.com/MudBlazor/MudBlazor" Target="_blank" />
+    </MudAppBar>
+    <MudDrawer  @bind-Open="@_open" ClipMode="_clipMode" Breakpoint="@_breakpoint" Elevation="1" Variant="@DrawerVariant.Mini">
+        <MudNavMenu>
+            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard" OnClick="@(()=>ConvertTab("Profile"))">Profile</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard" OnClick="@(()=>ConvertTab("Dashboard"))">Dashboard</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.AccountBox" OnClick="@(()=>ConvertTab("Profile"))">Profile</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Group" OnClick="@(()=>ConvertTab("AddService"))">Add Service Api</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Group" OnClick="@(()=>ConvertTab("Billing"))">Billing</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Group" OnClick="@(()=>ConvertTab("BillingSummary"))">Subscription Plan </MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+    <MudMainContent Class="pt-16 px-16">
+
+        @if (ActiveSection == "Dashboard")
+        {
+            <Dashboard />
+        }
+        else if (ActiveSection == "Billing")
+        {
+            
+           @*  <LAHJA.Components.Profile.EditBillingContact/> *@
+           <LAHJA.UI.Templates.Sections.Profile.Billing.Index/>
+        }
+        else if (ActiveSection =="AddService")
+        {
+              <AddServiceApi/>
+        }
+        else if (ActiveSection == "BillingSummary")
+        {
+            <Main/>
+        }
+        else
+        {
+            <Dashboard />
+ 
+        }  
+       @*  <LAHJA.Components.Profile.Dashboard /> *@
+      @*    <LAHJA.Components.Profile.AddServiceApi />
+
+
+
+     <LAHJA.Components.Profile.EditBillingContact />    
+  
+                  
+                
+         
+
+
+       @*  <MudContainer Class="mt-6">
+            <MudSelect Label="Select clip mode" @bind-Value="_clipMode">
+                <MudSelectItem Value="@DrawerClipMode.Never">Not clipped (DrawerClipMode.Never)</MudSelectItem>
+                <MudSelectItem Value="@DrawerClipMode.Docked">Drawer is docked (DrawerClipMode.Docked)</MudSelectItem>
+                <MudSelectItem Value="@DrawerClipMode.Always">Always (DrawerClipMode.Always)</MudSelectItem>
+            </MudSelect>
+            <MudSelect Label="Select breakpoint" @bind-Value="_breakpoint">
+                <MudSelectItem Value="@Breakpoint.Sm">Breakpoint.Sm</MudSelectItem>
+                <MudSelectItem Value="@Breakpoint.Md">Breakpoint.Md</MudSelectItem>
+                <MudSelectItem Value="@Breakpoint.Lg">Breakpoint.Lg</MudSelectItem>
+                <MudSelectItem Value="@Breakpoint.Xl">Breakpoint.Xl</MudSelectItem>
+            </MudSelect>
+            <MudSwitch @bind-Value="_dense" Label="Dense appbar" Color="Color.Primary" Style="width:100%;" />
+        </MudContainer> *@
+    </MudMainContent>
+</MudLayout>
+@code 
+{
+    private bool _open = true;
+    private bool _dense = true;
+    private string ActiveSection { get; set; } = "Dashboard";
+    private Breakpoint _breakpoint = Breakpoint.Lg;
+    private DrawerClipMode _clipMode = DrawerClipMode.Never;
+
+    private async  void   ConvertTab(string name)
+    {
+        ActiveSection = name;
+        StateHasChanged();
+    }
+    private void ToggleDrawer()
+    {
+        _open = true; ;
+    }
+}

@@ -1,0 +1,294 @@
+﻿ 
+@using CardShopping.Web.VitsModel
+@using MudBlazor
+@using System.Globalization
+
+@* <MudContainer MaxWidth="MaxWidth.Medium" Class="pa-4">
+    <MudCard>
+        <MudCardHeader>
+            <MudText Typo="Typo.h5">معلومات البروفايل</MudText>
+        </MudCardHeader>
+        <MudCardContent>
+             
+            <MudText Typo="Typo.body1"><strong>رقم المستخدم:</strong> @UserProfile.IdUser</MudText>
+            <MudText Typo="Typo.body1"><strong>البريد الإلكتروني:</strong> @UserProfile.Email</MudText>
+            <MudText Typo="Typo.body1"><strong>رقم الهاتف:</strong> @UserProfile.NumberPhone</MudText>
+        </MudCardContent>
+        <MudButton Variant="MudBlazor.Variant.Filled" Color="MudBlazor.Color.Primary">تحميل الفواتير والايصالات </MudButton>
+        <MudButton Variant="MudBlazor.Variant.Filled" Color="MudBlazor.Color.Primary"> تسجيل الخروج </MudButton>
+    </MudCard>
+
+    <MudSpacer />
+
+  
+    <MudCard>
+
+        <MudCardHeader>
+            <MudText Typo="Typo.h6"> الاشتراكات</MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            @if (UserProfile.outputPlances.Count !=0  )
+            {
+
+              
+                <MudTable Items="UserProfile.outputPlances" Dense="true">
+                  
+                    <HeaderContent>
+                        <MudTh> نوع الاشتراك </MudTh>
+                        <MudTh>حالة  الاشتراك </MudTh>
+                        <MudTh>تاريخ الاشتراك</MudTh>
+                        <MudTh>تاريخ الانتهاء</MudTh>
+                        <MudTh>الطلبات المتبقية</MudTh>
+                        <MudTh>وصف الخدمة  </MudTh>
+
+
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd>@context.Nameplan</MudTd>
+                        <MudTd>@context.State</MudTd>
+                        <MudTd>@context.SubscrptionDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)</MudTd>
+                        <MudTd>@context.ExpirationDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)</MudTd>
+                       
+                        
+
+                        <MudTd>@context.RemainiingRequest</MudTd>
+                        <MudTd>تحويل النص الى الصوت بالهجة النجدية </MudTd>
+                    </RowTemplate>
+
+                
+                </MudTable>
+
+                <MudButton Variant="MudBlazor.Variant.Filled" Color="MudBlazor.Color.Primary">عرض الاشتراك الحالي </MudButton>
+                 <MudButton Variant="MudBlazor.Variant.Filled" Color="MudBlazor.Color.Primary"> عرض جميع الاشتراكات </MudButton>
+                <MudButton Variant="MudBlazor.Variant.Filled" Color="MudBlazor.Color.Primary"> تفعيل / الغاء التجديد التلقاي  </MudButton>
+               
+         
+
+            }
+            else
+            {
+                <MudText Typo="Typo.body2">لا توجد اشتراكات متاحة.</MudText>
+            }
+        </MudCardContent>
+    </MudCard>
+    
+</MudContainer> *@
+
+
+@using MudBlazor
+
+ <style>
+
+    /* AppBar Styles */
+    .app-bar {
+        background-color: #6200ea;
+        color: white;
+        padding: 0.5rem 1rem;
+    }
+
+    .app-bar-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    /* Side Menu Styles */
+    .side-menu {
+        background-color: #f5f5f5;
+        color: #333;
+        width: 250px;
+        padding: 1rem 0;
+    }
+
+    .menu-item {
+        margin: 0.5rem 0;
+        padding: 0.5rem 1rem;
+        font-weight: bold;
+        color: #333;
+        transition: background-color 0.3s ease;
+    }
+
+        .menu-item:hover {
+            background-color: #e0e0e0;
+            border-radius: 4px;
+        }
+
+    /* Main Content Styles */
+    .main-content {
+        background-color: #f9f9f9;
+        padding: 2rem;
+        min-height: calc(100vh - 64px);
+    }
+
+    .content-section {
+        padding: 1rem;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Card Customization */
+    .custom-card {
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+    }
+
+    .divider {
+        margin: 1rem 0;
+        background-color: #6200ea;
+        height: 2px;
+    }
+
+
+
+ </style>
+ <MudLayout>
+  
+    <MudAppBar Class="app-bar" Elevation="4">
+        <MudText Typo="Typo.h6" Class="app-bar-title">Profile Page</MudText>
+    </MudAppBar>
+
+  
+    <MudDrawer Open="true" Variant="DrawerVariant.Persistent" Elevation="2" Class="side-menu">
+        <MudNavMenu>
+            <MudNavLink   Icon="@Icons.Material.Filled.Dashboard"  Class="menu-item">Dashboard</MudNavLink>
+            <MudNavLink   Icon="@Icons.Material.Filled.Person" Class="menu-item">Profile</MudNavLink>
+            <MudNavLink   Icon="@Icons.Material.Filled.Message" Class="menu-item">Messages</MudNavLink>
+            <MudNavLink   Icon="@Icons.Material.Filled.Settings" Class="menu-item">Settings</MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Filled.Edit" Class="menu-item">billing </MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+
+ 
+    <MudMainContent Class="main-content">
+        @if (ActiveSection == "Dashboard")
+        {
+            <MudContainer MaxWidth="MaxWidth.Large" Class="content-section">
+                <MudCard Class="custom-card">
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5">Dashboard</MudText>
+                        <MudDivider Class="divider" />
+                        <MudText Typo="Typo.body1">Welcome to the Dashboard section!</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudContainer>
+        }
+        else if (ActiveSection == "Profile")
+        {
+            <MudContainer MaxWidth="MaxWidth.Large" Class="content-section">
+                <MudCard Class="custom-card">
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5">Profile</MudText>
+                        <MudDivider Class="divider" />
+                        <MudText Typo="Typo.body1">Manage your personal profile here.</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudContainer>
+        }
+        else if (ActiveSection == "Messages")
+        {
+            <MudContainer MaxWidth="MaxWidth.Large" Class="content-section">
+                <MudCard Class="custom-card">
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5">Messages</MudText>
+                        <MudDivider Class="divider" />
+                        <MudText Typo="Typo.body1">Check your messages here.</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudContainer>
+        }
+        else if (ActiveSection == "billing")
+        {
+
+            <MudContainer MaxWidth="MaxWidth.Large" Class="content-section">
+                <MudCard Class="custom-card">
+                   <EditBillingContact/>
+                </MudCard>
+            </MudContainer>
+        }
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private string ActiveSection { get; set; } = "billing"; // Default section
+}
+
+
+@code {
+
+
+
+
+    private async void TabProfile(string name)
+
+
+    {
+        ActiveSection=name;
+        StateHasChanged();
+
+    }
+ 
+    OutPutProfile UserProfile = new OutPutProfile()
+        {
+            IdUser = "12345",
+            Email = "example@mail.com",
+            NumberPhone = "+1234567890",
+            outputPlances =new List<OutputSubscription>()
+            {
+             new OutputSubscription
+        {
+            Id = "2",
+            Name = "الخطة السنوية",
+            State = "غير نشط",
+            Idplan = "A001",
+            Nameplan = "الخطة السنوية",
+            RemainiingRequest = 100,
+            SubscrptionDate = DateTimeOffset.UtcNow.AddMonths(-6),
+            ExpirationDate = DateTimeOffset.UtcNow.AddMonths(6)
+        },
+             new OutputSubscription
+        {
+            Id = "2",
+            Name = "الخطة الأساسية",
+            State = "نشط",
+            Idplan = "B001",
+            Nameplan = "الخطة الشهرية",
+            RemainiingRequest = 10,
+            SubscrptionDate = DateTimeOffset.UtcNow.AddDays(-15),
+            ExpirationDate = DateTimeOffset.UtcNow.AddDays(15)
+            }
+            ,
+               new OutputSubscription
+        {
+            Id = "3",
+            Name = "الخطة الأساسية",
+            State = "منتهى ",
+            Idplan = "B001",
+            Nameplan = "الخطة الشهرية",
+            RemainiingRequest = 10,
+            SubscrptionDate = DateTimeOffset.UtcNow.AddDays(-15),
+            ExpirationDate = DateTimeOffset.UtcNow.AddDays(15)
+            }
+       
+        
+        
+        
+        
+        
+            }
+        
+        
+        
+        
+        
+        
+        
+        
+        };
+
+   
+
+
+}
+

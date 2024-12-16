@@ -1,0 +1,59 @@
+﻿@page "/Rigist"
+@using LAHJA.Components
+@using LAHJA.UI.Templates.Auth
+@inherits BaseInitializationComponent
+
+<div style="padding:10%!important">
+
+
+    @if (!_isLoaded)
+    {
+
+        if (isAuth)
+        {
+            <LoaderComponent ViewProgress="true" />
+        }
+        else
+        {
+            <TemplateAuth IsToLoginMode="false" />
+        }
+
+
+    }
+    else
+    {
+        <LoaderComponent ViewProgress="true" />
+
+    }
+
+
+  
+
+</div>
+
+@code{
+    // <LAHJA.Components.T.Rigister />
+
+    private bool _isLoaded = true;
+    private bool isAuth = false;
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            isAuth = await getAuthAsync();
+            StateHasChanged();
+            if (isAuth)
+            {
+                Navigation.NavigateTo("/");
+            }
+            _isLoaded = false;
+            StateHasChanged();
+
+        }
+        
+        
+   
+
+    }
+}

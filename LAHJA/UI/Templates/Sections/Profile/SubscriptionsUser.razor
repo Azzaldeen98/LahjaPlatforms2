@@ -1,0 +1,170 @@
+﻿@inject ISnackbar Snackbar
+
+@if (@Params == null)
+{
+
+    <MudAlert Severity="Severity.Error">@Error</MudAlert>
+}
+else
+{
+    <MudContainer MaxWidth="MaxWidth.Large">
+        <MudDataGrid T="Subscriptions" Items="@Params" Bordered="true" Dense="true" EditMode="DataGridEditMode.Cell">
+            <Columns>
+
+                <PropertyColumn Property="x => x.APIname" Title="API Name" />
+                <PropertyColumn Property="x => x.Status" Title="Status">
+                    <EditTemplate>
+                        <MudChip Color="@GetChipColor(context.Item.Status)">
+                            @context.Item.Status
+                        </MudChip>
+                    </EditTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.TotalAmount" Title="Total Amount" />
+                <PropertyColumn Property="x => x.PlanName" Title="Plan Name" />
+                <PropertyColumn Property="x => x.CreatedAt" Title="Created At" />
+                <PropertyColumn Property="x => x.ExpirationDate" Title="Monthly Statement" />
+   <TemplateColumn  CellClass="d-flex justify-end">
+   <CellTemplate>
+  <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="@(()=>ShowInfoemationApiService(context.Item))" />
+            </CellTemplate>
+            </TemplateColumn>
+            </Columns>
+        </MudDataGrid>
+    </MudContainer>
+}
+
+
+
+@code
+{
+
+
+    public string Error { get; set; } = "No Data";
+
+    private Color GetChipColor(bool status)
+    {
+        return status == true ? Color.Success : Color.Error;
+    }
+
+
+    List<Subscriptions> Params = new List<Subscriptions>
+        {
+            new Subscriptions
+            {
+                Id = "1",
+                APIname = "API_Example1",
+                Status = true,
+                TotalAmount = 100,
+                PlanName = "Basic",
+                CreatedAt = DateTimeOffset.Now.AddMonths(-2),
+                ExpirationDate = DateTimeOffset.Now.AddMonths(1)
+            },
+            new Subscriptions
+            {
+                Id = "2",
+                APIname = "API_Example2",
+                Status = false,
+                TotalAmount = 200,
+                PlanName = "Premium",
+                CreatedAt = DateTimeOffset.Now.AddMonths(-5),
+                ExpirationDate = DateTimeOffset.Now.AddMonths(-1)
+            },
+            new Subscriptions
+            {
+                Id = "3",
+                APIname = "API_Example3",
+                Status = true,
+                TotalAmount = 150,
+                PlanName = "Standard",
+                CreatedAt = DateTimeOffset.Now.AddMonths(-1),
+                ExpirationDate = DateTimeOffset.Now.AddMonths(3)
+            },
+            new Subscriptions
+            {
+                Id = "4",
+                APIname = "API_Example4",
+                Status = true,
+                TotalAmount = 250,
+                PlanName = "Enterprise",
+                CreatedAt = DateTimeOffset.Now.AddMonths(-3),
+                ExpirationDate = DateTimeOffset.Now.AddMonths(6)
+            }
+        };
+
+
+    private async void ShowInfoemationApiService(Subscriptions obj)
+    {
+        try
+        {
+            Snackbar.Add(obj.APIname, Severity.Error);
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+    
+    public class Subscriptions
+    {
+        public string Id { get; set; }
+        public string APIname { get; set; }
+        public bool Status { get; set; }
+        public int TotalAmount { get; set; }
+        public string PlanName { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset ExpirationDate { get; set; }
+    }
+
+    public class Element
+    {
+        public int Number { get; set; }
+        public string APIname { get; set; }
+        public bool Status { get; set; }
+        public int  Totalamount { get; set; }
+        public string  planname { get; set; }
+        public string createdat { get; set; }
+        public string monthlystatement { get; set; }
+    }
+
+    private List<Element> Elements = new List<Element>
+    {
+        new Element
+        {
+            Number = 1,
+            APIname = "API-001",
+            Status = true,
+            Totalamount = 500,
+            planname = "Basic Plan",
+            createdat = "2023-12-01",
+            monthlystatement = "Paid"
+        },
+        new Element
+        {
+            Number = 2,
+            APIname = "API-002",
+            Status = false,
+            Totalamount = 1000,
+            planname = "Pro Plan",
+            createdat = "2023-11-15",
+            monthlystatement = "Unpaid"
+        },
+        new Element
+        {
+            Number = 3,
+            APIname = "API-003",
+            Status = true,
+            Totalamount = 1500,
+            planname = "Enterprise Plan",
+            createdat = "2023-10-20",
+            monthlystatement = "Paid"
+        }
+    };
+ 
+    private void EditItem(Element item)
+    {
+        // Function to handle editing logic
+        Console.WriteLine($"Editing item with Number: {item.Number}");
+    }
+    
+}
+ 

@@ -1,0 +1,165 @@
+﻿<MudExpansionPanel Text="@NameService">
+<MudTable Items="elements" Dense="true" Bordered="true" Hover="true">
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+
+        <MudTh>Request Number</MudTh>
+        <MudTh>Price Request</MudTh>
+        <MudTh>Count Request</MudTh>
+        <MudTh>Count Price</MudTh>
+        <MudTh>*</MudTh>
+        <MudTh>*</MudTh>
+        <MudTh>*</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+
+        <MudTd>@context.Name</MudTd>
+        <MudTd>@context.RequestNumber</MudTd>
+        <MudTd>@context.PriceRequest</MudTd>
+        <MudTd>@context.CountRequest</MudTd>
+        <MudTd>@context.CountPrice</MudTd>
+        <MudTd>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => Add(context))" StartIcon="@Icons.Material.Filled.Add"></MudButton>
+        </MudTd>
+        <MudTd>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="@(() =>Sub(context))"></MudButton>
+
+        </MudTd>
+
+
+    </RowTemplate>
+</MudTable>
+</MudExpansionPanel>
+<MudDialog @bind-IsVisible="isDialogVisible" MaxWidth="MaxWidth.Small">
+
+    <DialogContent>
+        <MudTextField @bind-Value="selectedElement.Name" Label="Name" FullWidth="true" Disabled="true" />
+        <MudTextField @bind-Value="selectedElement.CountRequest" Label="Count Request" FullWidth="true" />
+
+    </DialogContent>
+    <DialogActions>
+        @* <MudButton OnClick="SaveChanges" Color="Color.Primary" Variant="Variant.Filled">Save</MudButton> *@
+        <MudButton OnClick="CloseDialog" Color="Color.Secondary" Variant="Variant.Text">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code
+{
+
+    [Parameter] public string NameService { get; set; }
+
+    public class Element
+    {
+
+        public int Number { get; set; }
+        public string Sign { get; set; }
+        public string Name { get; set; }
+        public int Position { get; set; }
+        public double Molar { get; set; }
+    }
+
+
+
+
+    public class Elemnt3
+
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public int Price { get; set; }
+
+
+    }
+
+    public List<Elemnt3> listt3 = new List<Elemnt3>()
+    {
+        new Elemnt3()
+        {
+            Id="1",
+            Name="Male",
+            Price=10
+        },
+        new Elemnt3()
+        {
+            Id="2",
+            Name="Famle",
+            Price=3
+        }
+    };
+
+
+    public class Element1
+    {
+
+        public string Name { get; set; }
+
+
+        public int CountRequest { get; set; }
+
+
+        public int RequestNumber { get; set; }
+
+
+        public int PriceRequest { get; set; }
+
+
+        public int CountPrice { get; set; }
+    }
+
+   
+   
+
+
+   
+
+   
+
+
+
+    private List<Element1> elements = new List<Element1>
+    {
+
+        new Element1 { Name = "Add Request ", CountRequest =0, RequestNumber = 1, PriceRequest = 100, CountPrice =100 },
+        new Element1 { Name = "Add Scope Android", CountRequest = 20, RequestNumber = 2, PriceRequest = 200, CountPrice = 10 },
+         new Element1 { Name = "Add Scope Web", CountRequest = 30, RequestNumber = 3, PriceRequest = 300, CountPrice = 15 },
+
+    };
+
+    private bool isDialogVisible = false;
+    private Element1 selectedElement = new Element1();
+
+    private void Add(Element1 element)
+    {
+
+
+        if (element.CountRequest >= 0)
+        {
+            element.CountRequest += 1;
+            element.CountPrice = element.CountRequest * element.PriceRequest;
+        }
+        StateHasChanged();
+
+     
+    }
+
+    private void Sub(Element1 element)
+    {
+
+
+        if (element.CountRequest > 0)
+        {
+            element.CountRequest -= 1;
+            element.CountPrice = element.CountRequest * element.PriceRequest;
+        }
+        StateHasChanged();
+
+
+    }
+
+    private void CloseDialog()
+    {
+        isDialogVisible = false;
+    }
+
+}

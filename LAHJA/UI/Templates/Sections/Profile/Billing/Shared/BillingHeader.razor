@@ -1,0 +1,65 @@
+﻿
+
+ 
+
+    <MudCard>
+        <MudCardContent>
+            <MudText Typo="Typo.h6" Class="mb-4">Billing summary</MudText>
+            <MudGrid>
+                <MudItem xs="6">
+                    <MudText Typo="Typo.subtitle1" Class="font-weight-bold">Your next payment</MudText>
+                    <MudText Typo="Typo.h4" Class="mt-2 mb-1">@billingSummary.NextPaymentAmount</MudText>
+                    <MudText Typo="Typo.body2">
+                        This amount does not include the spend on usage of metered service.
+                    View your <MudLink Href="/bBillingSummary" Target="_blank">usage this month</MudLink> below.
+                    </MudText>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudText Typo="Typo.subtitle1" Class="font-weight-bold">
+                        @paymentInfo.Title <MudIcon Icon="@Icons.Filled.ArrowForward" />
+                    </MudText>
+                    <MudList Class="mt-2">
+                        @foreach (var link in paymentInfo.Links)
+                        {
+                            <MudListItem>
+                                <MudLink Href="#" Target="_blank">@link</MudLink>
+                            </MudListItem>
+                        }
+                    </MudList>
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+    </MudCard>
+ 
+
+@code 
+{
+    private BillingSummary billingSummary = new BillingSummary
+        {
+            NextPaymentAmount = "$0.00",
+            UsageLink = "#"
+        };
+
+    private PaymentInfo paymentInfo = new PaymentInfo
+        {
+            Title = "Payment information",
+            Links = new List<string>
+        {
+            "Manage spending limit",
+            "View payment history",
+            "Switch to yearly billing"
+        }
+        };
+    public class BillingSummary
+    {
+        public string NextPaymentAmount { get; set; }
+        public string UsageLink { get; set; }
+    }
+
+    public class PaymentInfo
+    {
+        public string Title { get; set; }
+        public List<string> Links { get; set; }
+    }
+}
+

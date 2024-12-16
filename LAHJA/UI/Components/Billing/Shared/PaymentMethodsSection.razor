@@ -1,0 +1,147 @@
+﻿@using LAHJA.Data.UI.Components.Payment.CreditCards
+@using MudBlazor
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+<style>
+
+   
+
+</style>
+
+<MudPaper Class="pa-4 mb-4" Elevation="1">
+    <MudText Typo="Typo.h6" Class="mb-4">Payment method</MudText>
+    @if (creditCards != null && creditCards.Count > 0)
+    {
+        <MudGrid Justify="Justify.SpaceBetween">
+            <MudItem xs="3" Class="custom-border">
+
+                <MudText Typo="Typo.h6" Class="mb-2">Payment Methods</MudText>
+                <MudText Typo="Typo.body2" Class="mb-3 text-muted">Manage your default payment method</MudText>
+
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OpenLoginDialog">
+                    + Payment Method
+                </MudButton>
+
+            </MudItem>
+            <MudItem xs="7">
+
+                <MudList Class="mt-4">
+
+                    @foreach (var card in creditCards)
+                    {
+                        <MudListItem Class="custom-border">
+                            <MudRadio T="bool" @bind-Checked="card.IsSelected" />
+                            <MudIcon Class="mr-2" Color="Color.Primary" Size="Size.Small" Icon="@Icons.Material.Outlined.AddCard"> </MudIcon>
+                            <MudText Typo="Typo.body1">@card.CardNumber</MudText>
+                            <MudText Typo="Typo.caption" Class="ml-2">Expiry @card.ExpiryDate</MudText>
+                            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Class="ml-auto" @onclick="() => UpdateCard(card)">Update</MudButton>
+                        </MudListItem>
+
+
+                    }
+                </MudList>
+
+            </MudItem>
+        </MudGrid>
+    }
+    else
+    {
+        <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">The reactor temperature exceeds the optimal range
+
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Add" OnClick="OpenLoginDialog">
+                + Payment Method
+            </MudButton>
+
+
+
+        </MudAlert>
+    }
+
+
+</MudPaper>
+
+@code
+{
+
+    private List<CreditCardDisplay> creditCards = new List<CreditCardDisplay>
+    {
+      //  new CreditCardDisplay { CardNumber = "**** **** 423", ExpiryDate = "02/22", CardHolder = "John Doe", CardType = "MasterCard", IsSelected = false },
+       // new CreditCardDisplay { CardNumber = "**** **** 324", ExpiryDate = "11/24", CardHolder = "Jane Smith", CardType = "Visa", IsSelected = false }
+    };
+
+    private CreditCardInput newCard = new CreditCardInput();
+
+
+
+    private void CloseAddCardDialog()
+    {
+
+    }
+
+
+    private void AddCard(CreditCardInput newCard)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(newCard.CardNumber) || string.IsNullOrWhiteSpace(newCard.ExpiryDate))
+            {
+
+                return;
+            }
+
+
+
+            creditCards.Add(new CreditCardDisplay
+                {
+                    CardNumber = newCard.CardNumber,
+                    ExpiryDate = newCard.ExpiryDate,
+                    CardHolder = newCard.CardHolder,
+                    CardType = newCard.CardType,
+                    IsSelected = false
+                });
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+
+    }
+    private async Task OpenLoginDialog()
+    {
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = false };
+
+      
+
+
+        var dialog = DialogService.Show<CreditCard>("Add Card", options);
+
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+
+
+           
+
+            var input = (CreditCardInput)result.Data;
+            AddCard(input);
+
+             
+          
+        }
+        else
+        {
+            Snackbar.Add("Error!", Severity.Error);
+        }
+    }
+  
+    private void UpdateCard(CreditCardDisplay card)
+    {
+        Console.WriteLine($"Updating card: {card.CardNumber}");
+    }
+ 
+
+}

@@ -1,0 +1,61 @@
+﻿@using LAHJA.Data.BlazarComponents.Authentication
+@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans1.Model
+@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Model
+@inject ISnackbar Snackbar
+ 
+@if (Params != null)
+{
+    
+<MudGrid Gutter="3" Class="plan-grid">
+
+
+        @foreach (var item in Params)
+        {
+            <Feature auth="@auth" OnClick="@Submit" Params="@item"/>
+                     }
+
+
+</MudGrid>
+
+
+
+}
+else
+{
+    <MudAlert Severity="Severity.Error">@Error</MudAlert>
+}
+
+
+@code
+
+{
+
+    public string Error { get; set; } = "No Data";
+    [Parameter]
+    public Data.BlazarComponents.Shared.PageTransition PageTransition{ get; set;}
+    [Parameter] public List<FeaturesPlansTem1>? Params { get; set; }
+    [Parameter] public AuthComponent? auth { get; set; }
+    [Parameter] public EventCallback<FeaturesPlansTem1> OnClick { get; set; }
+
+
+
+
+
+    private async void Submit(FeaturesPlansTem1 input)
+    {
+        try
+        {
+            if (OnClick.HasDelegate)
+            {
+                await OnClick.InvokeAsync(input);
+            }
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+            StateHasChanged();
+        }
+    }
+    
+
+}

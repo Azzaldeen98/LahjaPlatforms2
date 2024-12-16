@@ -1,0 +1,52 @@
+﻿@using LAHJA.Data.BlazarComponents.Authentication
+@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model
+
+
+<MudPaper Elevation="1" Class="p-4">
+@if (@Params != null)
+{
+    
+        <MudText Typo="Typo.h4" Class="mb-3">Upgrade your account  Api Name Pr</MudText>
+        <MudLink Href="/BillingSummary" Target="_self">← Back to billing </MudLink>
+
+ 
+
+        <LAHJA.Components.TemPlansBlazar.TemPlan.Components.PlanInfo_ Params="@Params" auth="@auth" FlagButton="false" />
+}
+
+    <MudText Typo="Typo.h6" Class="mt-4">Payment frequency</MudText>
+    <MudButtonGroup Variant="Variant.Outlined" Class="mb-3">
+        <MudButton Color="Color.Primary" OnClick="@(()=>Clickfrequency("y"))">Year  monthly</MudButton>
+        <MudButton Color="Color.Default" OnClick="@(()=>Clickfrequency("m"))">Pay monthly</MudButton>
+    </MudButtonGroup>
+
+    <MudPaper Class="p-3" Style="background-color: #e3f2fd;">
+        <MudText Typo="Typo.body1">Payment due Dec 15, 2024</MudText>
+        <MudText Typo="Typo.h6">$@price</MudText>
+    </MudPaper>
+
+    <MudButton Variant="Variant.Text" Class="mt-2">Edit</MudButton>
+</MudPaper>
+
+@code
+{
+    [Parameter] public PlanInfo? Params { get; set; }
+    [Parameter] public AuthComponent? auth { get; set; }
+    
+
+    private decimal price = 0;
+
+    private void Clickfrequency(string  name)
+    {
+        if (name == "y")
+        {
+            price += Params.TotalPrice - 1;
+        }
+        else
+        {
+            price -= Params.TotalPrice - 1;
+        }
+        StateHasChanged();
+    }
+
+}

@@ -1,0 +1,122 @@
+﻿@page "/ListFeatureService"
+@using LAHJA.Data.BlazarComponents.Authentication
+@inject NavigationManager Navigation
+@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.DataModel
+@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Model
+@inject ISnackbar Snackbar
+<style>
+
+
+
+
+</style> 
+
+
+
+@if (Params != null)
+{
+
+
+
+
+   
+        <MudDialog>
+            <DialogContent>
+
+                <MudGrid Gutter="3" Class="plan-grid">
+
+
+
+                    @foreach (var item in Params)
+                    {
+
+                        <FeatureService Params="@item" auth="@auth" OnClickSelect="@Submit"  />
+                    }
+
+
+
+
+                </MudGrid>
+
+            </DialogContent>
+            <DialogActions>
+                   
+            <MudButton OnClick="Cancel" Color="Color.Primary" Variant="Variant.Filled">Cancel</MudButton>
+       
+   
+            </DialogActions>
+
+        </MudDialog>
+  
+    
+
+
+
+}
+   
+  
+ 
+
+else
+{
+    <MudAlert Severity="Severity.Error">@Error</MudAlert>
+}
+
+
+@code
+
+{
+    [CascadingParameter]
+    private MudDialogInstance? MudDialog { get; set; }
+    [Parameter]
+    public bool TypeTransition { get; set; } = false;
+    public string Error { get; set; } = "No Data";
+    [Parameter]
+    public string IdCategry { get; set; }
+    [Parameter]
+    public Data.BlazarComponents.Shared.PageTransition PageTransition{ get; set;}
+    [Parameter] public List<PlansFeture>? Params { get; set; } = null;
+
+    [Parameter] public AuthComponent? auth { get; set; }
+    [Parameter] public EventCallback<PlansFeture> OnClick { get; set; }
+
+
+
+
+
+    protected override void OnInitialized()
+    {
+
+       
+        
+    }
+
+
+ 
+
+    private void Cancel() => MudDialog.Cancel();
+    private async void Submit(PlansFeture input)
+    {
+        try
+        {
+           @*   if (OnClick.HasDelegate)
+            {
+                await OnClick.InvokeAsync(input);
+            }   *@
+
+
+
+            MudDialog.Close(DialogResult.Ok(input));
+ 
+
+           // Snackbar.Add(input.Name, Severity.Success);
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+            StateHasChanged();
+        }
+    }
+    
+
+}

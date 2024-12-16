@@ -1,0 +1,158 @@
+﻿@using LAHJA.Data.BlazarComponents.Authentication
+@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Model
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@if (@Params != null)
+{
+
+
+
+    <MudListItem Style="border:1px !important">
+
+        <MudText Typo="Typo.body2">
+            @if (auth.Isauth)
+            {
+
+            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" Color="Color.Primary" @onclick="DeleteAsync" />
+            <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Color="Color.Primary" @onclick="EditAsync" />
+            }
+            else
+            {
+                 <MudIcon Icon="@Icons.Custom.Uncategorized.AlertSuccess" Color="Color.Primary" />
+            }
+            @Params.Name: @string.Join(",", Params.Count.ToString())
+        </MudText>
+        </MudListItem>
+
+  
+
+}
+else
+{
+
+    <MudAlert Severity="Severity.Error">@Error</MudAlert>
+ }
+
+
+
+@code
+{
+
+
+    private bool flagedit = false;
+    [Parameter]
+    public bool Flagedit { get; set; } =false;
+    [Parameter]
+    public bool flagTypeService { get; set; }
+
+    public string Error { get; set; } = "No Data";
+    [Parameter]
+    public Data.BlazarComponents.Shared.PageTransition PageTransition { get; set; }
+    [Parameter] public Data.BlazarComponents.Plans.TemFeturePlans2.Model.NumberOfService? Params { get; set; }
+    [Parameter] public AuthComponent? auth { get; set; }
+    [Parameter] public EventCallback<Data.BlazarComponents.Plans.TemFeturePlans2.Model.NumberOfService> OnClickSeletct { get; set; }
+    [Parameter] public EventCallback<Data.BlazarComponents.Plans.TemFeturePlans2.Model.NumberOfService> OnClickDelete { get; set; }
+    [Parameter] public EventCallback<Data.BlazarComponents.Plans.TemFeturePlans2.Model.NumberOfService> OnClickEdit { get; set; }
+
+    private void clickflagedit()
+    {
+        Flagedit = true;
+        StateHasChanged();
+    }
+
+    private Color GetChipColor(bool status)
+    {
+        return status == true ? Color.Success : Color.Error;
+    }
+    private async Task Submit(Data.BlazarComponents.Plans.TemFeturePlans2.Model.NumberOfService input)
+    {
+        try
+        {
+            if (OnClickSeletct.HasDelegate)
+            {
+                await OnClickSeletct.InvokeAsync(input);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+    }
+
+    private async  Task DeleteAsync()
+    {
+        try
+        {
+            var parameters = new DialogParameters<MudDialogNumberService>
+        {
+            { x => x.ContentText, "Do you really want to delete these records? This process cannot be undone." },
+            { x => x.ButtonText, "Delete" },
+            { x => x.Color, Color.Error },
+            {x => x.Params,Params}
+        };
+
+            var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+            var dialog = await DialogService.ShowAsync<MudDialogNumberService>("Delete", parameters, options);
+
+            var result = await dialog.Result;
+
+            if (!result.Cancelled)
+            {
+                if (OnClickDelete.HasDelegate)
+                {
+                    await OnClickDelete.InvokeAsync(Params);
+                }
+             
+            }
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+
+    }
+
+    private async Task EditAsync()
+    {
+        try
+        {
+            var parameters = new DialogParameters<MudDialogNumberService>
+        {
+
+            { x => x.ButtonText, "Edit" },
+            { x => x.Color, Color.Success },
+            {x => x.Params,Params}
+        };
+
+            var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+            var dialog = await DialogService.ShowAsync<MudDialogNumberService>("Edit", parameters, options);
+
+            var result = await dialog.Result;
+
+            if (!result.Cancelled)
+            {
+                Params = (Data.BlazarComponents.Plans.TemFeturePlans2.Model.NumberOfService)result.Data;
+                if (OnClickEdit.HasDelegate)
+                {
+                    await OnClickEdit.InvokeAsync(Params);
+                }
+              
+               // Snackbar.Add(Params.Count.ToString(), Severity.Error);
+                //StateHasChanged();
+
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+
+    }
+
+}

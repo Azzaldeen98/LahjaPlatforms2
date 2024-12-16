@@ -1,0 +1,200 @@
+﻿@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model
+@using LAHJA.Data.UI.Components.Authentication
+@inject NavigationManager Navigation
+ 
+@inject ISnackbar Snackbar
+ 
+@if (@Params != null)
+{
+    
+        <MudCard Class="plan-card">
+            <MudText Typo="Typo.body1" Align="Align.Center">
+                <strong>Name</strong>
+                 @Params.Name
+            
+
+
+            </MudText>
+            <MudCardContent>
+                <MudText Typo="Typo.body1" Class="mb-1">
+                    <MudIcon Icon="@Icons.Custom.Uncategorized.AlertSuccess" Color="Color.Primary" />
+                    <strong>@Params.TotalPrice:</strong>
+                    @totalPrice
+                </MudText>
+
+                <MudList Dense="true">
+
+                    <MudText Typo="Typo.body1"><strong> 
+                        <MudIcon Icon="@Icons.Custom.Uncategorized.AlertSuccess" Color="Color.Primary" />Features:</strong></MudText>
+
+                    @foreach (var featur in Params.TechnologyServices)
+                    {
+                        <MudListItem>
+
+                            <LAHJA.Components.TemPlansBlazar.TemPlan.Components.Service.TechnologyService_ auth="@auth" Params="featur" />
+                           
+                        </MudListItem>
+                    }
+                    @foreach (var feature in Params.ServiceDetailsList)
+                    {
+
+                                <LAHJA.Components.TemPlansBlazar.TemPlan.Components.Service.DigitalService_ auth="@auth" Params="feature"/>
+                           
+                        
+                    }
+                </MudList>
+            </MudCardContent>
+        @if (FlagButton)
+        {
+               <MudCardActions>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="@(()=>Submit(@Params))" Class="select-button">Select Plan</MudButton>
+            </MudCardActions>
+        
+        }
+    </MudCard>
+    
+}
+else
+{
+    
+        <MudAlert Severity="Severity.Error">@Error</MudAlert>
+  
+}
+
+
+@code 
+{
+
+    public string Error { get; set; } = "No Data";
+    private decimal totalPrice;
+    [Parameter] public bool FlagButton { get; set; } = true;
+    [Parameter] public Data.BlazarComponents.Shared.PageTransition PageTransition { get; set; }
+    [Parameter] public PlanInfo? Params { get; set; }
+    [Parameter] public AuthComponent? auth { get; set; }
+    [Parameter] public EventCallback<PlanInfo> OnClickSelect { get; set; }
+    [Parameter] public string IdCategry { get; set; }
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        totalPrice =20;
+
+    }
+
+    private Color GetChipColor(bool status)
+    {
+        return status == true ? Color.Success : Color.Error;
+    }
+    private async Task Submit(PlanInfo input)
+    {
+        try
+        {
+
+            if (OnClickSelect.HasDelegate)
+            {
+                await OnClickSelect.InvokeAsync(input);
+            }
+
+
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+    }
+    private async void ONclickDeleteNumberService(DigitalService numberOfService)
+    {
+        try
+        {
+
+
+            Params.TotalPrice -= numberOfService.TotalPrice;
+            Params.ServiceDetailsList.Remove(numberOfService);
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+    }
+
+    private async void ONclickEditNumberService(DigitalService numberOfService)
+    {
+        try
+        {
+
+          //  CalculateTotalPrice();
+            Params.TotalPrice += numberOfService.TotalPrice;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+    }
+
+    // private async void ONclickDeleteNumberService(Data.BlazarComponents.Plans.TemFeturePlans2.Model.NumberOfService numberOfService)
+    // {
+    //     try
+    //     {
+    //      //   Params.numberOfServices.Remove(numberOfService);
+    //         CalculateTotalPrice();
+    //         StateHasChanged();
+    //     }
+    //     catch(Exception ex)
+    //     {
+    //         Snackbar.Add(ex.Message, Severity.Error);
+    //     }
+
+    // }
+
+    // private async void ONclickEditNumberService(Data.BlazarComponents.Plans.TemFeturePlans2.Model.NumberOfService numberOfService)
+    // {
+    //     try
+    //     {
+           
+    //         CalculateTotalPrice();
+    //           StateHasChanged();
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Snackbar.Add(ex.Message, Severity.Error);
+    //     }
+
+    // }
+    private void CalculateTotalPrice()
+    {
+
+        try
+        {
+            // totalPrice = 0;
+            // foreach (var item in Params.Services)
+            // {
+            //     totalPrice += item.Price;
+            // }
+
+            // foreach (var item in Params.numberOfServices)
+            // {
+            //     totalPrice += item.Price;
+            // }
+
+    
+
+        }
+        catch(Exception ex)
+        {
+            
+        }
+    }
+
+     
+
+
+    }
+
+ 

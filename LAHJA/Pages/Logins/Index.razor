@@ -1,0 +1,142 @@
+﻿@page "/Login"
+@using LAHJA.ClientServices.Auth
+@using LAHJA.Components
+@using LAHJA.UI.Templates.Auth
+@using LAHJA.VitsModel.Auth
+@inject NavigationManager Navigation
+@inject ClientAuthService ClientAuthService
+@inject AppCustomAuthenticationStateProvider AppCustomAuthenticationStateProvider
+
+
+@inherits BaseInitializationComponent
+
+@inject ISnackbar Snackbar
+
+
+<div style="padding:10%!important">
+
+    @if (!_isLoaded)
+    {
+
+        if (isAuth)
+        {
+            <LoaderComponent ViewProgress="true" />
+        }
+        else
+        {
+            <TemplateAuth IsToLoginMode="true" />
+        }
+
+
+    }
+    else
+    {
+        <LoaderComponent ViewProgress="true" />
+
+    }
+
+
+
+</div>
+
+
+@code
+{
+    private bool _isLoaded = true;
+    private bool isAuth = false;
+    // protected override async void OnAfterRender(bool firstRender)
+    // {
+    //     base.OnAfterRender(firstRender);
+
+    //     if (firstRender)
+    //     {
+    //         var isAuth =await getAuthAsync();
+    // if (isAuth)
+    // {
+    //     Navigation.NavigateTo("/");
+    // }
+    // _isLoaded = false;
+    // StateHasChanged();
+    //     }
+
+    // }
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            isAuth = await getAuthAsync();
+            StateHasChanged();
+            if (isAuth)
+            {
+                Navigation.NavigateTo("/");
+            }
+            _isLoaded = false;
+            StateHasChanged();
+
+        }
+
+    }
+
+    // <TemplateAuth OnLoginSubmit="HandleLoginSubmit" OnRegisterSubmit="HandRegisterSubmit" IsToLoginMode="toLoginMode" ErrorMessages="errorMessages" />
+    // bool toLoginMode = false;
+    // List<string> errorMessages { get; set; } = new List<string>();
+
+    // private async Task HandleLoginSubmit(LoginRequest data)
+    // {
+    //     if (data != null)
+    //     {
+
+    //         var response = await ClientAuthService.loginAsync(data);
+    //         if (response.Succeeded)
+    //         {
+
+    //             AppCustomAuthenticationStateProvider.StoreAuthenticationData(response.Data.accessToken);
+    //             Snackbar.Add("Successfully", Severity.Success);
+    //             Navigation.NavigateTo("/", forceLoad: true);
+    //         }
+    //         else
+    //         {
+    //             if (response.Messages != null && response.Messages.Count() > 0)
+    //             {
+    //                 errorMessages.AddRange(response.Messages);
+    //                 Snackbar.Add(response.Messages[0], Severity.Error);
+    //             }
+    //         }
+
+
+    //     }
+
+
+    // }
+    // private async Task HandRegisterSubmit(RegisterRequest data)
+    // {
+    //     if (data != null)
+    //     {
+
+    //         var response = await ClientAuthService.registerAsync(data);
+    //         if (response.Succeeded)
+    //         {
+    //             toLoginMode = true;
+
+    //             Snackbar.Add("Successfully", Severity.Success);
+
+    //             StateHasChanged();
+
+    //         }
+    //         else
+    //         {
+    //             if (response.Messages != null && response.Messages.Count() > 0)
+    //             {
+    //                 errorMessages.AddRange(response.Messages);
+    //                 Snackbar.Add(response.Messages[0], Severity.Error);
+    //             }
+    //         }
+
+
+    //     }
+
+    // }
+    //<LAHJA.Components.T.Login OnClickLogenDeb="@HandelLogout"  FlagDev=true />
+   
+
+}

@@ -1,0 +1,97 @@
+﻿@using MudBlazor
+
+
+
+<MudPaper Class="pa-4" Elevation="1">
+    <MudText Typo="Typo.h6" Class="mb-2">Invoices</MudText>
+    <MudTable Items="@invoices">
+        <HeaderContent>
+            <MudTh>Invoice Date</MudTh>
+            <MudTh>Payment Date</MudTh>
+            <MudTh>Invoice Amount</MudTh>
+            <MudTh>Plan Name</MudTh>
+            <MudTh>Billing Cycle</MudTh>
+            <MudTh>*</MudTh>
+            <MudTh>*</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.InvoiceDate</MudTd>
+            <MudTd>@context.PaymentDate</MudTd>
+            <MudTd>@context.InvoiceAmount</MudTd>
+            <MudTd>@context.PlanName</MudTd>
+            <MudTd>@context.BillingCycle</MudTd>
+            <MudTd>
+                <MudLink Href="#" Color="Color.Primary">View details</MudLink>
+                <MudButton StartIcon="@Icons.Material.Outlined.Download"></MudButton>
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+</MudPaper>
+
+
+
+@code {
+    private List<Invoice> invoices;
+
+    protected override void OnInitialized()
+    {
+       
+        invoices = new List<Invoice>
+        {
+            new Invoice
+            {
+                InvoiceNumber = "INV001",
+                InvoiceDate = new DateTime(2024, 1, 15),
+                InvoiceAmount = 100.00m,
+                Currency = "USD",
+                Status = "Paid",
+                PaymentDate = new DateTime(2024, 1, 16),
+                PaymentMethod = "Credit Card",
+                SubscriptionName = "John Doe",
+                Address = "123 Main St",
+                City = "New York",
+                State = "NY",
+                ZipCode = "10001",
+                Country = "United States",
+                PlanName = "Pro Plan",
+                PlanDescription = "Access to all advanced features including unlimited reports.",
+                BillingCycle = "Monthly",
+                PlanPrice = 100.00m,
+                PlanStartDate = new DateTime(2024, 1, 1),
+                PlanEndDate = new DateTime(2024, 1, 31)
+            }
+        };
+    }
+
+   
+    private async Task DownloadInvoiceImage(Invoice invoice)
+    {
+         
+    }
+    public class Invoice
+    {
+        public string InvoiceNumber { get; set; }
+        public DateTime InvoiceDate { get; set; }
+        public decimal InvoiceAmount { get; set; }
+        public string Currency { get; set; }
+        public string Status { get; set; } // "Paid", "Pending", "Cancelled"
+        public DateTime? PaymentDate { get; set; }
+        public string PaymentMethod { get; set; } // e.g., "Credit Card", "PayPal"
+
+        // معلومات العنوان الذي تم الاشتراك من أجله
+        public string SubscriptionName { get; set; } // اسم المشترك أو اسم الشركة
+        public string Address { get; set; } // عنوان الاشتراك
+        public string City { get; set; } // المدينة
+        public string State { get; set; } // الولاية أو المقاطعة
+        public string ZipCode { get; set; } // الرمز البريدي
+        public string Country { get; set; } // الدولة
+
+        // تفاصيل الخطة التي تم الاشتراك فيها
+        public string PlanName { get; set; } // اسم الخطة (مثال: "Pro Plan")
+        public string PlanDescription { get; set; } // وصف الخطة
+        public string BillingCycle { get; set; } // الدورة الفوترة (شهري / سنوي)
+        public decimal PlanPrice { get; set; } // سعر الخطة
+        public DateTime PlanStartDate { get; set; } // تاريخ بداية الخطة
+        public DateTime PlanEndDate { get; set; } // تاريخ نهاية الخطة
+    }
+}

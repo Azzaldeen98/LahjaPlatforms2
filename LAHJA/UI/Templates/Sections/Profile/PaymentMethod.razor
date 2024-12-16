@@ -1,0 +1,38 @@
+﻿ 
+@using MudBlazor
+
+<MudContainer MaxWidth="MaxWidth.Small">
+    <MudCard>
+        <MudCardContent>
+            <MudText Typo="Typo.h6">Payment method</MudText>
+            <MudDivider />
+            <MudText Typo="Typo.body1">
+                <strong>Credit Card:</strong> **** **** **** 9090
+            </MudText>
+            <MudText Typo="Typo.body1">
+                <strong>Name:</strong>Azdeen Talal
+            </MudText>
+            <MudText Typo="Typo.body1">
+                <strong>Address:</strong> iip 12214 rada SA Ba
+            </MudText>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Color="Color.Primary" Variant="Variant.Outlined" OnClick="UpdatePaymentMethod">Update payment method</MudButton>
+            <MudButton Color="Color.Error" Variant="Variant.Outlined" OnClick="DeletePaymentMethod">Delete your payment method</MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudContainer>
+
+@code {
+    private void UpdatePaymentMethod()
+    {
+        
+        Console.WriteLine("Updating payment method...");
+    }
+
+    private void DeletePaymentMethod()
+    {
+         
+        Console.WriteLine("Deleting payment method...");
+    }
+}
