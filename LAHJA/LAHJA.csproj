@@ -47,7 +47,7 @@
 	  <Folder Include="Data\UI\Templates\Auth\" />
 	  <Folder Include="Data\UI\Templates\Payment\" />
 	  <Folder Include="Data\UI\Templates\Sections\Billing\" />
-	  <Folder Include="Data\UI\Templates\Sections\Plans\" />
+	  <Folder Include="Token\" />
 	  <Folder Include="UI\Components\Payment\" />
 	  <Folder Include="wwwroot\assets\images\Icon\" />
 	</ItemGroup>

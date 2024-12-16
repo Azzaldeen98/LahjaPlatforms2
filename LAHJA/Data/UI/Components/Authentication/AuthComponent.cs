@@ -3,9 +3,10 @@
     public class AuthComponent
     {
 
-        public bool IsAuth { get; set; } = true;
+        public bool IsAuth { get; set; } = false;
         public bool IsMyself { get; set; }= false;
-        public string NamePigeLogin = "/Logout";
+
+        public string PageRouterName = "/Login";
 
     }
 }

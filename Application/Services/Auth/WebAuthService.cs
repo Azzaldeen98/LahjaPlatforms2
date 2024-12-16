@@ -13,13 +13,13 @@ using Application.UseCase.Auth;
 
 namespace Application.Services.Auth
 {
-    public class AuthService
+    public class WebAuthService
     {
         private readonly LoginUseCase loginUseCase;
         private readonly RegisterUseCase registerUseCase;
         private readonly ForgetPasswordUseCase forgetPasswordUseCase;
 
-        public AuthService(LoginUseCase loginUseCase, RegisterUseCase registerUseCase, ForgetPasswordUseCase forgetPasswordUseCase)
+        public WebAuthService(LoginUseCase loginUseCase, RegisterUseCase registerUseCase, ForgetPasswordUseCase forgetPasswordUseCase)
         {
 
 

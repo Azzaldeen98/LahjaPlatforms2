@@ -1,9 +1,7 @@
 ﻿using Application.Services.Auth;
 using Application.Services.Plans;
 using Application.UseCase.Plans;
-using LAHJA.HelperServices;
 using LAHJA.Mappings;
-using LAHJA.Token;
 using Infrastructure.Mappings.Plans;
 using Infrastructure.Repository.Plans;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,8 +46,8 @@ namespace Infrastructure
         {
      
             serviceCollection.AddScoped<ClientAuthService>();
-            serviceCollection.AddScoped<AuthCheckedService>();
-            serviceCollection.AddScoped<ClientPlansService>();
+            serviceCollection.AddScoped<LAHJA.Helpers.Services.AuthService>();
+            serviceCollection.AddScoped<PlansClientService>();
             serviceCollection.AddScoped<ClientProfileService>();
            
            

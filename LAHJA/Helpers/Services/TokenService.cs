@@ -3,7 +3,7 @@ using Microsoft.JSInterop;
 using Shared.Constants;
 using Shared.Helpers;
 using System.Threading.Tasks;
-namespace CardShopping.Web.Token
+namespace LAHJA.Helpers.Services
 {
     public class TokenService : ITokenService
     {
@@ -25,7 +25,7 @@ namespace CardShopping.Web.Token
         public async Task SaveExpiresInTokenAsync(string expiresIn)
         {
             await _jsRuntime.InvokeVoidAsync("localStorageHelper.setItem", ConstantsApp.EXPIRES_IN_TOKEN, expiresIn);
-        }        
+        }
         public async Task SaveTokenTypeAsync(string tokenType)
         {
             await _jsRuntime.InvokeVoidAsync("localStorageHelper.setItem", ConstantsApp.TOKEN_TYPE, tokenType);
@@ -33,7 +33,7 @@ namespace CardShopping.Web.Token
 
         public async Task<string> GetTokenAsync()
         {
-            return await _jsRuntime.InvokeAsync<string>("localStorageHelper.getItem", ConstantsApp.ACCESS_TOKEN) ??"";
+            return await _jsRuntime.InvokeAsync<string>("localStorageHelper.getItem", ConstantsApp.ACCESS_TOKEN) ?? "";
         }
         public async Task<string> GetRefreshTokenAsync()
         {
@@ -48,8 +48,8 @@ namespace CardShopping.Web.Token
             return await _jsRuntime.InvokeAsync<string>("localStorageHelper.getItem", ConstantsApp.TOKEN_TYPE);
         }
 
-        public async Task SaveAllTokensAsync(string accessToken,string refreshToken,
-            string expiresInToken,string tokenType)
+        public async Task SaveAllTokensAsync(string accessToken, string refreshToken,
+            string expiresInToken, string tokenType)
         {
             await SaveTokenAsync(accessToken);
             await SaveRefreshTokenAsync(refreshToken);
@@ -70,8 +70,8 @@ namespace CardShopping.Web.Token
         }
 
 
-      
-    
+
+
 
     }
 }

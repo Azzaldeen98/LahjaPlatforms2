@@ -1,4 +1,4 @@
-﻿@using LAHJA.Data.BlazarComponents.Authentication
+﻿@using LAHJA.Data.UI.Components.Authentication
 @using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model
  
 @inject ISnackbar Snackbar
@@ -35,6 +35,7 @@ else
     public Data.BlazarComponents.Shared.PageTransition PageTransition { get; set; }
     [Parameter] public TechnologyService? Params { get; set; }
     [Parameter] public AuthComponent? auth { get; set; }
+
     [Parameter] public EventCallback<TechnologyService> OnClick { get; set; }
 
 }

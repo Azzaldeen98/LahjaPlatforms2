@@ -1,10 +1,9 @@
-﻿
-using Shared.Models;
+﻿using Shared.Models;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace LAHJA.HelperServices
+namespace LAHJA.Helpers.Services
 {
 
 
@@ -33,6 +32,6 @@ namespace LAHJA.HelperServices
     //    }
     //}
 
-  
+
 
 }

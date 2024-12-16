@@ -1,6 +1,4 @@
 using LAHJA;
-
-using CardShopping.Web.Token;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using MudBlazor;
 using MudBlazor.Services;
@@ -16,6 +14,7 @@ using Shared.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
 using Shared.Models;
+using LAHJA.Helpers.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

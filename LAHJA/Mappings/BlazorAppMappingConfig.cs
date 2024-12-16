@@ -2,6 +2,7 @@
 using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans1.Model;
 using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Model;
 using Domain.Entities.Plans.Response;
+using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model;
 
 namespace LAHJA.Mappings
 {
@@ -30,6 +31,11 @@ namespace LAHJA.Mappings
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => (decimal)src.Amount))
                 .ReverseMap();
             CreateMap<PlanTechnicalFeaturesResponse, NumberOfService>().ReverseMap();
+
+
+
+
+            CreateMap<TechnologyService, NumberOfService>().ReverseMap();
         }
     }
 }

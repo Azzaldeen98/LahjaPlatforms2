@@ -57,7 +57,7 @@ namespace Infrastructure
         private static void InstallServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<PlansService>();
-            serviceCollection.AddScoped<AuthService>();
+            serviceCollection.AddScoped<WebAuthService>();
             serviceCollection.AddScoped<ProfileService>();
             //serviceCollection.AddScoped<PaymentService>();
         }

@@ -4,11 +4,11 @@ using Application.UseCase.Plans;
 using AutoMapper;
 using LAHJA.Data.BlazarComponents.Plans.Category.Model;
 using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Model;
-using CardShopping.Web.Token;
 using Domain.Entities.Plans;
 using Domain.Entities.Profile;
 using Domain.Wrapper;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using LAHJA.Helpers.Services;
 
 namespace LAHJA.ApplicationLayer.Profile
 {

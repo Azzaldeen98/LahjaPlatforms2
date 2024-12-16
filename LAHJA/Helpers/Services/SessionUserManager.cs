@@ -1,6 +1,6 @@
 ﻿using Infrastructure.DataSource.Seeds.Models;
 using Microsoft.JSInterop;
-namespace CardShopping.Web.Token
+namespace LAHJA.Helpers.Services
 {
     public class SessionUserManager
     {
@@ -11,7 +11,7 @@ namespace CardShopping.Web.Token
         {
             _jsRuntime = jsRuntime;
         }
-        public async Task SaveDataAsync(string email,string password,string numberPhone)
+        public async Task SaveDataAsync(string email, string password, string numberPhone)
         {
             await _jsRuntime.InvokeVoidAsync("localStorageHelper.setItem", "email", email);
             await _jsRuntime.InvokeVoidAsync("localStorageHelper.setItem", "password", password);
@@ -20,10 +20,10 @@ namespace CardShopping.Web.Token
 
         public async Task<UserApp> GetDataAsync()
         {
-            var email= await _jsRuntime.InvokeAsync<string>("localStorageHelper.getItem", "email") ?? "";
-            var password= await _jsRuntime.InvokeAsync<string>("localStorageHelper.getItem", "password") ?? "";
+            var email = await _jsRuntime.InvokeAsync<string>("localStorageHelper.getItem", "email") ?? "";
+            var password = await _jsRuntime.InvokeAsync<string>("localStorageHelper.getItem", "password") ?? "";
             var numberPhone = await _jsRuntime.InvokeAsync<string>("localStorageHelper.getItem", "numberPhone") ?? "";
-            return new UserApp { email = email,phoneNumber= numberPhone };
+            return new UserApp { email = email, phoneNumber = numberPhone };
         }
 
         public async Task RemoveDataAsync()

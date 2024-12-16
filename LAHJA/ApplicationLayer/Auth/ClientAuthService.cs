@@ -1,25 +1,24 @@
-﻿using Application.Services.Auth;
-using Application.Services.Plans;
-using Application.UseCase.Plans;
+﻿
+using Application.Services.Auth;
 using AutoMapper;
-using LAHJA.Data.BlazarComponents.Plans.Category.Model;
 using Blazorise.Extensions;
-using CardShopping.Web.Token;
 using Domain.Entities.Auth.Request;
 using Domain.Entities.Auth.Response;
 using Domain.Wrapper;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using LAHJA.Helpers.Services;
+
 
 namespace LAHJA.ApplicationLayer.Auth
 {
     public class ClientAuthService
     {
         private readonly TokenService tokenService;
-        private readonly AuthService service;
+        private readonly WebAuthService service;
+
         private readonly IMapper _mapper;
 
 
-        public ClientAuthService(AuthService service, IMapper mapper, TokenService tokenService)
+        public ClientAuthService(WebAuthService service, IMapper mapper, TokenService tokenService)
         {
 
             this.service = service;

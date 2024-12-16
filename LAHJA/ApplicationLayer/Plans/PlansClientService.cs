@@ -3,14 +3,14 @@ using Application.UseCase.Plans;
 using AutoMapper;
 using LAHJA.Data.BlazarComponents.Plans.Category.Model;
 using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Model;
-using CardShopping.Web.Token;
 using Domain.Entities.Plans;
 using Domain.Wrapper;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using LAHJA.Helpers.Services;
 
 namespace LAHJA.ApplicationLayer.Plans
 {
-    public class ClientPlansService
+    public class PlansClientService
     {
         private readonly PlansService plansService;
         private readonly TokenService tokenService;
@@ -18,7 +18,7 @@ namespace LAHJA.ApplicationLayer.Plans
 
 
 
-        public ClientPlansService(PlansService plansService, IMapper mapper, TokenService tokenService)
+        public PlansClientService(PlansService plansService, IMapper mapper, TokenService tokenService)
         {
 
             this.plansService = plansService;
@@ -26,7 +26,7 @@ namespace LAHJA.ApplicationLayer.Plans
             this.tokenService = tokenService;
         }
 
-        public async Task<Result<List<PlansFeture>>> GetPlansGroupAsync()
+        public async Task<Result<List<PlansFeture>>> getPlansGroupAsync()
         {
 
             var result = await plansService.getPlansGroupAsync();

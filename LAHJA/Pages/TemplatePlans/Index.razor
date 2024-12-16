@@ -5,21 +5,27 @@
 @using LAHJA.ApplicationLayer.Auth
 @using LAHJA.ApplicationLayer.Plans
 @using LAHJA.Components.TemPlansBlazar.FeaturesPlansTem2
+@using LAHJA.Data.BlazarComponents.DesignServicesLahja
 @using LAHJA.Data.BlazarComponents.Plans.Category.DataModel
 @using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.DataModel
-@using LAHJA.Token
+@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model
+@using LAHJA.Data.UI.Components.Authentication
+@using LAHJA.Data.UI.Templates.Plans
+@using LAHJA.Helpers
+@using LAHJA.Helpers.Services
+@using LAHJA.UI.Components.PlanCard.Components
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
 
 @inject NavigationManager Navigation
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
-@inject ClientPlansService ClientPlansService
+@inject PlansClientService ClientPlansService
 @inject ClientAuthService clientAuthService
-@inject AuthCheckedService authChecked
+@inject AuthService AuthService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject AppCustomAuthenticationStateProvider AppCustomAuthenticationStateProvider
-
+@inject PlansClientService PlansClientService
 
  
 <section>
@@ -31,11 +37,11 @@
         <LAHJA.Components.TemPlansBlazar.Category_Plans_Template.TemListCategorys OnClick="Submit" Params="@dataPlansCategory._listcategories" />
     </div>
 
-    <div style="padding:10px!important">
+ @*    <div style="padding:10px!important">
 
         <LAHJA.Components.TemPlansBlazar.FeaturesPlansTem1.ListFeature Params="@dataFeature.featureList" OnClick="SubmitListFeature" />
         
-    </div>
+    </div> *@
 </section>
 
  
@@ -50,7 +56,7 @@
     public  DataPlansCategory dataPlansCategory = new DataPlansCategory();
     public Data.BlazarComponents.Plans.TemFeturePlans1.DataModel.DataFeature dataFeature = new Data.BlazarComponents.Plans.TemFeturePlans1.DataModel.DataFeature();
     public DataFeature dataFeaturee= new DataFeature();
-
+    private List<PlanInfo> planInfos;
 
     protected override async Task OnInitializedAsync()
     {
@@ -58,7 +64,7 @@
         try
         {
 
-       
+            planInfos = DataManager.GetAllPlanInfos();
 
             // AppCustomAuthenticationStateProvider.SignOut();
             // var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -109,12 +115,13 @@
             Snackbar.Add(plans.ProductName, Severity.Success);
         }
     }
+
     private async Task ShowFeatureService(Data.BlazarComponents.Plans.Category.Model.InputCategory inputCategory)
     {
         try
         {
 
-            var response = await ClientPlansService.GetPlansGroupAsync();
+            var response = await PlansClientService.getPlansGroupAsync();
 
             if (response.Succeeded)
             {
@@ -124,34 +131,45 @@
 
                 var dataList = response.Data.ToList();
 
-                Data.BlazarComponents.Authentication.AuthComponent authComponent = new Data.BlazarComponents.Authentication.AuthComponent() { 
-                    Isauth = await authChecked.isAuth(),
-                NamePigeLogin="/login" };
-                var parameters = new DialogParameters<ListFeatureService>
-                {
+             AuthComponent authComponent = new AuthComponent()
+                    {
+                        IsAuth = await AuthService.isAuth(),
+                        PageRouterName = "/login"
+                    };
+                // var parameters = new DialogParameters<ListFeatureService>
+                // {
 
-                    {x => x.TypeTransition,true},
-                    {x => x.IdCategry,inputCategory.IdPlans},
-                    {x=>x.auth,authComponent},
-                    {x =>x.Params,dataList} //dataFeaturee.plansList1}
-                };
+                //     {x => x.TypeTransition,true},
+                //     {x => x.IdCategry,inputCategory.IdPlans},
+                //     {x=>x.auth,authComponent},
+                //     {x =>x.Params,dataList} //dataFeaturee.plansList1}
+                // };
+                var parameters = new DialogParameters<ListInfoPlans>
+              {
 
+                  {x => x.TypeTransition,true},
+                  {x => x.IdCategry,inputCategory.IdPlans},
+                  {x => x.auth,authComponent},
+                  {x =>x.Params,planInfos} //dataFeaturee.plansList1}
+              };
 
-                var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraLarge,FullWidth=true};
-                var dialog = await DialogService.ShowAsync<ListFeatureService>("",parameters, options);
+                var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
+                //   var dialog = await DialogService.ShowAsync<ListFeatureService>("",parameters, options);
+                var dialog = await DialogService.ShowAsync<ListInfoPlans>("", parameters, options);
                 var result = await dialog.Result;
                 if (!result.Canceled)
                 {
-                    var pbj =(Data.BlazarComponents.Plans.TemFeturePlans2.Model.PlansFeture)result.Data;
-                    Snackbar.Add(pbj.Name, Severity.Error);
+                    var pbj = (PlanInfo)result.Data;
+                    string url = "/Payment/" + pbj.Id;
+                    Navigation.NavigateTo(url);
                 }
             }
             else
             {
-                throw new Exception(response?.Messages[0]??"");
+                throw new Exception(response?.Messages[0] ?? "");
             }
 
-            
+
         }
         catch (Exception ex)
         {
@@ -160,5 +178,56 @@
 
 
     }
+    // private async Task ShowFeatureService(Data.BlazarComponents.Plans.Category.Model.InputCategory inputCategory)
+    // {
+    //     try
+    //     {
 
+    //         var response = await ClientPlansService.getPlansGroupAsync();
+
+    //         if (response.Succeeded)
+    //         {
+
+    //             dataPlansCategory._listcategories = ;
+    //             StateHasChanged();
+
+    //             var dataList = response.Data.ToList();
+
+    //             Data.BlazarComponents.Authentication.AuthComponent authComponent = new Data.BlazarComponents.Authentication.AuthComponent() { 
+    //                 Isauth = await AuthService.isAuth(),
+    //             PageRouterName="/login" };
+    //             var parameters = new DialogParameters<ListFeatureService>
+    //             {
+
+    //                 {x => x.TypeTransition,true},
+    //                 {x => x.IdCategry,inputCategory.IdPlans},
+    //                 {x=>x.auth,authComponent},
+    //                 {x =>x.Params,dataList} dataFeaturee.plansList1}
+    //             };
+
+
+    //             var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraLarge,FullWidth=true};
+    //             var dialog = await DialogService.ShowAsync<ListFeatureService>("",parameters, options);
+    //             var result = await dialog.Result;
+    //             if (!result.Canceled)
+    //             {
+    //                 var pbj =(Data.BlazarComponents.Plans.TemFeturePlans2.Model.PlansFeture)result.Data;
+    //                 Snackbar.Add(pbj.Name, Severity.Error);
+    //             }
+    //         }
+    //         else
+    //         {
+    //             throw new Exception(response?.Messages[0]??"");
+    //         }
+
+            
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Snackbar.Add(ex.Message, Severity.Error);
+    //     }
+
+
+    // }
+    
 }

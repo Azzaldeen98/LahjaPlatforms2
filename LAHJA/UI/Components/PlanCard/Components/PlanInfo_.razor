@@ -1,5 +1,6 @@
 ﻿@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model
 @using LAHJA.Data.UI.Components.Authentication
+@using LAHJA.UI.Components.PlanCard.Components.Service
 @inject NavigationManager Navigation
  
 @inject ISnackbar Snackbar
@@ -31,14 +32,14 @@
                     {
                         <MudListItem>
 
-                            <LAHJA.Components.TemPlansBlazar.TemPlan.Components.Service.TechnologyService_ auth="@auth" Params="featur" />
+                            <TechnologyService_ auth="@auth" Params="featur" />
                            
                         </MudListItem>
                     }
                     @foreach (var feature in Params.ServiceDetailsList)
                     {
 
-                                <LAHJA.Components.TemPlansBlazar.TemPlan.Components.Service.DigitalService_ auth="@auth" Params="feature"/>
+                    <DigitalService_  auth="@auth" Params="feature" />
                            
                         
                     }
