@@ -48,6 +48,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Data\UI\NewFolder\" />
+	  <Folder Include="Data\UI\Templates\Auth\" />
 	  <Folder Include="Data\UI\Templates\Payment\" />
 	  <Folder Include="Data\UI\Templates\Sections\Billing\" />
 	  <Folder Include="Data\UI\Templates\Sections\Plans\" />
