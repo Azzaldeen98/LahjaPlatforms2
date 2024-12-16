@@ -10,7 +10,7 @@ using Domain.Entities.Profile;
 using Domain.Wrapper;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace LAHJA.ClientServices.Profile
+namespace LAHJA.ApplicationLayer.Profile
 {
     public class ClientProfileService
     {
@@ -18,8 +18,8 @@ namespace LAHJA.ClientServices.Profile
         private readonly TokenService tokenService;
         private readonly IMapper _mapper;
 
-        public ClientProfileService(ProfileService profileService, 
-            IMapper mapper, 
+        public ClientProfileService(ProfileService profileService,
+            IMapper mapper,
             TokenService tokenService)
         {
 
@@ -38,11 +38,11 @@ namespace LAHJA.ClientServices.Profile
             //    var res = result.Data;
             //    var data = _mapper.Map<List<PlansFeture>>(res);
             //    int i = 0;
-                //foreach (var item in data)
-                //{
-                //    item.Services = _mapper.Map<List<ProfileResponse>>(res[i].SubscriptionFeatures);
-                //    item.numberOfServices = _mapper.Map<List<NumberOfService>>(res[i++].TechnicalFeatures);
-                //}
+            //foreach (var item in data)
+            //{
+            //    item.Services = _mapper.Map<List<ProfileResponse>>(res[i].SubscriptionFeatures);
+            //    item.numberOfServices = _mapper.Map<List<NumberOfService>>(res[i++].TechnicalFeatures);
+            //}
             //    return Result<List<PlansFeture>>.Success(data);
             //}
             //else
@@ -51,6 +51,6 @@ namespace LAHJA.ClientServices.Profile
             //}
 
         }
-   
+
     }
 }

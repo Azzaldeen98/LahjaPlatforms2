@@ -8,7 +8,7 @@ using Domain.Entities.Plans;
 using Domain.Wrapper;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace LAHJA.ClientServices.Plans
+namespace LAHJA.ApplicationLayer.Plans
 {
     public class ClientPlansService
     {
@@ -31,7 +31,7 @@ namespace LAHJA.ClientServices.Plans
 
             var result = await plansService.getPlansGroupAsync();
 
-            if ( result.Succeeded)
+            if (result.Succeeded)
             {
                 var res = result.Data.ToList();
                 var data = _mapper.Map<List<PlansFeture>>(res);
@@ -51,9 +51,9 @@ namespace LAHJA.ClientServices.Plans
         }
         public async Task<Result<List<InputCategory>>> getAllPlansContainersAsync()
         {
-            var result= await plansService.getAllPlansContainersAsync();
-      
-            if (result != null && result.Succeeded && result.Data!=null)
+            var result = await plansService.getAllPlansContainersAsync();
+
+            if (result != null && result.Succeeded && result.Data != null)
             {
                 var data = _mapper.Map<List<InputCategory>>(result.Data.ToList());
                 return Result<List<InputCategory>>.Success(data);

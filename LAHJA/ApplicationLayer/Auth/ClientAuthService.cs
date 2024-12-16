@@ -10,7 +10,7 @@ using Domain.Entities.Auth.Response;
 using Domain.Wrapper;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace LAHJA.ClientServices.Auth
+namespace LAHJA.ApplicationLayer.Auth
 {
     public class ClientAuthService
     {
@@ -27,11 +27,11 @@ namespace LAHJA.ClientServices.Auth
             this.tokenService = tokenService;
         }
 
-        public async Task<Result<Domain.Entities.Auth.Response.LoginResponse>> loginAsync(VitsModel.Auth.LoginRequest request)
+        public async Task<Result<LoginResponse>> loginAsync(VitsModel.Auth.LoginRequest request)
         {
 
-            var model = _mapper.Map<Domain.Entities.Auth.Request.LoginRequest>(request);
-            var response= await service.loginAsync(model);
+            var model = _mapper.Map<LoginRequest>(request);
+            var response = await service.loginAsync(model);
             if (response.Succeeded)
             {
                 await tokenService.SaveAllTokensAsync(response.Data.accessToken,
@@ -39,7 +39,7 @@ namespace LAHJA.ClientServices.Auth
                                                     response.Data.expiresIn,
                                                     response.Data.tokenType);
             }
-              
+
 
             return response;
         }
@@ -47,7 +47,7 @@ namespace LAHJA.ClientServices.Auth
         public async Task<Result<RegisterResponse>> registerAsync(VitsModel.Auth.RegisterRequest request)
         {
 
-            var model = _mapper.Map<Domain.Entities.Auth.Request.RegisterRequest>(request);
+            var model = _mapper.Map<RegisterRequest>(request);
             return await service.registerAsync(model);
 
         }

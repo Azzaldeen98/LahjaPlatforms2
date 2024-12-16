@@ -8,16 +8,12 @@
 
   <ItemGroup>
     <Compile Remove="Infrastructure\**" />
-    <Compile Remove="NewFolder\**" />
     <Compile Remove="UI\Teamplat\**" />
     <Content Remove="Infrastructure\**" />
-    <Content Remove="NewFolder\**" />
     <Content Remove="UI\Teamplat\**" />
     <EmbeddedResource Remove="Infrastructure\**" />
-    <EmbeddedResource Remove="NewFolder\**" />
     <EmbeddedResource Remove="UI\Teamplat\**" />
     <None Remove="Infrastructure\**" />
-    <None Remove="NewFolder\**" />
     <None Remove="UI\Teamplat\**" />
   </ItemGroup>
 	<ItemGroup>
@@ -47,6 +43,7 @@
 		<PackageReference Include="NSwag.AspNetCore" Version="8.0.2" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Folder Include="ClientServices\" />
 	  <Folder Include="Data\UI\NewFolder\" />
 	  <Folder Include="Data\UI\Templates\Auth\" />
 	  <Folder Include="Data\UI\Templates\Payment\" />

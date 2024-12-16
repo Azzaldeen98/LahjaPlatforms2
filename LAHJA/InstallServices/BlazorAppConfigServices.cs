@@ -1,9 +1,6 @@
 ﻿using Application.Services.Auth;
 using Application.Services.Plans;
 using Application.UseCase.Plans;
-using LAHJA.ClientServices.Auth;
-using LAHJA.ClientServices.Plans;
-using LAHJA.ClientServices.Profile;
 using LAHJA.HelperServices;
 using LAHJA.Mappings;
 using LAHJA.Token;
@@ -16,6 +13,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LAHJA.ApplicationLayer.Plans;
+using LAHJA.ApplicationLayer.Auth;
+using LAHJA.ApplicationLayer.Profile;
 
 namespace Infrastructure
 {
