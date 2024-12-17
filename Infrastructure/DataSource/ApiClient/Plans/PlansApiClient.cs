@@ -58,6 +58,28 @@ namespace Infrastructure.DataSource.ApiClient.Plans
 
 
         }
+
+        //public async Task<Result<IEnumerable<PlansGroupModel>>> getPlansInfoAsync(string id)
+        //{
+        //    try
+        //    {
+
+        //        var client = await GetApiClient();
+        //        //var response =  await client.GroupAsync();
+        //        //var resModel = _mapper.Map<IEnumerable<PlansGroupModel>>(response);
+        //        return Result<IEnumerable<PlansGroupModel>>.Success();
+
+        //    }
+        //    catch (ApiException e)
+        //    {
+
+        //        return Result<IEnumerable<PlansGroupModel>>.Fail(e.Response);
+
+        //    }
+
+
+
+        //}
         public async Task<Result<PlanResponseModel>> getPlanByIdAsync(string id)
         {
             try

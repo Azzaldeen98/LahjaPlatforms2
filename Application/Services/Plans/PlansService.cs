@@ -10,19 +10,22 @@ namespace Application.Services.Plans
         private readonly GetAllPlansUseCase getAllPlansUseCase;
         private readonly GetPlansGroupUseCase getPlansGroupUseCase;
         private readonly GetPlanByIdUseCase getPlanByIdUseCase;
+        private readonly GetPlanInfoByIdUseCase getPlanInfoByIdUseCase;
         private readonly GetAllPlansContainersUseCase getAllPlansContainersUseCase;
 
         public PlansService(
             GetAllPlansUseCase getAllPlansUseCase,
             GetPlanByIdUseCase getPlanByIdUseCase,
             GetAllPlansContainersUseCase getAllPlansContainersUseCase,
-            GetPlansGroupUseCase getPlansGroupUseCase)
+            GetPlansGroupUseCase getPlansGroupUseCase,
+            GetPlanInfoByIdUseCase getPlanInfoByIdUseCase)
         {
 
             this.getAllPlansUseCase = getAllPlansUseCase;
             this.getPlanByIdUseCase = getPlanByIdUseCase;
             this.getAllPlansContainersUseCase = getAllPlansContainersUseCase;
             this.getPlansGroupUseCase = getPlansGroupUseCase;
+            this.getPlanInfoByIdUseCase = getPlanInfoByIdUseCase;
         }
 
         public async Task<Result<IEnumerable<PlanResponse>>> getAllPlansAsync()
@@ -47,6 +50,11 @@ namespace Application.Services.Plans
         public async Task<Result<PlanResponse>> getPlanByIdAsync(string id)
         {
             return await getPlanByIdUseCase.ExecuteAsync(id);
+
+        }
+        public async Task<Result<PlanInfoResponse>> getPlanInfoByIdAsync(string id)
+        {
+            return await getPlanInfoByIdUseCase.ExecuteAsync(id);
 
         }
     } 

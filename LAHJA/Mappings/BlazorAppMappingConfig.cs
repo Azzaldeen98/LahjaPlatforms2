@@ -32,10 +32,39 @@ namespace LAHJA.Mappings
                 .ReverseMap();
             CreateMap<PlanTechnicalFeaturesResponse, NumberOfService>().ReverseMap();
 
+            CreateMap<PlansGroupResponse, PlanInfoResponse>()
+               .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.ProductName))
+           .ReverseMap();
+
+
+            CreateMap<PlanSubscriptionFeaturesResponse, PlanTechnicalServiceResponse>()
+                .ForMember(dest => dest.TechnicalServiceFeatures, opt => opt.Ignore())
+            .ReverseMap();
+
+            CreateMap<PlanTechnicalFeaturesResponse, PlanQuantitativeFeatureResponse>().ReverseMap();
 
 
 
-            CreateMap<TechnologyService, NumberOfService>().ReverseMap();
+
+            CreateMap<PlanInfoResponse, PlanInfo>()
+                .ForMember(dest => dest.PlanDescription, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.TechnologyServices, opt => opt.Ignore())
+                .ForMember(dest => dest.ServiceDetailsList, opt => opt.Ignore())
+                .ReverseMap();          
+            
+            
+            CreateMap<PlanTechnicalServiceResponse, TechnologyService>()
+                .ForMember(dest => dest.TechnicalServices, opt => opt.Ignore())
+            .ReverseMap();
+
+            CreateMap<PlanQuantitativeFeatureResponse, DigitalService>()
+             .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => src.Name))
+             .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.Price))
+             .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Count))
+           .ReverseMap();
+
+
+            //CreateMap<TechnologyService, NumberOfService>().ReverseMap();
         }
     }
 }

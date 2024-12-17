@@ -103,18 +103,34 @@ namespace Infrastructure.Repository.Plans
         {
                 var response = await ExecutorAppMode.ExecuteAsync<Result<PlanResponseModel>>(
                  async () => await plansApiClient.getPlanByIdAsync(id),
-                 async () => Result<PlanResponseModel>.Success(await seedsPlans.getPlanByIdAsync(id))
-);
-            if (response.Succeeded)
-            {
-                var result = (response.Data != null) ? _mapper.Map<PlanResponse>(response.Data) : null;
-                return Result<PlanResponse>.Success(result);
-            }
-            else
-            {
-                return Result<PlanResponse>.Fail(response.Messages);
-            }
+                 async () => Result<PlanResponseModel>.Success(await seedsPlans.getPlanByIdAsync(id)));
+                if (response.Succeeded)
+                {
+                    var result = (response.Data != null) ? _mapper.Map<PlanResponse>(response.Data) : null;
+                    return Result<PlanResponse>.Success(result);
+                }
+                else
+                {
+                    return Result<PlanResponse>.Fail(response.Messages);
+                }
         }
-       
+
+        public async Task<Result<PlanInfoResponse>> GetPlanInfoByIdAsync(string id)
+        {
+                 var response = await ExecutorAppMode.ExecuteAsync<Result<PlanResponseModel>>(
+                 async () => Result<PlanResponseModel>.Success(new PlanResponseModel()),
+                 async () => Result<PlanResponseModel>.Success(await seedsPlans.getPlanByIdAsync(id)));
+                  
+                 if (response.Succeeded)
+                    {
+                        var result = (response.Data != null) ? _mapper.Map<PlanInfoResponse>(response.Data) : null;
+                        return Result<PlanInfoResponse>.Success(result);
+                    }
+                    else
+                    {
+                        return Result<PlanInfoResponse>.Fail(response.Messages);
+                    }
+
+        }
     } 
 }

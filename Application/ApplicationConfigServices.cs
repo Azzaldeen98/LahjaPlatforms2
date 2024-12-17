@@ -42,6 +42,7 @@ namespace Infrastructure
             serviceCollection.AddScoped<GetPlansGroupUseCase>();
             serviceCollection.AddScoped<GetAllPlansUseCase>();
             serviceCollection.AddScoped<GetPlanByIdUseCase>();
+            serviceCollection.AddScoped<GetPlanInfoByIdUseCase>();
             serviceCollection.AddScoped<GetAllPlansContainersUseCase>();
 
 

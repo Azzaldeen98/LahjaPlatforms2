@@ -6,16 +6,24 @@
 {
 
 
-    
+    <MudText Typo="Typo.body2">
+        <MudIcon Icon="@Icons.Custom.Uncategorized.AlertSuccess" Color="Color.Primary" />
+        @Params.Name: @string.Join(",", @Params.Description)
+    </MudText>
 
     @foreach (var item in Params.TechnicalServices)
     {
-
-
-        <MudText Typo="Typo.body2">
-            <MudIcon Icon="@Icons.Custom.Uncategorized.AlertSuccess" Color="Color.Primary" />
-            @Params.Name: @string.Join(",", item.Name)
-        </MudText>
+        @if (item.Active)
+        {
+            <MudText Typo="Typo.body2">
+                    <MudIcon Icon="@Icons.Custom.Uncategorized.ChessRook" Color="Color.Primary" />
+                Name : @string.Join(",", item.Name)
+            </MudText>
+            <MudText Typo="Typo.body2">
+                <MudIcon Icon="@Icons.Custom.Uncategorized.ChessRook" Color="Color.Primary" />
+               Price: @string.Join(",", item.Price)
+            </MudText>
+        }
     }
 
 }

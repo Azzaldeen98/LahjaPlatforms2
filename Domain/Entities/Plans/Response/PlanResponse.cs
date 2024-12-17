@@ -21,4 +21,6 @@ namespace Domain.Entities.Plans.Response
 
     }
 
+      
+
 }

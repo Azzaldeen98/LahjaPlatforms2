@@ -4,22 +4,20 @@ using Domain.Wrapper;
 
 namespace Application.UseCase.Plans
 {
-    public class GetPlanByIdUseCase
+    public class GetPlanInfoByIdUseCase
     {
         private readonly IPlansRepository repository;
-        public GetPlanByIdUseCase(IPlansRepository repository)
+        public GetPlanInfoByIdUseCase(IPlansRepository repository)
         {
 
             this.repository = repository;
         }
 
 
-        public async Task<Result<PlanResponse>> ExecuteAsync(string id)
+        public async Task<Result<PlanInfoResponse>> ExecuteAsync(string id)
         {
 
-            return await repository.getPlanByIdAsync(id);
-
-
+          return await repository.GetPlanInfoByIdAsync(id);
 
         }
     }

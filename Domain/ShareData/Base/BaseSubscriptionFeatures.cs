@@ -6,7 +6,7 @@
         public string? BillingPeriod { get; set; }
         public long? NumberRequests { get; set; }
         public double? Amount { get; set; }
-        public bool? Active { get; set; } = false;
+        public bool? Active { get; set; }
     }
 
 

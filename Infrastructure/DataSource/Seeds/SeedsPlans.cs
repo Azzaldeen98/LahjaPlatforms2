@@ -1,4 +1,5 @@
-﻿using Infrastructure.Models.Plans;
+﻿using Domain.Entities.Plans.Response;
+using Infrastructure.Models.Plans;
 using Infrastructure.Models.Plans.Response;
 using System;
 using System.Collections.Generic;
@@ -116,11 +117,11 @@ namespace Infrastructure.DataSource.Seeds
                 },
                 TechnicalFeatures = new List<PlanTechnicalFeaturesModel>
                 {
-                    new PlanTechnicalFeaturesModel { Id = "1", Name = "Number of Requests", Description = "Unlimited requests", Price = 19.99, Count = 10, Status = "Active" },
-                    new PlanTechnicalFeaturesModel { Id = "2", Name = "Scope Android", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
-                    new PlanTechnicalFeaturesModel { Id = "3", Name = "Scope Web", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
-                    new PlanTechnicalFeaturesModel { Id = "4", Name = "Scope Report", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
-                    new PlanTechnicalFeaturesModel { Id = "5", Name = "Scope Word Count", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "1", Name = "Number of Requests", Description = "Unlimited requests", Price = 19.99m, Quantity = 10, Status = "Active" },
+                    new PlanTechnicalFeaturesModel { Id = "2", Name = "Scope Android", Description = "Unlimited requests", Price = 29.99m, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "3", Name = "Scope Web", Description = "Unlimited requests", Price = 29.99m, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "4", Name = "Scope Report", Description = "Unlimited requests", Price = 29.99m, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "5", Name = "Scope Word Count", Description = "Unlimited requests", Price = 29.99m, Count = 20, Status = "NoActive" },
                 }
             },
             new PlansGroupModel
@@ -139,11 +140,11 @@ namespace Infrastructure.DataSource.Seeds
                 TechnicalFeatures = new List<PlanTechnicalFeaturesModel>
                 {
 
-                    new PlanTechnicalFeaturesModel { Id = "1", Name = "Number of Requests", Description = "Unlimited requests", Price = 19.99, Count = 10, Status = "Active" },
-                    new PlanTechnicalFeaturesModel { Id = "2", Name = "Scope Android", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
-                    new PlanTechnicalFeaturesModel { Id = "3", Name = "Scope Web", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
-                    new PlanTechnicalFeaturesModel { Id = "4", Name = "Scope Report", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
-                    new PlanTechnicalFeaturesModel { Id = "5", Name = "Scope Word Count", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "1", Name = "Number of Requests", Description = "Unlimited requests", Price = 19.99m, Count = 10, Status = "Active" },
+                    new PlanTechnicalFeaturesModel { Id = "2", Name = "Scope Android", Description = "Unlimited requests", Price = 29.99m, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "3", Name = "Scope Web", Description = "Unlimited requests", Price = 29.99m, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "4", Name = "Scope Report", Description = "Unlimited requests", Price = 29.99m, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "5", Name = "Scope Word Count", Description = "Unlimited requests", Price = 29.99m, Count = 20, Status = "NoActive" },
                 }
             },
             new PlansGroupModel
@@ -162,11 +163,11 @@ namespace Infrastructure.DataSource.Seeds
                 TechnicalFeatures = new List<PlanTechnicalFeaturesModel>
                 {
 
-                    new PlanTechnicalFeaturesModel { Id = "1", Name = "Number of Requests", Description = "Unlimited requests", Price = 19.99, Count = 10, Status = "Active" },
-                    new PlanTechnicalFeaturesModel { Id = "2", Name = "Scope Android", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
-                    new PlanTechnicalFeaturesModel { Id = "3", Name = "Scope Web", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
-                    new PlanTechnicalFeaturesModel { Id = "4", Name = "Scope Report", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
-                    new PlanTechnicalFeaturesModel { Id = "5", Name = "Scope Word Count", Description = "Unlimited requests", Price = 29.99, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "1", Name = "Number of Requests", Description = "Unlimited requests", Price = 19.99m, Count = 10, Status = "Active" },
+                    new PlanTechnicalFeaturesModel { Id = "2", Name = "Scope Android", Description = "Unlimited requests", Price = 29.99m, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "3", Name = "Scope Web", Description = "Unlimited requests", Price = 29.99m, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "4", Name = "Scope Report", Description = "Unlimited requests", Price = 29.99m, Count = 20, Status = "NoActive" },
+                    new PlanTechnicalFeaturesModel { Id = "5", Name = "Scope Word Count", Description = "Unlimited requests", Price = 29.99m, Count = 20, Status = "NoActive" },
                 }
             }
         };
@@ -193,7 +194,42 @@ namespace Infrastructure.DataSource.Seeds
         public async Task<PlanResponseModel?> getPlanByIdAsync(string id)
         {
 
-            return (db.Count > 0) ? db.FirstOrDefault(x => x.Id == id) : null;
+             return (db.Count > 0) ? db.FirstOrDefault(x => x.Id == id) : null;
+        }
+
+        public async Task<PlanInfoResponse?> getPlanInfoByIdAsync(string id)
+        {
+            var random = new Random();
+            new PlanInfoResponse
+            {
+                Id =id,
+                //Name = "Plan 1",
+         
+                //Description = "Random generated plan description",
+                //Status = random.Next(0, 2) == 0 ? "Active" : "Inactive",
+                //TotalPrice = (decimal)(random.Next(100, 1000) + random.NextDouble()),
+                //TechnologyServices = new List<TechnologyService>
+                //{
+
+                //    new TechnologyService
+                //    {
+                //        Id = $"T{random.Next(1000, 9999)}",
+                //        Name = "Tech Service " + (i + 1),
+                //        Description = "Random tech service description",
+                //        TechnicalServices = new List<TechnicalService>
+                //        {
+                //            new TechnicalService { Id = $"TS{random.Next(1000, 9999)}", Name = "Random Tech", Price = (decimal)(random.NextDouble() * 1000), Status = "Active" }
+                //        }
+                //    }
+
+                //},
+                //ServiceDetailsList = new List<DigitalService>
+                //{
+                //    new DigitalService { ServiceType = "Internet", Id = $"SD{random.Next(1000, 9999)}", Quantity = random.Next(1, 10), UnitPrice = (decimal)(random.NextDouble() * 100) },
+                //    new DigitalService { ServiceType = "Storage", Id = $"SD{random.Next(1000, 9999)}", Quantity = random.Next(1, 10), UnitPrice = (decimal)(random.NextDouble() * 200) }
+                //}
+            };
+            return new PlanInfoResponse();// (db.Count > 0) ? db.FirstOrDefault(x => x.Id == id) : null;
         }
     }
 }
