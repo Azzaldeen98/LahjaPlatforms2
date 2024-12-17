@@ -28,6 +28,7 @@ namespace Domain
 
     }
 
+
     public class ProductRepository : Repository<Product>, IProductRepository<Product>
     {
 

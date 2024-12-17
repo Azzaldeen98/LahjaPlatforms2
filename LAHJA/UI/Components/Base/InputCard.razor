@@ -1,13 +1,17 @@
-﻿@if (@Params.Src != null)
+﻿@using LAHJA.Data.UI.Components.Base
+
+@* @if (@Params.Src != null)
 {
-    <li class="@Params.ClassContanier">
-        <a href="#" class="@Params.ClassIcon" style="--bs-bg-opacity:0.05">
-            <img src="@Params.Src" class="@Params.ClassImg" alt="icon">
-        </a>
-    </li>
-}
+  <MudTextField T="@Params.Properties.T" 
+              Disabled="@Params.Properties.Disabled" 
+              Required="@Params.Properties.Required" 
+              Label="@Params.Properties.Label" 
+              RequiredError="@Params.Properties.RequiredError" 
+              @bind-Value="@Params.DataBuild" />
+} *@
 
 @code{
-    [Parameter] public CardIcon Params { set; get; } = new CardIcon();
+
+    // [Parameter] public CardInput<T> Params { set; get; } = new CardInput();
 
 }

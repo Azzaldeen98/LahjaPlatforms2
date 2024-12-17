@@ -26,10 +26,27 @@ namespace LAHJA.ApplicationLayer.Auth
             this.tokenService = tokenService;
         }
 
-        public async Task<Result<LoginResponse>> loginAsync(VitsModel.Auth.LoginRequest request)
+        //public async Task<Result<LoginResponse>> loginAsync(VitsModel.Auth.LoginRequest request)
+        //{
+
+        //    var model = _mapper.Map<LoginRequest>(request);
+        //    var response = await service.loginAsync(model);
+        //    if (response.Succeeded)
+        //    {
+        //        await tokenService.SaveAllTokensAsync(response.Data.accessToken,
+        //                                            response.Data.refreshToken,
+        //                                            response.Data.expiresIn,
+        //                                            response.Data.tokenType);
+        //    }
+
+
+        //    return response;
+        //}
+
+        public async Task<Result<LoginResponse>> loginAsync(LoginRequest model)
         {
 
-            var model = _mapper.Map<LoginRequest>(request);
+
             var response = await service.loginAsync(model);
             if (response.Succeeded)
             {
@@ -42,12 +59,18 @@ namespace LAHJA.ApplicationLayer.Auth
 
             return response;
         }
+        //public async Task<Result<RegisterResponse>> registerAsync(VitsModel.Auth.RegisterRequest request)
+        //{
 
-        public async Task<Result<RegisterResponse>> registerAsync(VitsModel.Auth.RegisterRequest request)
+        //    var model = _mapper.Map<RegisterRequest>(request);
+        //    return await service.registerAsync(model);
+
+        //}
+
+        public async Task<Result> registerAsync(RegisterRequest request)
         {
-
-            var model = _mapper.Map<RegisterRequest>(request);
-            return await service.registerAsync(model);
+           
+            return await service.registerAsync(request);
 
         }
 

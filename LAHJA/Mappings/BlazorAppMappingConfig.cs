@@ -3,6 +3,8 @@ using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans1.Model;
 using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Model;
 using Domain.Entities.Plans.Response;
 using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model;
+using LAHJA.Data.UI.Components.Base;
+using Domain.Entities.Auth.Request;
 
 namespace LAHJA.Mappings
 {
@@ -62,6 +64,12 @@ namespace LAHJA.Mappings
              .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.Price))
              .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Count))
            .ReverseMap();
+            
+            
+            CreateMap<DataBuildAuthBase, LoginRequest>().ReverseMap();
+
+            CreateMap<DataBuildAuthBase, RegisterRequest>().ReverseMap();
+            //CreateMap<DataBuildAuthBase, RegisterRequest>().ReverseMap();
 
 
             //CreateMap<TechnologyService, NumberOfService>().ReverseMap();

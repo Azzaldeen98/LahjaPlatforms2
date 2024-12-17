@@ -8,7 +8,7 @@
 {
     <MudListItem>
         <MudText Typo="Typo.body2">
-            @if (@auth?.IsAuth==true)
+            @if (@auth.IsAuth)
             {
                 <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" Color="Color.Primary" @onclick="DeleteAsync"   />
                 <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Color="Color.Primary"  @onclick="EditAsync" />
@@ -31,10 +31,9 @@ else
 {
     public string Error { get; set; } = "No Data";
     private decimal totalPrice;
-
+   
     [Parameter] public DigitalService? Params { get; set; }
-    [Parameter] public AuthComponent auth { get; set; } = new AuthComponent();
-
+    [Parameter] public AuthComponent? auth { get; set; }
     [Parameter] public EventCallback<DigitalService> OnClickSelect { get; set; }
  
     [Parameter] public EventCallback<DigitalService> OnClickDelete { get; set; }

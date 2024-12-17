@@ -1,4 +1,4 @@
-﻿@using LAHJA.Data.UI.Components.Authentication
+﻿@using LAHJA.Data.BlazarComponents.Authentication
 @using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model
  
 @inject ISnackbar Snackbar
@@ -6,24 +6,16 @@
 {
 
 
-    <MudText Typo="Typo.body2">
-        <MudIcon Icon="@Icons.Custom.Uncategorized.AlertSuccess" Color="Color.Primary" />
-        @Params.Name: @string.Join(",", @Params.Description)
-    </MudText>
+    
 
     @foreach (var item in Params.TechnicalServices)
     {
-        @if (item.Active)
-        {
-            <MudText Typo="Typo.body2">
-                    <MudIcon Icon="@Icons.Custom.Uncategorized.ChessRook" Color="Color.Primary" />
-                Name : @string.Join(",", item.Name)
-            </MudText>
-            <MudText Typo="Typo.body2">
-                <MudIcon Icon="@Icons.Custom.Uncategorized.ChessRook" Color="Color.Primary" />
-               Price: @string.Join(",", item.Price)
-            </MudText>
-        }
+
+
+        <MudText Typo="Typo.body2">
+            <MudIcon Icon="@Icons.Custom.Uncategorized.AlertSuccess" Color="Color.Primary" />
+            @Params.Name: @string.Join(",", item.Name)
+        </MudText>
     }
 
 }
@@ -43,7 +35,6 @@ else
     public Data.BlazarComponents.Shared.PageTransition PageTransition { get; set; }
     [Parameter] public TechnologyService? Params { get; set; }
     [Parameter] public AuthComponent? auth { get; set; }
-
     [Parameter] public EventCallback<TechnologyService> OnClick { get; set; }
 
 }

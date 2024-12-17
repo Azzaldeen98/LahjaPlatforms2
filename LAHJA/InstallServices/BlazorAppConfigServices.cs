@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using LAHJA.ApplicationLayer.Plans;
 using LAHJA.ApplicationLayer.Auth;
 using LAHJA.ApplicationLayer.Profile;
+using LAHJA.Data.UI.Templates.Auth;
+using LAHJA.Data.UI.Templates.Base;
 
 namespace Infrastructure
 {
@@ -25,6 +27,7 @@ namespace Infrastructure
             InstallMapping(serviceCollection);
             InstallServices(serviceCollection);
             InstallHelperServices(serviceCollection);
+            InstallTemplates(serviceCollection);
 
         }
 
@@ -40,6 +43,12 @@ namespace Infrastructure
         {
             //serviceCollection.AddTransient<RecaptchaService>();
         
+
+        }  
+        
+        private static void InstallTemplates(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddScoped<TemplateAuth>();
 
         }
         private static void InstallServices(this IServiceCollection serviceCollection)

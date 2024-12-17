@@ -1,86 +1,44 @@
 ﻿@using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations
+@using LAHJA.Data.UI.Components.Base
 @using LAHJA.UI.Components.Auth
-@using LAHJA.VitsModel.Auth
+
 @using Microsoft.Extensions.Options
-@using global::Shared.Constants
-@using global::Shared.Enums
-@using global::Shared.Models
-@using global::Shared.Wrapper
-@inject IJSRuntime JSRuntime
-@inject IOptions<ReCaptchaSettings> ReCaptchaOption
-@inject IConfiguration configuration
-@{
 
-    // / var siteKey = configuration["ReCaptchaSettings:SiteKey"];
-    // string siteKey = ReCaptchaOption.Value.SiteKey;
-}
 
-<script>
-    //V3
-    //src="https://www.google.com/recaptcha/api.js"
-</script>
-<script>
-    //V3
-    // function onSubmit(token) {
-    //     document.getElementById("Auth-Demo-form").submit();
-    // }
-</script>
-
-<script type="text/javascript">
-    var onloadCallback = function () {
-        grecaptcha.render('html_element', {
-            'sitekey': '6Ld41JsqAAAAAEvJSBeM48mCbu3ndltGRi7u06gU'
-        });
-    };
+@inherits CardAuth<DataBuildAuthBase>
 
 
 
-    function onSubmitReCAPTCHA(event) {
-     
-        var token = grecaptcha.getResponse();
+<ReCaptchaComponent />
 
-        if (!token) {
-         //   event.preventDefault(); // منع إرسال النموذج إذا لم يتم التحقق بنجاح
-            return null;
-        }
 
-        return token+"";
 
+
+<MudForm id="Auth-Demo-form" @ref="form" onsubmit="onSubmitReCAPTCHA(event)" @bind-IsValid="@success" @bind-Errors="@errors">
+
+
+   
+
+    @if (!IsLogin)
+    {
+
+        <MudTextField T="string" Disabled="false" Required="true" Label="PhoneNumber" RequiredError="Phone Number is required!" @bind-Value="@phoneNumber" />
     }
 
+    <MudTextField T="string" Label="Email" Required="true" RequiredError="Email is required!"
+    Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" @bind-Value="@email" />
+    <MudTextField T="string" Label="Password" HelperText="Choose a strong password" @ref="pwField1"
+    InputType="InputType.Password"
+    Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true"
+    RequiredError="Password is required!" @bind-Value="@password" />
 
-</script>
-
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer> </script>
-
-
-
-
-
-
-
-    <MudForm id="Auth-Demo-form" @ref="form" onsubmit="onSubmitReCAPTCHA(event)" @bind-IsValid="@success" @bind-Errors="@errors">
-
-        <MudTextField @bind-Value="ReCaptchaToken" id="ReCaptchaTokenId" InputType="InputType.Hidden" />
-
-        @if (!IsLogin)
-        {
-
-            <MudTextField T="string" Disabled="false" Required="true" Label="PhoneNumber" RequiredError="Phone Number is required!" @bind-Value="@phoneNumber" />
-        }
-        <MudTextField T="string" Label="Email" Required="true" RequiredError="Email is required!"
-                      Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" @bind-Value="@email" />
-        <MudTextField T="string" Label="Password" HelperText="Choose a strong password" @ref="pwField1"
-                      InputType="InputType.Password"
-                      Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true"
-                      RequiredError="Password is required!" @bind-Value="@password" />
-        @if (!IsLogin)
-        {
-            <MudTextField T="string"
-                          Label="Password" HelperText="Repeat the password" InputType="InputType.Password"
-                          Validation="@(new Func<string, string>(PasswordMatch))" />
-        }
+    @if (!IsLogin)
+    {
+        <MudTextField T="string"
+        Label="Password" HelperText="Repeat the password" InputType="InputType.Password"
+        Validation="@(new Func<string, string>(PasswordMatch))" />
+    }
 
     <div class="row mb-3">
         <div class="offset-sm-4 col-sm-8">
@@ -88,196 +46,88 @@
         </div>
     </div>
     <br />
+    <div class="d-flex align-center justify-space-between">
+        <MudCheckBox T="bool" Required="true" RequiredError="You must agree" Label="I agree!" />
+        <MudButton id="submitButton" Variant="Variant.Filled" Color="Color.Primary" OnClick="Submit" Disabled="@(!success)" Class="ml-auto">@(IsLogin ? "Login" : "Register")</MudButton>
+
+    </div>
+
+
+
+
+    @if (IsLogin)
+    {
         <div class="d-flex align-center justify-space-between">
-            <MudCheckBox T="bool" Required="true" RequiredError="You must agree" Label="I agree!" />
-            <MudButton id="submitButton" Variant="Variant.Filled" Color="Color.Primary" OnClick="onSubmitForm" Disabled="@(!success)" Class="ml-auto">@(IsLogin ? "Login" : "Register")</MudButton>
 
+            <MudButton OnClick="onClickForgetPassword" Color="Color.Primary">Forgot Password?</MudButton>
         </div>
-
-
-        @{
-            // <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!success)" Class="ml-auto"
-            //            data-sitekey="@ReCaptchaOption.Value.SiteKey"
-            //            data-callback='onSubmit'
-            //            data-action='submit'>
-            //     @(IsLogin ? "Login" : "Register")
-            // </MudButton>
-        }
-
-
-        @if (IsLogin)
-        {
-            <div class="d-flex align-center justify-space-between">
-
-                <MudButton OnClick="onClickForgetPassword" Color="Color.Primary">Forgot Password?</MudButton>
-            </div>
-        }
-
-
-        @if (errors != null && errors.Count() > 0)
-        {
-            <MudAlert Severity="Severity.Error" Class="mt-3">
-                <ul>
-                    @foreach (var error in errors)
-                    {
-                        <li>@error</li>
-                    }
-                </ul>
-            </MudAlert>
-        }
-
-
-    </MudForm>
-
-
-<ForgetPasswordForm  IsDisplay="visibleForgetPassword" />
-
-
-
-@code {
-
-    
-    private string ReCaptchaToken { set; get; }
-    private string reCaptchaSiteKey;
-    bool visibleForgetPassword = false;
-
-    [Parameter] public bool IsLogin { set; get; } = false;
-    [Parameter] public EventCallback<LoginRequest> OnLoginSubmit { get; set; }
-    [Parameter] public EventCallback<RegisterRequest> OnRegisterSubmit { get; set; }
-    [Parameter]
-    public List<string> ErrorMessages
-    {
-        set
-        {
-            if (value != null && value.Count() > 0)
-                errors = value.ToArray();
-        }
     }
 
-    bool success;
 
-    string[] errors = { };
-
-    MudTextField<string> pwField1;
-    MudForm form;
-
-    private string phoneNumber;
-    private string email = "test@gmail.com";
-    private string password = "Test@123";
-    private string repeatPassword;
-
-
-
-    private IEnumerable<string> PasswordStrength(string pw)
+    @if (errors != null && errors.Count() > 0)
     {
-        if (string.IsNullOrWhiteSpace(pw))
-        {
-            yield return "Password is required!";
-            yield break;
-
-
-        }
-        if (pw.Length < 8)
-            yield return "Password must be at least of length 8";
-        if (!Regex.IsMatch(pw, @"[A-Z]"))
-            yield return "Password must contain at least one capital letter";
-        if (!Regex.IsMatch(pw, @"[a-z]"))
-            yield return "Password must contain at least one lowercase letter";
-        if (!Regex.IsMatch(pw, @"[0-9]"))
-            yield return "Password must contain at least one digit";
-    }
-
-    private string PasswordMatch(string arg)
-    {
-        repeatPassword = pwField1.Value;
-        if (pwField1.Value != arg)
-            return "Passwords don't match";
-        return null;
-    }
-
-    private async Task onClickForgetPassword()
-    {
-        visibleForgetPassword = true;
-       
-        StateHasChanged();
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender)
-        {
-            reCaptchaSiteKey = ReCaptchaOption.Value.SiteKey;
-            var st = reCaptchaSiteKey;
-        }
-    }
-
-    private async Task onSubmitForm()
-    {
-        await form.Validate();
-
-        if (success)
-        {
-            var result = await JSRuntime.InvokeAsync<string>("onSubmitReCAPTCHA");
-            if (result == null)
-            {
-
-                    errors = new string[] { MapperMessages.Map(
-                    global::Shared.Constants.ErrorMessages.CHECK_FROM_RECAPTCHA_EN, 
-                    global::Shared.Constants.ErrorMessages.CHECK_FROM_RECAPTCHA_EN,
-                    AvailableLanguage.EN) };
-
-                StateHasChanged();
-            }
-            else
-            {
-                
-                if (IsLogin)
+        <MudAlert Severity="Severity.Error" Class="mt-3">
+            <ul>
+                @foreach (var error in errors)
                 {
-
-                    var data = new LoginRequest
-                        {
-
-                            Email = email,
-                            Password = password,
-                        };
-
-
-
-                    // استدعاء المفوض وتمرير البيانات
-                    if (OnLoginSubmit.HasDelegate)
-                    {
-                        await OnLoginSubmit.InvokeAsync(data);
-                    }
-
-                    // معالجة تسجيل الدخول
-                    Console.WriteLine($"Logging in with Email: {email}, Password: {password}");
+                    <li>@error</li>
                 }
-                else
-                {
+            </ul>
+        </MudAlert>
+    }
 
-                    var data = new RegisterRequest
-                        {
 
-                            Email = email,
-                            Password = password,
-                            PhoneNumber = phoneNumber,
-                        };
+</MudForm>
 
-                    // استدعاء المفوض وتمرير البيانات
-                    if (OnRegisterSubmit.HasDelegate)
-                    {
-                        await OnRegisterSubmit.InvokeAsync(data);
-                    }
 
-                    Console.WriteLine($"Registering with Username: {phoneNumber}, Email: {email}, Password: {password}");
-                }
-            }
-            
+<ForgetPasswordForm IsDisplay="visibleForgetPassword" OnSubmited=OnSubmitedForgetPassword />
+
+@code{
+
+
+    // bool success { get; set; }
+    // bool visibleForgetPassword { get; set; }
+    // string[] errors { get; set; }
+
+    // private CardAuth<DataBuildAuthBase> cardAuth = new CardAuth<DataBuildAuthBase>();
+
+   async Task Submit(){
+        DataBuildAuthBase data;
+
+        if (IsLogin)
+        {
+            data=new DataBuildAuthBase()
+            {
+                    Email = email,
+                    Password = password
+
+            };
         }
         else
         {
-            Console.WriteLine("Form is invalid!");
+
+            data = new DataBuildAuthBase()
+            {
+                    Email = email,
+                    Password = password,
+                    ConfirmPassword = repeatPassword,
+                    PhoneNumber = phoneNumber
+
+            };
         }
-    }
+        data.IsLogin = IsLogin;
+
+
+            if (OnSubmit.HasDelegate)
+            {
+
+                 await OnSubmit.InvokeAsync(data);
+            }
+
+
+        // OnSubmit(data);
+        StateHasChanged();
+
+}
 
 }

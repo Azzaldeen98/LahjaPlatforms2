@@ -1,13 +1,13 @@
-﻿@if (@Params.Src != null)
+﻿@using LAHJA.Data.UI.Components.Base
+@if (@Params.IsActive)
 {
-    <li class="@Params.ClassContanier">
-        <a href="#" class="@Params.ClassIcon" style="--bs-bg-opacity:0.05">
-            <img src="@Params.Src" class="@Params.ClassImg" alt="icon">
-        </a>
+     <li class="@Params.ClassContainer">
+    <MudText Typo="@Params.TypeTextCard" Class="@Params.ClassItem" >@Params.DataBuild</MudText>
     </li>
+
 }
 
 @code{
-    [Parameter] public CardIcon Params { set; get; } = new CardIcon();
+    [Parameter] public CardText Params { set; get; } = new CardText();
 
 }
