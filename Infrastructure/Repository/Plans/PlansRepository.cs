@@ -8,6 +8,7 @@ using Infrastructure.DataSource.Seeds;
 using Infrastructure.Models.Plans;
 using Infrastructure.Models.Plans.Response;
 using Shared.Settings;
+using System.Net.Http.Headers;
 
 namespace Infrastructure.Repository.Plans
 {
@@ -36,7 +37,7 @@ namespace Infrastructure.Repository.Plans
 
         public async Task<Result<IEnumerable<PlanResponse>>> getAllPlansAsync()
         {
-
+        
 
             var response = await ExecutorAppMode.ExecuteAsync<Result<IEnumerable<PlanResponseModel>>>(
                  async () => Result<IEnumerable<PlanResponseModel>>.Success(),
@@ -59,11 +60,10 @@ namespace Infrastructure.Repository.Plans
        
         public async Task<Result<IEnumerable<PlansContainerResponse>>> getAllPlansContainerAsync()
         {
-
+         
             var response = await ExecutorAppMode.ExecuteAsync<Result<IEnumerable<PlansContainerModel>>>(
-                 async () => Result<IEnumerable<PlansContainerModel>>.Success(),
-                 async () => Result<IEnumerable<PlansContainerModel>>.Success(await seedsPlansContainers.getAllAsync()));
-
+            async () => Result<IEnumerable<PlansContainerModel>>.Success(),
+            async () => Result<IEnumerable<PlansContainerModel>>.Success(await seedsPlansContainers.getAllAsync()));
 
 
             if (response.Succeeded)
@@ -98,7 +98,27 @@ namespace Infrastructure.Repository.Plans
 
         
         }
+        public async Task<Result<IEnumerable<PlansGroupResponse>>> getPlansByGroupIdAsync(string id)
+        {
 
+            var response = await ExecutorAppMode.ExecuteAsync<Result<IEnumerable<PlansGroupModel>>>(
+                 async () => await plansApiClient.getPlansGroupAsync(),
+                  async () => Result<IEnumerable<PlansGroupModel>>.Success(await seedsPlans.getPlansGroupAsync()
+                  ));
+
+            if (response.Succeeded)
+            {
+                var result = (response.Data != null) ? _mapper.Map<IEnumerable<PlansGroupResponse>>(response.Data) : null;
+                return Result<IEnumerable<PlansGroupResponse>>.Success(result);
+            }
+            else
+            {
+                return Result<IEnumerable<PlansGroupResponse>>.Fail(response.Messages);
+            }
+
+
+
+        }
         public async Task<Result<PlanResponse>> getPlanByIdAsync(string id)
         {
                 var response = await ExecutorAppMode.ExecuteAsync<Result<PlanResponseModel>>(
@@ -117,6 +137,9 @@ namespace Infrastructure.Repository.Plans
 
         public async Task<Result<PlanInfoResponse>> GetPlanInfoByIdAsync(string id)
         {
+
+        
+
                  var response = await ExecutorAppMode.ExecuteAsync<Result<PlanResponseModel>>(
                  async () => Result<PlanResponseModel>.Success(new PlanResponseModel()),
                  async () => Result<PlanResponseModel>.Success(await seedsPlans.getPlanByIdAsync(id)));

@@ -1,7 +1,7 @@
 ﻿@page "/TemplatePlan"
 
 
-
+@* 
 @using LAHJA.ApplicationLayer.Auth
 @using LAHJA.ApplicationLayer.Plans
 @using LAHJA.Components.TemPlansBlazar.FeaturesPlansTem2
@@ -16,25 +16,26 @@
 @using LAHJA.UI.Components.PlanCard.Components
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
-
-@inject NavigationManager Navigation
-@inject IDialogService DialogService
-@inject ISnackbar Snackbar
-@inject PlansClientService ClientPlansService
-@inject ClientAuthService clientAuthService
-@inject AuthService AuthService
-@inject AuthenticationStateProvider AuthenticationStateProvider
-@inject AppCustomAuthenticationStateProvider AppCustomAuthenticationStateProvider
-@inject PlansClientService plansClientService
-
+ 
+@*  @inject NavigationManager Navigation
+ @inject IDialogService DialogService
+ @inject ISnackbar Snackbar
+ @inject PlansClientService ClientPlansService
+ @inject ClientAuthService clientAuthService
+ @inject AuthService AuthService
+ @inject AuthenticationStateProvider AuthenticationStateProvider
+ @inject AppCustomAuthenticationStateProvider AppCustomAuthenticationStateProvider
+ @inject PlansClientService plansClientService *@
+ @using LAHJA.UI.Templates.Plans
  
 <section>
 
 
     <div style="padding:10px!important">
 
- 
-        <LAHJA.Components.TemPlansBlazar.Category_Plans_Template.TemListCategorys OnClick="Submit" Params="@dataPlansCategory._listcategories" />
+        <TemplatePlans />
+
+        @* <LAHJA.Components.TemPlansBlazar.Category_Plans_Template.TemListCategorys OnClick="Submit" Params="@dataPlansCategory._listcategories" /> *@
     </div>
 
  @*    <div style="padding:10px!important">
@@ -53,135 +54,133 @@
     // @attribute[Authorize]
 
 
-    public  DataPlansCategory dataPlansCategory = new DataPlansCategory();
-    public Data.BlazarComponents.Plans.TemFeturePlans1.DataModel.DataFeature dataFeature = new Data.BlazarComponents.Plans.TemFeturePlans1.DataModel.DataFeature();
-    public DataFeature dataFeaturee= new DataFeature();
-    private List<PlanInfo> planInfos;
+    // public  DataPlansCategory dataPlansCategory = new DataPlansCategory();
+    // public Data.BlazarComponents.Plans.TemFeturePlans1.DataModel.DataFeature dataFeature = new Data.BlazarComponents.Plans.TemFeturePlans1.DataModel.DataFeature();
+    // public DataFeature dataFeaturee= new DataFeature();
+    // private List<PlanInfo> planInfos;
 
-    protected override async Task OnInitializedAsync()
-    {
+    // protected override async Task OnInitializedAsync()
+    // {
 
-        try
-        {
+    //     try
+    //     {
         
 
-            // planInfos = DataManager.GetAllPlanInfos();
+    //         // planInfos = DataManager.GetAllPlanInfos();
 
-            // AppCustomAuthenticationStateProvider.SignOut();
-            // var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            // var authState = await AppCustomAuthenticationStateProvider.GetAuthenticationStateAsync();
+    //         // AppCustomAuthenticationStateProvider.SignOut();
+    //         // var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    //         // var authState = await AppCustomAuthenticationStateProvider.GetAuthenticationStateAsync();
 
-            // if (authState.User.Identity.IsAuthenticated)
-            // {
+    //         // if (authState.User.Identity.IsAuthenticated)
+    //         // {
 
 
-            var result = await plansClientService.getAllPlansContainersAsync();
+    //         var result = await plansClientService.getAllPlansContainersAsync();
 
-                if (result.Succeeded && result.Data != null)
-                {
+    //             if (result.Succeeded && result.Data != null)
+    //             {
 
-                    dataPlansCategory._listcategories = result.Data;
-                    StateHasChanged();
-                }
-                else
-                {
+    //                 dataPlansCategory._listcategories = result.Data;
+    //                 StateHasChanged();
+    //             }
+    //             else
+    //             {
 
-                }
+    //             }
             
 
-        }
-        catch (Exception e)
-        {
+    //     }
+    //     catch (Exception e)
+    //     {
 
-        }
-
-
-    }
+    //     }
 
 
-    private async void Submit(Data.BlazarComponents.Plans.Category.Model.InputCategory inputCategory)
-    {
-        if (inputCategory != null)
-        {
-
-            await ShowFeatureService(inputCategory);
+    // }
 
 
-        }
-    }
-    private async void SubmitListFeature(LAHJA.Data.BlazarComponents.Plans.TemFeturePlans1.Model.FeaturesPlansTem1 plans)
-    {
-        if (plans != null)
-        {
-            Snackbar.Add(plans.ProductName, Severity.Success);
-        }
-    }
+    // private async void Submit(Data.BlazarComponents.Plans.Category.Model.InputCategory inputCategory)
+    // {
+    //     if (inputCategory != null)
+    //     {
 
-    private async Task ShowFeatureService(Data.BlazarComponents.Plans.Category.Model.InputCategory inputCategory)
-    {
-        try
-        {
-
-            var response = await plansClientService.getAllPlansInfoAsync();
-
-            if (response.Succeeded)
-            {
-
-                // dataPlansCategory._listcategories = ;
-                // StateHasChanged();
-
-                var dataList = response.Data.ToList();
-
-                AuthComponent authComponent = new AuthComponent()
-                {
-                    IsAuth = await AuthService.isAuth(),
-                    PageRouterName = "/login"
-                };
-                // var parameters = new DialogParameters<ListFeatureService>
-                // {
-
-                //     {x => x.TypeTransition,true},
-                //     {x => x.IdCategry,inputCategory.IdPlans},
-                //     {x=>x.auth,authComponent},
-                //     {x =>x.Params,dataList} //dataFeaturee.plansList1}
-                // };
-                var parameters = new DialogParameters<ListInfoPlans>
-              {
-
-                  {x => x.TypeTransition,true},
-                  {x => x.IdCategry,inputCategory.IdPlans},
-                  {x => x.auth,authComponent},
-                  {x =>x.Params,response.Data} //dataFeaturee.plansList1}
-              };
-
-                var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
-                //   var dialog = await DialogService.ShowAsync<ListFeatureService>("",parameters, options);
-                var dialog = await DialogService.ShowAsync<ListInfoPlans>("", parameters, options);
-                var result = await dialog.Result;
-                if (!result.Canceled)
-                {
-                    var pbj = (PlanInfo)result.Data;
-                    string url = "/Payment/" + pbj.Id;
-                    Navigation.NavigateTo(url);
-                }
-            }
-            else
-            {
-                throw new Exception(response?.Messages[0] ?? "");
-            }
+    //         await ShowFeatureService(inputCategory);
 
 
-        }
-        catch (Exception ex)
-        {
-            Snackbar.Add(ex.Message, Severity.Error);
-        }
+    //     }
+    // }
+    // private async void SubmitListFeature(LAHJA.Data.BlazarComponents.Plans.TemFeturePlans1.Model.FeaturesPlansTem1 plans)
+    // {
+    //     if (plans != null)
+    //     {
+    //         Snackbar.Add(plans.ProductName, Severity.Success);
+    //     }
+    // }
 
-
-    }
     // private async Task ShowFeatureService(Data.BlazarComponents.Plans.Category.Model.InputCategory inputCategory)
     // {
     //     try
+    //     {
+
+    //         var response = await plansClientService.getAllPlansInfoAsync();
+
+    //         if (response.Succeeded)
+    //         {
+
+    //             // dataPlansCategory._listcategories = ;
+    //             // StateHasChanged();
+
+    //             var dataList = response.Data.ToList();
+
+    //             AuthComponent authComponent = new AuthComponent()
+    //             {
+    //                 IsAuth = await AuthService.isAuth(),
+    //                 PageRouterName = "/login"
+    //             };
+    //             // var parameters = new DialogParameters<ListFeatureService>
+    //             // {
+
+    //             //     {x => x.TypeTransition,true},
+    //             //     {x => x.IdCategry,inputCategory.IdPlans},
+    //             //     {x=>x.auth,authComponent},
+    //             //     {x =>x.Params,dataList} //dataFeaturee.plansList1}
+    //             // };
+    //             var parameters = new DialogParameters<ListInfoPlans>{
+    //               {x => x.TypeTransition,true},
+    //               {x => x.IdCategry,inputCategory.IdPlans},
+    //               {x => x.auth,authComponent},
+    //               {x =>x.Params,response.Data} //dataFeaturee.plansList1}
+    //           };
+
+    //             var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
+    //             //   var dialog = await DialogService.ShowAsync<ListFeatureService>("",parameters, options);
+    //             var dialog = await DialogService.ShowAsync<ListInfoPlans>("", parameters, options);
+    //             var result = await dialog.Result;
+    //             if (!result.Canceled)
+    //             {
+    //                 var pbj = (PlanInfo)result.Data;
+    //                 string url = "/Payment/" + pbj.Id;
+    //                 Navigation.NavigateTo(url);
+    //             }
+    //         }
+    //         else
+    //         {
+    //             throw new Exception(response?.Messages[0] ?? "");
+    //         }
+
+
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Snackbar.Add(ex.Message, Severity.Error);
+    //     }
+
+
+    // }
+    // // private async Task ShowFeatureService(Data.BlazarComponents.Plans.Category.Model.InputCategory inputCategory)
+    // // {
+    // //     try
     //     {
 
     //         var response = await ClientPlansService.getPlansGroupAsync();

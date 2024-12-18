@@ -1,4 +1,10 @@
-﻿using System.Collections;
+﻿using AutoMapper;
+using LAHJA.ApplicationLayer.Auth;
+using LAHJA.Data.UI.Components.Base;
+using LAHJA.Helpers.Services;
+using Microsoft.AspNetCore.Components;
+using MudBlazor;
+using System.Collections;
 
 namespace LAHJA.Data.UI.Templates.Base;
 
@@ -49,14 +55,42 @@ public interface ITemplateBase<T,E>
 }
 
 
-public abstract class TemplateBase<T, E> : ITemplateBase<T, E>
+public abstract class TemplateBase2<T, E> : ITemplateBase<T, E>
 {
     public bool IsActive { get; set; }
     public  TypeTemplate Type { get=> TypeTemplate.Base; }
     public IBuilderComponents<T, E> BuilderComponents { get; set; }
-    public IBuilderApi<T, E> BuilderApi { get; set; }
+    public IBuilderApi<T, E> BuilderApi { get; set ; }
 
     public abstract T Map(E data);
+}
+
+public  class TemplateBase
+{
+
+    protected readonly IMapper mapper;
+    protected readonly NavigationManager navigation;
+    protected readonly AuthService authService;
+    protected readonly IDialogService dialogService;
+    protected readonly ISnackbar Snackbar;
+
+    //protected List<string> Errors { get => _errors; }
+
+    protected List<string> _errors;
+
+
+    public TemplateBase(IMapper mapper, NavigationManager navigation,
+        AuthService authService, IDialogService dialogService, ISnackbar snackbar)
+    {
+
+        this.mapper = mapper;
+        this.navigation = navigation;
+        _errors = new List<string>();
+        this.authService = authService;
+        this.dialogService = dialogService;
+        this.Snackbar = snackbar;
+        
+    }
 }
 
 

@@ -6,7 +6,7 @@ namespace Infrastructure.Models.Plans
     {
         public string? Id { get; set; }
         //public string? ContainerId { get; set; }
-        public string? ProductName { get; set; }
+        public string? ProductName { get; set; } = "";
         public bool? Active { get; set; } = true;
         public List<PlanSubscriptionFeaturesModel>? SubscriptionFeatures { get; set; }
         public List<PlanTechnicalFeaturesModel>?  TechnicalFeatures { get; set; }

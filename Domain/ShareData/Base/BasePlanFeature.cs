@@ -16,6 +16,7 @@
 
     public class BasePlanFeature : BaseQuantitativeFeature
     {
+
         public decimal TotalAmount { get; set; } = 0;
     }
 

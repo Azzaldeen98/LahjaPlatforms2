@@ -1,0 +1,27 @@
+﻿@using LAHJA.UI.Components.Auth
+
+@using LAHJA.Data.UI.Templates.Auth
+
+@inject LAHJA.Data.UI.Templates.Plans.TemplatePlans Template
+
+
+@if(Template!=null){
+
+        <LAHJA.Components.TemPlansBlazar.Category_Plans_Template.TemListCategorys OnClick="@Template.OnSubmitContainerPlanAsync"  Params="@Template.ContainersPlans" />
+
+}
+@code{
+
+    // [Parameter] public bool IsToLoginMode { set; get; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Template.OnInitializedAsync();
+    }
+
+    // private LAHJA.Data.UI.Templates.Auth.TemplateAuth template = new LAHJA.Data.UI.Templates.Auth.TemplateAuth();
+
+
+
+}

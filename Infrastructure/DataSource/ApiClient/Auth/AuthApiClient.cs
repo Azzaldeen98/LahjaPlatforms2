@@ -58,7 +58,7 @@ namespace Infrastructure.DataSource.ApiClient.Auth
             {
                 var model = _mapper.Map<LoginRequest>(request);
                 var client = await GetApiClient();
-                var response =await client.LoginAsync(null, null, model);
+                var response =await client.LoginAsync(false, false, model);
                 var resModel = _mapper.Map<LoginResponseModel>(response);
                 return Result<LoginResponseModel>.Success(resModel);
 

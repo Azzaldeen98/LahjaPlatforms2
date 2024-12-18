@@ -37,7 +37,7 @@ namespace Infrastructure.DataSource.ApiClientFactory
                 //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userClaimsHelper.AccessToken);
 
 
-                if (Activator.CreateInstance(typeof(TClient), baseUrl.Api, httpClient) is TClient client)
+                if (Activator.CreateInstance(typeof(TClient), httpClient) is TClient client)
                 {
                     return client;
                 }
@@ -79,7 +79,7 @@ namespace Infrastructure.DataSource.ApiClientFactory
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",token);
 
 
-                if (Activator.CreateInstance(typeof(TClient), baseUrl.Api, httpClient) is TClient client)
+                if (Activator.CreateInstance(typeof(TClient),httpClient) is TClient client)
                 {
                     return client;
                 }
