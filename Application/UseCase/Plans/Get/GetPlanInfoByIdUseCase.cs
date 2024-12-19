@@ -2,7 +2,7 @@
 using Domain.Repository.Plans;
 using Domain.Wrapper;
 
-namespace Application.UseCase.Plans
+namespace Application.UseCase.Plans.Get
 {
     public class GetPlanInfoByIdUseCase
     {
@@ -17,7 +17,7 @@ namespace Application.UseCase.Plans
         public async Task<Result<PlanInfoResponse>> ExecuteAsync(string id)
         {
 
-          return await repository.GetPlanInfoByIdAsync(id);
+            return await repository.GetPlanInfoByIdAsync(id);
 
         }
     }

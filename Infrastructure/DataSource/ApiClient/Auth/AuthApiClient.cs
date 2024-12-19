@@ -13,6 +13,13 @@ using Microsoft.IdentityModel.Tokens;
 using Domain.Wrapper;
 
 
+using LoginRequest = Infrastructure.Nswag.LoginRequest;
+using Domain.ShareData.Base.Auth;
+using ResetPasswordRequest = Infrastructure.Nswag.ResetPasswordRequest;
+using RegisterRequest = Infrastructure.Nswag.RegisterRequest;
+using Infrastructure.Models.Auth.Response;
+
+
 //using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.DataSource.ApiClient.Auth
@@ -21,7 +28,7 @@ namespace Infrastructure.DataSource.ApiClient.Auth
 
 
 
-        public class AuthApiClient
+     public class AuthApiClient
     {
 
 
@@ -42,15 +49,37 @@ namespace Infrastructure.DataSource.ApiClient.Auth
             return client;
         }
 
+        private async Task<AuthClient> GetApiClientWithAuth()
+        {
+
+            var client = await _clientFactory.CreateClientWithAuthAsync<AuthClient>("ApiClient");
+            return client;
+        }
         /// TODO : link to Api
         /// <summary>
         /// TODO
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        public async Task<Result<string>> forgetPasswordAsync(string email)
+        public async Task<Result<ForgetPasswordResponseModel>> forgetPasswordAsync(ForgetPasswordRequestModel requestModel)
         {
-            return Result<string>.Success(email);
+            try
+            {
+                var model = _mapper.Map<ForgotPasswordRequest>(requestModel);
+                var client = await GetApiClient();
+                await client.ForgotPasswordAsync(model);
+                //var response=
+                //var res= _mapper.Map<ForgetPasswordResponseModel>(response);
+                return Result<ForgetPasswordResponseModel>.Success();
+            }
+            catch (ApiException ex)
+            {
+                return Result<ForgetPasswordResponseModel>.Fail(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Result<ForgetPasswordResponseModel>.Fail(ex.Message);
+            }
         }
         public async Task<Result<LoginResponseModel>> loginAsync(LoginRequestModel request)
         {
@@ -71,8 +100,47 @@ namespace Infrastructure.DataSource.ApiClient.Auth
    
 
 
-        }
+        } 
+        
+        public  async  Task<Result<string>> reSendConfirmationEmailAsync(ResendConfirmationEmailModel request)
+        {
+            try
+            {
+                var model = _mapper.Map<ResendConfirmationEmailRequest>(request);
+                var client = await GetApiClient();
+                await client.ResendConfirmationEmailAsync(model);
+              
+                return Result<string>.Success();
 
+            }catch(ApiException e)
+            {
+
+                return Result<string>.Fail(e.Response,httpCode:e.StatusCode);
+               
+            }
+   
+
+        }
+        public async Task<Result<string>> confirmationEmailAsync(ConfirmationEmailModel request)
+        {
+            try
+            {
+             
+                var client = await GetApiClient();
+                await client.ConfirmEmailAsync(request.UserId, request.Code, request.ChangedEmail);
+
+                return Result<string>.Success();
+
+            }
+            catch (ApiException e)
+            {
+
+                return Result<string>.Fail(e.Response, httpCode: e.StatusCode);
+
+            }
+
+
+        }
 
         public async Task<Result<RegisterResponseModel>> registerAsync(RegisterRequestModel request)
         {
@@ -97,6 +165,77 @@ namespace Infrastructure.DataSource.ApiClient.Auth
 
 
         }
+
+
+        public async Task<Result<string>> logoutAsync()
+        {
+            try
+            {
+                var client = await GetApiClientWithAuth();
+                await client.LogoutAsync("");
+                return Result<string>.Success();
+            }
+            catch (ApiException ex)
+            {
+                return Result<string>.Fail(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Result<string>.Fail(ex.Message);
+            }
+
+        }
+
+        public async Task<Result<AccessTokenResponseModel>> refreshTokinAsync(RefreshRequestModel request)
+        {
+
+            try
+            {
+                var model = _mapper.Map<RefreshRequest>(request);
+            
+                var client = await GetApiClientWithAuth();
+                var response=  await client.RefreshAsync(model);
+
+                return Result<AccessTokenResponseModel>.Success(_mapper.Map<AccessTokenResponseModel>(response));
+            }
+            catch (ApiException ex)
+            {
+                return Result<AccessTokenResponseModel>.Fail(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Result<AccessTokenResponseModel>.Fail(ex.Message);
+            }
+
+        }
+
+
+        public async Task<Result<ResetPasswordResponseModel>> resetPasswordAsync(ResetPasswordRequestModel request)
+        {
+
+            try
+            {
+                var model = _mapper.Map<ResetPasswordRequest>(request);
+                var client = await GetApiClientWithAuth();
+                await client.ResetPasswordAsync(model);
+
+                return Result<ResetPasswordResponseModel>.Success();
+            }
+            catch (ApiException ex)
+            {
+                return Result<ResetPasswordResponseModel>.Fail(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Result<ResetPasswordResponseModel>.Fail(ex.Message);
+            }
+
+        }
+
+
+
+
+
         public string GenerateJwtToken(string serverToken, string role="")
         {
             var claims = new[]

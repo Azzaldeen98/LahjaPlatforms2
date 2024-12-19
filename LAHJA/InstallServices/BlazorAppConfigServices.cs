@@ -17,6 +17,7 @@ using LAHJA.ApplicationLayer.Profile;
 using LAHJA.Data.UI.Templates.Auth;
 using LAHJA.Data.UI.Templates.Base;
 using LAHJA.Data.UI.Templates.Plans;
+using LAHJA.Data.UI.Components.Base;
 
 namespace Infrastructure
 {
@@ -49,9 +50,23 @@ namespace Infrastructure
         
         private static void InstallTemplates(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<TemplateBase>();
+
+
+
+            //serviceCollection.AddScoped < TemplateBase<IBuilderAuthApi<>, IBuilderAuthComponent<DataBuildAuthBase>>();
+
+
+            //serviceCollection.AddScoped<TemplateBase<IBuilderAuthApi<DataBuildAuthBase>, IBuilderAuthComponent<DataBuildAuthBase>>();
+
+            //serviceCollection.AddScoped<BuilderAuthApiClient>();
+            serviceCollection.AddScoped<IBuilderAuthApi<DataBuildAuthBase>, BuilderAuthApiClient>();
+
+           
+          
+            serviceCollection.AddScoped<IBuilderAuthComponent<DataBuildAuthBase>,BuilderAuthComponent<DataBuildAuthBase>>();
+            serviceCollection.AddScoped<TemplateAuthShare<ClientAuthService,DataBuildAuthBase>>();
             serviceCollection.AddScoped<TemplateAuth>();
-            serviceCollection.AddScoped<TemplatePlans>();
+            //serviceCollection.AddScoped<TemplatePlans>();
 
         }
         private static void InstallServices(this IServiceCollection serviceCollection)

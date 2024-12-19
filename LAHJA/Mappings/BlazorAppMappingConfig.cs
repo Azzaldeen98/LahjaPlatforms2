@@ -62,15 +62,27 @@ namespace LAHJA.Mappings
             CreateMap<PlanQuantitativeFeatureResponse, DigitalService>()
              .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => src.Name))
              .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.Price))
-             .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Count))
+             //.ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
            .ReverseMap();
             
             
             CreateMap<DataBuildAuthBase, LoginRequest>().ReverseMap();
 
             CreateMap<DataBuildAuthBase, RegisterRequest>().ReverseMap();
+            CreateMap<DataBuildAuthBase, ForgetPasswordRequest>().ReverseMap();
+            CreateMap<DataBuildAuthBase, ResendConfirmationEmail>().ReverseMap();
+            CreateMap<DataBuildAuthBase, ResetPasswordRequest>()
+                 .ForMember(dest => dest.NewPassword, opt => opt.MapFrom(src => src.Password))
+                .ReverseMap();
+            CreateMap<DataBuildAuthBase, ConfirmationEmail>()
+                .ForMember(dest => dest.ChangedEmail, opt => opt.MapFrom(src => src.Email))
+                .ReverseMap();
             //CreateMap<DataBuildAuthBase, RegisterRequest>().ReverseMap();
 
+
+            CreateMap<ContainerPlans, InputCategory>()
+           //.ForMember(dest => dest.PlanDescription, opt => opt.MapFrom(src => src.Description))
+           .ReverseMap();
 
             //CreateMap<TechnologyService, NumberOfService>().ReverseMap();
         }

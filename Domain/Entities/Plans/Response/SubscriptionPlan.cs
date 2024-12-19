@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities.Plans.Response
 {
-    class SubscriptionPlan : BaseSubscriptionPlan
+   public  class SubscriptionPlan : BaseSubscriptionPlan  
     {
-        public List<BasePlanFeature> Features { get; set; }
+        public new List<PlanFeature> Features { get; set; }
+        public new ContainerPlans? ContainerPlan { get; set; }
 
     }
 
@@ -41,14 +42,14 @@ namespace Domain.Entities.Plans.Response
     //    public int Quantity { get; set; } = 1;
     //    public decimal TotalAmount { get; set; } = 0;
     //}
-    public class GroupPlans
-    {
-        public string? Id { get; set; }
-        public string Name { get; set; }
-        public string? Description { get; set; }
-        public bool Active { get; set; } = true;
-        //public List<SubscriptionPlan>? SubscriptionPlans { get; set; }
-    }
+    //public class GroupPlans
+    //{
+    //    public string? Id { get; set; }
+    //    public string Name { get; set; }
+    //    public string? Description { get; set; }
+    //    public bool Active { get; set; } = true;
+    //    //public List<SubscriptionPlan>? SubscriptionPlans { get; set; }
+    //}
 
     //var groupPlans = new List<GroupPlans>
     //    {

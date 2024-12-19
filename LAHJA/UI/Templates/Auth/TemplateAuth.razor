@@ -6,7 +6,10 @@
 
 
 @if(Template!=null){
-    <MainAuth IsToLoginMode="IsToLoginMode" ErrorMessages="@Template.Errors"  OnSubmitedForgetPassword="Template.OnSubmitedForgetPassword" OnSubmit="Template.OnSubmit" />
+    <MainAuth IsToLoginMode="IsToLoginMode" 
+        ErrorMessages="@Template.Errors"
+              OnSubmitedForgetPassword="@Template.BuilderComponents.SubmitedForgetPassword"
+    OnSubmit="@Template.BuilderComponents.Submit" />
 
 }
 @code{

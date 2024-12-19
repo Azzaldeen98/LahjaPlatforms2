@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Domain.Entities.Auth.Response;
 using Domain.Entities.Auth.Request;
 using Application.UseCase.Auth;
+using Domain.ShareData.Base;
+using Application.UseCase;
 
 namespace Application.Services.Auth
 {
@@ -18,14 +20,31 @@ namespace Application.Services.Auth
         private readonly LoginUseCase loginUseCase;
         private readonly RegisterUseCase registerUseCase;
         private readonly ForgetPasswordUseCase forgetPasswordUseCase;
+        private readonly RefreshTokinUseCase refreshTokinUseCase;
+        private readonly ReSendConfirmationEmailUseCase reSendConfirmationEmailUseCase;
+        private readonly ResetPasswordUseCase resetPasswordUseCase;
+        private readonly ConfirmationEmailUseCase confirmationEmailUseCase;
+        private readonly LogoutUseCase logoutUseCase;
 
-        public WebAuthService(LoginUseCase loginUseCase, RegisterUseCase registerUseCase, ForgetPasswordUseCase forgetPasswordUseCase)
+        public WebAuthService(LoginUseCase loginUseCase,
+            RegisterUseCase registerUseCase,
+            ForgetPasswordUseCase forgetPasswordUseCase,
+            RefreshTokinUseCase refreshTokinUseCase,
+            ResetPasswordUseCase resetPasswordUseCase,
+            ConfirmationEmailUseCase confirmationEmailUseCase,
+            LogoutUseCase logoutUseCase,
+            ReSendConfirmationEmailUseCase reSendConfirmationEmailUseCase)
         {
 
 
             this.loginUseCase = loginUseCase;
             this.registerUseCase = registerUseCase;
             this.forgetPasswordUseCase = forgetPasswordUseCase;
+            this.refreshTokinUseCase = refreshTokinUseCase;
+            this.resetPasswordUseCase = resetPasswordUseCase;
+            this.confirmationEmailUseCase = confirmationEmailUseCase;
+            this.logoutUseCase = logoutUseCase;
+            this.reSendConfirmationEmailUseCase = reSendConfirmationEmailUseCase;
         }
 
         public async Task<Result<LoginResponse>> loginAsync(LoginRequest request)
@@ -38,16 +57,55 @@ namespace Application.Services.Auth
         {
             return await registerUseCase.ExecuteAsync(request);
                 
-            
+           
+        }
+
+        public async Task<Result<string>> logoutAsync()
+        {
+
+            return await logoutUseCase.ExecuteAsync();
 
         }
-        public async Task<Result<string>> forgetPasswordAsync(string email)
+
+        public async Task<Result<AccessTokenResponse>> refreshTokinAsync(RefreshRequest request)
         {
-            return await forgetPasswordUseCase.ExecuteAsync(email);
+
+            return await refreshTokinUseCase.ExecuteAsync(request);
+
+        }
+
+
+         public async Task<Result<ForgetPasswordResponse>> forgetPasswordAsync(ForgetPasswordRequest model)
+        {
+            return await forgetPasswordUseCase.ExecuteAsync(model);
                 
             
 
         }
+
+        public async Task<Result<string>> confirmationEmailAsync(ConfirmationEmail request)
+        {
+            return await confirmationEmailUseCase.ExecuteAsync(request);
+
+
+        }
+
+        public async Task<Result<string>> reSendConfirmationEmailAsync(ResendConfirmationEmail request)
+        {
+
+            return await reSendConfirmationEmailUseCase.ExecuteAsync(request);
+
+
+
+        }
+        public async Task<Result<ResetPasswordResponse>> resetPasswordAsync(ResetPasswordRequest request)
+        {
+
+            return await resetPasswordUseCase.ExecuteAsync(request);
+
+        }
+
+   
 
     }
 }

@@ -1,5 +1,7 @@
 ﻿
 using Blazorise.Captcha.ReCaptcha;
+using IdentityModel.Client;
+using LAHJA.UI.Components.Auth;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
@@ -11,9 +13,14 @@ using System.Text.RegularExpressions;
 
 namespace LAHJA.Data.UI.Components.Base
 {
+
+    
    public enum TypeAuth
     {
-        Login
+        Login,
+        //ConfirmEmail,
+        //ResetPassword,
+        //ReSendConfirmEmail,
     }
 
 
@@ -45,6 +52,7 @@ namespace LAHJA.Data.UI.Components.Base
         public string? Address { get; set; }
         public string? Gender { get; set; }
         public string? Nationality { get; set; }
+        public string? Code { get; set; }
         public bool IsLogin { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
@@ -52,6 +60,9 @@ namespace LAHJA.Data.UI.Components.Base
 
     public class CardAuth<T> : ComponentBaseCard<T>
     {
+
+        [Inject] IDialogService DialogService { get; set; }
+
         public override TypeComponentCard Type => throw new NotImplementedException();
 
         public override void Build(T db)
@@ -60,10 +71,13 @@ namespace LAHJA.Data.UI.Components.Base
         }
 
 
-
+        [CascadingParameter] MudDialogInstance MudDialog { get; set; }
         [Parameter] public EventCallback<T> OnSubmit { get; set; }
+        [Parameter] public EventCallback<T> OnSubmitConfirmEmail { get; set; }
+        [Parameter] public EventCallback<T> OnSubmitReSendConfirmEmail { get; set; }
+        [Parameter] public EventCallback<T> OnSubmitResetPassword { get; set; }
         [Parameter] public bool IsLogin { set; get; } = false;
-        [Parameter] public EventCallback<string> OnSubmitedForgetPassword { get; set; }
+        [Parameter] public EventCallback<T> OnSubmitedForgetPassword { get; set; }
         [Parameter] public List<string> ErrorMessages
         {
             set
@@ -78,14 +92,16 @@ namespace LAHJA.Data.UI.Components.Base
         protected MudTextField<string> pwField1;
         protected MudForm form;
         protected bool visibleForgetPassword = false;
+        protected bool isLoading = false;
 
         protected string phoneNumber;
         protected string email = "test@gmail.com";
         protected string password = "Test@123";
         protected string repeatPassword;
+        protected string code;
 
 
-
+  
         protected IEnumerable<string> PasswordStrength(string pw)
         {
             if (string.IsNullOrWhiteSpace(pw))
@@ -113,14 +129,67 @@ namespace LAHJA.Data.UI.Components.Base
             return null;
         }
 
+        protected async Task showConfirmationEmail()
+        {
+            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+            var dialog = DialogService.Show<ConfirmationEmail>("", new DialogParameters(), options);
+            var result = await dialog.Result;
+
+            //if (!result.Cancelled)
+            //{
+            //    // Handle confirmation
+            //}
+        }
+
+        protected async Task showResetPassword()
+        {
+            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+            var dialog = DialogService.Show<ResetPassword>("", new DialogParameters(), options);
+            var result = await dialog.Result;
+
+            //if (!result.Cancelled)
+            //{
+            //    // Handle confirmation
+            //}
+        }
         protected async Task onClickForgetPassword()
         {
+          
             visibleForgetPassword = true;
 
             StateHasChanged();
         }
 
-        
+        protected async Task OnSendConfirmationEmail()
+        {
+            //visibleForgetPassword = true;
+
+            //StateHasChanged();
+        }
+
+        protected async Task OnResetPassword()
+        {
+            //visibleForgetPassword = true;
+
+            //StateHasChanged();
+        }
+
+        protected async Task onSubmitConfirmEmail()
+        {
+
+            //MudDialog.Close(DialogResult.Ok(email, code));
+        }
+
+        protected  void onCloseDialog()
+        {
+            MudDialog.Cancel();
+
+        }
+        //protected void onCloseConfirmEmailDialog()
+        //{
+        //    MudDialog.Cancel();
+
+        //}
 
       
 

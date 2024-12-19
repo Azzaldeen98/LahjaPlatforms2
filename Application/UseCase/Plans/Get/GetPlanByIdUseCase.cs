@@ -2,7 +2,7 @@
 using Domain.Repository.Plans;
 using Domain.Wrapper;
 
-namespace Application.UseCase.Plans
+namespace Application.UseCase.Plans.Get
 {
     public class GetPlanByIdUseCase
     {

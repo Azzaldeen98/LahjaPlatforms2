@@ -52,7 +52,7 @@ namespace Infrastructure.DataSource.ApiClient.Plans
             catch (ApiException e)
             {
 
-                return Result<IEnumerable<PlanResponseModel>>.Fail(e.Response);
+                return Result<IEnumerable<PlanResponseModel>>.Fail(e.Response, httpCode: e.StatusCode);
 
             }
 
@@ -65,7 +65,7 @@ namespace Infrastructure.DataSource.ApiClient.Plans
             {
 
                 var client = await GetApiClient();
-                var response =  await client.PlansGetAsync();
+                var response =  await client.GroupAsync();
 
 
                 var resModel = _mapper.Map<IEnumerable<PlansGroupModel>>(response);
@@ -75,7 +75,7 @@ namespace Infrastructure.DataSource.ApiClient.Plans
             catch (ApiException e)
             {
 
-                return Result<IEnumerable<PlansGroupModel>>.Fail(e.Response);
+                return Result<IEnumerable<PlansGroupModel>>.Fail(e.Response, httpCode: e.StatusCode);
 
             }
 
@@ -83,27 +83,56 @@ namespace Infrastructure.DataSource.ApiClient.Plans
 
         }
 
-        //public async Task<Result<IEnumerable<PlansGroupModel>>> getPlansInfoAsync(string id)
-        //{
-        //    try
-        //    {
+        public async Task<Result<IEnumerable<ContainerPlansModel>>> getAllContainersPlansAsync(int skip = 0, int take = 0)
+        {
+            try
+            {
 
-        //        var client = await GetApiClient();
-        //        //var response =  await client.GroupAsync();
-        //        //var resModel = _mapper.Map<IEnumerable<PlansGroupModel>>(response);
-        //        return Result<IEnumerable<PlansGroupModel>>.Success();
-
-        //    }
-        //    catch (ApiException e)
-        //    {
-
-        //        return Result<IEnumerable<PlansGroupModel>>.Fail(e.Response);
-
-        //    }
+                var client = await GetApiClient();
+                var response = await client.GroupAsync();
 
 
+                var resModel = _mapper.Map<IEnumerable<ContainerPlansModel>>(response);
+                return Result<IEnumerable<ContainerPlansModel>>.Success(resModel);
 
-        //}
+            }
+            catch (ApiException e)
+            {
+
+                return Result<IEnumerable<ContainerPlansModel>>.Fail(e.Response, httpCode: e.StatusCode);
+
+            }
+
+
+
+        }       
+        
+        public async Task<Result<IEnumerable<SubscriptionPlanModel>>> getAllSubscriptionsPlansAsync(int skip = 0, int take = 0)
+        {
+            try
+            {
+
+                var client = await GetApiClient();
+                var response = await client.PlansGetAsync();
+                if(response == null)
+                    return Result<IEnumerable<SubscriptionPlanModel>>.Success();
+
+
+                var resModel = _mapper.Map<IEnumerable<SubscriptionPlanModel>>(response);
+                return Result<IEnumerable<SubscriptionPlanModel>>.Success(resModel);
+
+            }
+            catch (ApiException e)
+            {
+
+                return Result<IEnumerable<SubscriptionPlanModel>>.Fail(e.Response,httpCode:e.StatusCode);
+
+            }
+
+
+
+        }
+
         public async Task<Result<PlanResponseModel>> getPlanByIdAsync(string id)
         {
             try
@@ -118,7 +147,7 @@ namespace Infrastructure.DataSource.ApiClient.Plans
             catch (ApiException e)
             {
 
-                return Result<PlanResponseModel>.Fail(e.Response);
+                return Result<PlanResponseModel>.Fail(e.Response, httpCode: e.StatusCode);
 
             }
 

@@ -10,6 +10,7 @@ using LAHJA.Helpers.Services;
 using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model;
 using Domain.Entities.Plans.Response;
 using System;
+using Application.UseCase.Plans.Get;
 
 namespace LAHJA.ApplicationLayer.Plans
 {
@@ -69,6 +70,55 @@ namespace LAHJA.ApplicationLayer.Plans
 
         }
 
+        /// <summary>
+        /// New Methods
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Result<List<InputCategory>>> getAllPlansContainersAsync()
+        {
+
+
+            var result=await plansService.getAllContainersPlansUseCase();
+            if (result.Succeeded)
+            {
+                var res = result.Data.ToList();
+                var data = _mapper.Map<List<InputCategory>>(res);
+
+
+                //var result2 = await plansService.getSubscriptionsPlansAsync("1");
+                //var result3 = await plansService.getSubscriptionsPlansFeaturesAsync("1");
+                //int i = 0;
+                //foreach (var item in data)
+                //{
+                //    //item.TechnicalServices = _mapper.Map<List<PlanTechnicalServiceResponse>>(res[i].SubscriptionFeatures);
+                //    //item.QuantitativeFeatures = _mapper.Map<List<PlanQuantitativeFeatureResponse>>(res[i++].TechnicalFeatures);
+                //}
+
+                //var dataList = _mapper.Map<List<ContainerPlans>>(data);
+                //i = 0;
+                //foreach (var item in dataList)
+                //{
+                //    item.TechnologyServices = _mapper.Map<List<TechnologyService>>(data[i].TechnicalServices);
+                //    foreach (var itm in item.TechnologyServices)
+                //        itm.TechnicalServices = new List<TechnicalService>
+                //        {
+                //            new TechnicalService { Id = $"TS{new Random().Next(999999)}", Name = "Random Tech", Price = (decimal)(new Random().NextDouble() * 1000), Status = "Active" }
+                //        };
+
+                //    item.ServiceDetailsList = _mapper.Map<List<DigitalService>>(data[i++].QuantitativeFeatures);
+                //}
+
+
+                return Result<List<InputCategory>>.Success(data);
+            }
+            else
+            {
+                return Result<List<InputCategory>>.Fail();
+            }
+
+        }
+
+
         public async Task<Result<List<PlansFeture>>> getPlansGroupAsync()
         {
 
@@ -95,11 +145,12 @@ namespace LAHJA.ApplicationLayer.Plans
 
         }
 
-        public async Task<Result<List<InputCategory>>> getAllPlansContainersAsync()
+        public async Task<Result<List<InputCategory>>> getAllPlansContainersAsync2()
         {
             var result = await plansService.getAllPlansContainersAsync();
+     
 
-            if (result != null && result.Succeeded && result.Data != null)
+            if (result.Succeeded)
             {
                 var data = _mapper.Map<List<InputCategory>>(result.Data.ToList());
                 return Result<List<InputCategory>>.Success(data);
@@ -111,6 +162,53 @@ namespace LAHJA.ApplicationLayer.Plans
 
         }
 
+        public async Task<Result<List<SubscriptionPlan>>> getSubscriptionsPlansAsync(string containerId)
+        {
+            var result = await plansService.getAllPlansContainersAsync();
+
+            if (result.Succeeded)
+            {
+                //var data = _mapper.Map<List<InputCategory>>(result.Data.ToList());
+                return Result<List<SubscriptionPlan>>.Success();
+            }
+            else
+            {
+                return Result<List<SubscriptionPlan>>.Fail();
+            }
+
+        }
+
+        public async Task<Result<List<PlanFeature>>> getSubscriptionsPlansFeaturesAsync(string planId)
+        {
+            var result = await plansService.getSubscriptionsPlansFeaturesAsync(planId);
+
+            if (result.Succeeded)
+            {
+                //var data = _mapper.Map<List<InputCategory>>(result.Data.ToList());
+                return Result<List<PlanFeature>>.Success();
+            }
+            else
+            {
+                return Result<List<PlanFeature>>.Fail();
+            }
+
+        }
+
+        public async Task<Result<List<SubscriptionPlan>>> getAllSubscriptionsPlansAsync(int skip = 0, int take = 0)
+        {
+            var result = await plansService.getAllSubscriptionsPlansAsync(skip,take);
+
+            if (result.Succeeded)
+            {
+                //var data = _mapper.Map<List<InputCategory>>(result.Data.ToList());
+                return Result<List<SubscriptionPlan>>.Success();
+            }
+            else
+            {
+                return Result<List<SubscriptionPlan>>.Fail();
+            }
+
+        }
         public async Task<Result<PlanInfo>> getPlanInfoByIdAsync(string id)
         {
             var item= await plansService.getPlanInfoByIdAsync(id);

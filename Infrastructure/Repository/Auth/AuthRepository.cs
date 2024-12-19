@@ -3,10 +3,13 @@ using AutoMapper;
 using Domain.Entities.Auth.Request;
 using Domain.Entities.Auth.Response;
 using Domain.Repository.Auth;
+using Domain.ShareData.Base;
+using Domain.ShareData.Base.Auth;
 using Domain.Wrapper;
 using Infrastructure.DataSource;
 using Infrastructure.DataSource.ApiClient.Auth;
 using Infrastructure.DataSource.Seeds;
+using Infrastructure.Models.Auth.Response;
 using Infrastructure.Models.Plans;
 using Shared.Settings;
 
@@ -35,12 +38,24 @@ namespace Infrastructure.Repository.Auth
         }
 
    
-        public async Task<Result<string>?> forgetPasswordAsync(string email)
+        public async Task<Result<ForgetPasswordResponse>> forgetPasswordAsync(ForgetPasswordRequest request)
         {
-         
 
-            var response = await authControl.forgetPasswordAsync(email);
-            return response;
+            var model = _mapper.Map<ForgetPasswordRequestModel>(request);
+            var response = await authControl.forgetPasswordAsync(model);
+
+            if (response.Succeeded)
+            {
+                var res = _mapper.Map<ForgetPasswordResponse>(response.Data);
+
+                return Result<ForgetPasswordResponse>.Success(res);
+
+            }
+            else
+            {
+                return Result<ForgetPasswordResponse>.Fail(response.Messages);
+            }
+         
 
 
         }
@@ -88,8 +103,70 @@ namespace Infrastructure.Repository.Auth
 
         }
 
+        public async Task<Result<string>> logoutAsync()
+        {
+
+           return await authControl.logoutAsync();
+
+        }
+
+        public async Task<Result<AccessTokenResponse>> refreshTokinAsync(RefreshRequest request)
+        {
+            var model = _mapper.Map<RefreshRequestModel>(request);
+            var response = await authControl.refreshTokinAsync(model);
+
+            if (response.Succeeded)
+            {
+                var res = _mapper.Map<AccessTokenResponse>(response.Data);
+                return Result<AccessTokenResponse>.Success(res);
+
+            }
+            else
+            {
+                return Result<AccessTokenResponse>.Fail(response.Messages);
+            }
+
+        }
+
+ 
+
+        public async Task<Result<string>> confirmationEmailAsync(ConfirmationEmail request)
+        {
+
+            var model = _mapper.Map<ConfirmationEmailModel>(request);
+            return await authControl.confirmationEmailAsync(model);
+
+         
+        }
+
+        public async Task<Result<string>> reSendConfirmationEmailAsync(ResendConfirmationEmail request)
+        {
+
+            var model = _mapper.Map<ResendConfirmationEmailModel>(request);
+            return await authControl.reSendConfirmationEmailAsync(model);
 
 
 
+        }
+        public async Task<Result<ResetPasswordResponse>> resetPasswordAsync(ResetPasswordRequest request)
+        {
+
+            var model = _mapper.Map<ResetPasswordRequestModel>(request);
+            var response = await authControl.resetPasswordAsync(model);
+
+            if (response.Succeeded)
+            {
+                var res = _mapper.Map<ResetPasswordResponse>(response.Data);
+                return Result<ResetPasswordResponse>.Success(res);
+
+            }
+            else
+            {
+                return Result<ResetPasswordResponse>.Fail(response.Messages);
+            }
+
+        }
+
+  
     }
 }

@@ -298,10 +298,10 @@ a, .btn-link {
     .col-lg-7.ms-auto.hover-opacity-fade:hover {
         opacity: 0.8;
     }
-*, *::before, *::after {
+/**, *::before, *::after {
     -webkit-box-sizing: border-box !important;
     box-sizing: border-box !important;
-}
+}*/
 .overflow-hidden {
     overflow: hidden !important;
 }

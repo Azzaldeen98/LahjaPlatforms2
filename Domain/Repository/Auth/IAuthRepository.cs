@@ -1,5 +1,6 @@
 ﻿using Domain.Entities.Auth.Request;
 using Domain.Entities.Auth.Response;
+using Domain.ShareData.Base;
 using Domain.Wrapper;
 
 namespace Domain.Repository.Auth
@@ -9,6 +10,21 @@ namespace Domain.Repository.Auth
 
         public Task<Result<LoginResponse>> loginAsync(LoginRequest model);
         public Task<Result<RegisterResponse>> registerAsync(RegisterRequest model);
-        public Task<Result<string>> forgetPasswordAsync(string email);
+        public Task<Result<ForgetPasswordResponse>> forgetPasswordAsync(ForgetPasswordRequest request);
+
+        public  Task<Result<string>> logoutAsync();
+
+        public  Task<Result<AccessTokenResponse>> refreshTokinAsync(RefreshRequest request);
+
+
+        public  Task<Result<string>> confirmationEmailAsync(ConfirmationEmail request);
+
+
+
+        public  Task<Result<string>> reSendConfirmationEmailAsync(ResendConfirmationEmail request);
+
+
+        public  Task<Result<ResetPasswordResponse>> resetPasswordAsync(ResetPasswordRequest request);
+      
     }
 }

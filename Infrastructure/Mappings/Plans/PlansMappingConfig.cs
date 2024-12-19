@@ -31,6 +31,13 @@ namespace Infrastructure.Mappings.Plans
             CreateMap<PlanTechnicalFeaturesModel, PlanTechnicalFeaturesResponse>().ReverseMap();
             CreateMap<PlanSubscriptionResponseModel, PlanSubscriptionResponse>().ReverseMap();
 
+
+            CreateMap<PlanFeatureModel, PlanFeature>().ReverseMap();
+            CreateMap<SubscriptionPlanModel, SubscriptionPlan>().ReverseMap();
+            CreateMap<ContainerPlansModel, ContainerPlans>().ReverseMap();
+        
+       
+
             //    .ForMember(dest => dest.likes, opt => opt.MapFrom(src => src.likes != null ? src.likes.Count : 0))
             //.ReverseMap();
 

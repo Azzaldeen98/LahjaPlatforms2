@@ -3,6 +3,7 @@
     public interface ITokenService
     {
         Task<string?> GetTokenAsync();
+        Task<string?> GetRefreshTokenAsync();
         Task<string> GetTokenTypeAsync();
         Task<string> GetExpiresInTokenAsync();
 

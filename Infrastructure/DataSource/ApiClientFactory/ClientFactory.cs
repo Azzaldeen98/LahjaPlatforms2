@@ -1,8 +1,13 @@
-﻿using Shared.Helpers;
+﻿using IdentityModel.Client;
+using Shared.Helpers;
 using System.Net.Http.Headers;
 
 namespace Infrastructure.DataSource.ApiClientFactory
 {
+
+    
+
+
     public class ClientFactory
     {
         private readonly IHttpClientFactory _httpClientFactory;
@@ -76,8 +81,9 @@ namespace Infrastructure.DataSource.ApiClientFactory
                     throw new Exception("invalid token!!");
 
                 var httpClient = _httpClientFactory.CreateClient(clientName);
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",token);
-
+                //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",token);
+      
+                 if (!string.IsNullOrEmpty(token)) httpClient.SetBearerToken(token);
 
                 if (Activator.CreateInstance(typeof(TClient),httpClient) is TClient client)
                 {

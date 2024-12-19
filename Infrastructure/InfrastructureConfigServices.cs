@@ -86,7 +86,7 @@ namespace Infrastructure
         private static void InstallRepositories(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IPlansContainerRepository, PlansContainerRepository>();
-            serviceCollection.AddScoped<IPlansRepository,BaseRepository>();
+            serviceCollection.AddScoped<IPlansRepository,PlansRepository>();
             serviceCollection.AddScoped<IUsersRepository,UsersRepository>();
             serviceCollection.AddScoped<IAuthRepository,AuthRepository>();
             serviceCollection.AddScoped<IProfileRepository, ProfileRepository>();

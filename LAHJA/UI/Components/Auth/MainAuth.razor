@@ -7,6 +7,7 @@
 @inject ISnackbar Snackbar
 
 @using LAHJA.Data.UI.Components.Base
+@using global::Shared.Constants.Router
 
   <MudContainer class="cuntrer">
 
@@ -62,6 +63,9 @@
                                     ErrorMessages="errorMessages"
                                           OnSubmit="OnSubmit"
                                      OnSubmitedForgetPassword="OnSubmitedForgetPassword"
+                                     OnSubmitConfirmEmail="OnSubmitConfirmEmail"
+                                     OnSubmitReSendConfirmEmail="OnSubmitReSendConfirmEmail"
+                                     OnSubmitResetPassword="OnSubmitResetPassword"
 
                                      
                                     />
@@ -96,15 +100,20 @@
 @code {
 
     [Parameter] public EventCallback<DataBuildAuthBase> OnSubmit { get; set; }
-    [Parameter] public EventCallback<string> OnSubmitedForgetPassword { get; set; }
+    [Parameter] public EventCallback<DataBuildAuthBase> OnSubmitedForgetPassword { get; set; }
+    [Parameter] public EventCallback<DataBuildAuthBase> OnSubmitConfirmEmail { get; set; }
+    [Parameter] public EventCallback<DataBuildAuthBase> OnSubmitReSendConfirmEmail { get; set; }
+    [Parameter] public EventCallback<DataBuildAuthBase> OnSubmitResetPassword { get; set; }
     [Parameter] public List<string> ErrorMessages{ get=>errorMessages; set
         {
             if(value!=null)
             {
                 errorMessages = value;
-                StateHasChanged();
+                if(value.Count()>0)
+                    isshowmian = false;
+                // StateHasChanged();
             }
-    } }
+        } }
     private bool isVisible = true;
     private DialogOptions dialogOptions = new() { CloseButton = true };
     [Parameter]
@@ -113,7 +122,11 @@
         set
         {
             _isToLogin = value;
-            if (_isToLogin) ChangeAuth();
+            if (_isToLogin)
+            {
+                indexAuth = 1 - indexAuth;
+                isshowmian = true;
+            }
         }
         get { return _isToLogin; }
     }
@@ -133,8 +146,12 @@
 
     void ChangeAuth()
     {
-        indexAuth = 1 - indexAuth;
-        isshowmian = true;
+    
+        if (!IsToLoginMode)
+            Navigation.NavigateTo(RouterPage.LOGIN, forceLoad: true);
+        else 
+            Navigation.NavigateTo(RouterPage.REGISTER, forceLoad: true);
+
         StateHasChanged();
     }
 

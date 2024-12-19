@@ -4,22 +4,24 @@ using Domain.Wrapper;
 
 namespace Application.UseCase.Plans
 {
-    public class GetPlansGroupUseCase
+    public class GetAllContainersPlansUseCase
     {
         private readonly IPlansRepository repository;
-        public GetPlansGroupUseCase(IPlansRepository repository)
+        public GetAllContainersPlansUseCase(IPlansRepository repository)
         {
 
             this.repository = repository;
         }
 
 
-        public async Task<Result<IEnumerable<PlansGroupResponse>>> ExecuteAsync()
+        public async Task<Result<IEnumerable<ContainerPlans>>> ExecuteAsync()
         {
 
-            return await repository.getPlansGroupAsync();
+            return await repository.getAllContainersPlansAsync();
+
 
         }
-    }
 
+
+    }
 }

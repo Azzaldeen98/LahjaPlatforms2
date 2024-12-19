@@ -4,10 +4,11 @@
 @using LAHJA.UI.Components.Auth
 
 @using Microsoft.Extensions.Options
+@using global::Shared.Wrapper
 
 
 @inherits CardAuth<DataBuildAuthBase>
-
+@inject IJSRuntime JSRuntime
 
 
 <ReCaptchaComponent />
@@ -62,7 +63,11 @@
             <MudButton OnClick="onClickForgetPassword" Color="Color.Primary">Forgot Password?</MudButton>
         </div>
     }
+    <div class="d-flex align-center justify-space-between">
 
+        <MudButton OnClick="showConfirmationEmail" Color="Color.Primary">Confirm Email</MudButton>
+        <MudButton OnClick="showResetPassword" Color="Color.Primary">Reset Password</MudButton>
+    </div>
 
     @if (errors != null && errors.Count() > 0)
     {
@@ -91,41 +96,50 @@
 
     // private CardAuth<DataBuildAuthBase> cardAuth = new CardAuth<DataBuildAuthBase>();
 
-   async Task Submit(){
+    async Task Submit(){
         DataBuildAuthBase data;
 
-        if (IsLogin)
-        {
-            data=new DataBuildAuthBase()
-            {
-                    Email = email,
-                    Password = password
-
-            };
-        }
-        else
+        var result = await JSRuntime.InvokeAsync<string>("onSubmitReCAPTCHA");
+        if (result == null)
         {
 
-            data = new DataBuildAuthBase()
-            {
-                    Email = email,
-                    Password = password,
-                    ConfirmPassword = repeatPassword,
-                    PhoneNumber = phoneNumber
+            errors = new string[] { MapperMessages.Map(
+                    global::Shared.Constants.ErrorMessages.CHECK_FROM_RECAPTCHA_EN,
+                    global::Shared.Constants.ErrorMessages.CHECK_FROM_RECAPTCHA_EN) };
 
-            };
         }
-        data.IsLogin = IsLogin;
+        else{
 
 
-            if (OnSubmit.HasDelegate)
+            if (IsLogin)
             {
+                data=new DataBuildAuthBase()
+                {
+                        Email = email,
+                        Password = password
 
-                 await OnSubmit.InvokeAsync(data);
+                };
             }
+            else
+            {
 
+                data = new DataBuildAuthBase()
+                {
+                        Email = email,
+                        Password = password,
+                        ConfirmPassword = repeatPassword,
+                        PhoneNumber = phoneNumber
 
-        // OnSubmit(data);
+                };
+            }
+            data.IsLogin = IsLogin;
+
+                if (OnSubmit.HasDelegate)
+                {
+                     await OnSubmit.InvokeAsync(data);
+                }
+        }
+;
         StateHasChanged();
 
 }

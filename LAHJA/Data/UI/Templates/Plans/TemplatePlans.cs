@@ -15,141 +15,141 @@ using static MudBlazor.CategoryTypes;
 
 namespace LAHJA.Data.UI.Templates.Plans
 {
-    public class TemplatePlans: TemplateBase
-    {
-        //[Inject] public PlansClientService PlansClientService { get; set; }
+    //public class TemplatePlans: TemplateBase
+    //{
+    //    //[Inject] public PlansClientService PlansClientService { get; set; }
 
-        private readonly PlansClientService _plansClientService;
+    //    private readonly PlansClientService _plansClientService;
         
 
 
-        public TemplatePlans(PlansClientService plansClientService,
-                            IMapper mapper,
-                            NavigationManager navigation,
-                            AuthService authService,
-                            IDialogService dialogService,
-                            ISnackbar snackbar
-            )
-        : base(mapper, navigation, authService,dialogService,snackbar)
-        {
+    //    public TemplatePlans(PlansClientService plansClientService,
+    //                        IMapper mapper,
+    //                        NavigationManager navigation,
+    //                        AuthService authService,
+    //                        IDialogService dialogService,
+    //                        ISnackbar snackbar
+    //        )
+    //    : base(mapper, navigation, authService,dialogService,snackbar)
+    //    {
 
-            _plansClientService = plansClientService;
-            OnInitializedAsync = getAllPlansContainersAsync;
-            OnSubmitContainerPlanAsync = getSubscriptionsPlansAsync;
-        }
-
-
-
-        public Func<Task> OnInitializedAsync { get; set; }
-        public Func<InputCategory, Task> OnSubmitContainerPlanAsync { get; set; }
-
-        public List<string> Errors { get => _errors; }
-        public List<InputCategory> ContainersPlans { get => _containersPlans; }
-        public List<PlanInfo> SubscriptionsPlans { get => _subscriptionsPlans; }
+    //        _plansClientService = plansClientService;
+    //        OnInitializedAsync = getAllPlansContainersAsync;
+    //        OnSubmitContainerPlanAsync = getSubscriptionsPlansAsync;
+    //    }
 
 
 
-        private List<InputCategory> _containersPlans = new List<InputCategory>();
+    //    public Func<Task> OnInitializedAsync { get; set; }
+    //    public Func<InputCategory, Task> OnSubmitContainerPlanAsync { get; set; }
 
-        private List<PlanInfo> _subscriptionsPlans=new List<PlanInfo>();
+    //    public List<string> Errors { get => _errors; }
+    //    public List<InputCategory> ContainersPlans { get => _containersPlans; }
+    //    public List<PlanInfo> SubscriptionsPlans { get => _subscriptionsPlans; }
 
 
-        private async Task getAllPlansContainersAsync()
-        {
+
+    //    private List<InputCategory> _containersPlans = new List<InputCategory>();
+
+    //    private List<PlanInfo> _subscriptionsPlans=new List<PlanInfo>();
+
+
+    //    private async Task getAllPlansContainersAsync()
+    //    {
   
-            try
-            {
+    //        try
+    //        {
 
-                var result = await _plansClientService.getAllPlansContainersAsync();
+    //            var result = await _plansClientService.getAllPlansContainersAsync();
 
-                if (result.Succeeded && result.Data != null)
-                {
-                    _containersPlans = result.Data;
+    //            if (result.Succeeded && result.Data != null)
+    //            {
+    //                _containersPlans = result.Data;
                
-                }
-                else
-                {
-                    _errors?.Clear();
-                    _errors?.AddRange(result.Messages);
-                }
+    //            }
+    //            else
+    //            {
+    //                _errors?.Clear();
+    //                _errors?.AddRange(result.Messages);
+    //            }
 
 
-            }
-            catch (Exception e)
-            {
+    //        }
+    //        catch (Exception e)
+    //        {
 
-            }
+    //        }
         
-    }
+    //}
 
-        private async Task getSubscriptionsPlansAsync(InputCategory container)
-        {
+    //    private async Task getSubscriptionsPlansAsync(InputCategory container)
+    //    {
 
-            try
-            {
+    //        try
+    //        {
 
-                var result = await _plansClientService.getAllPlansInfoAsync();
+    //            var result = await _plansClientService.getAllPlansInfoAsync();
 
-                if (result.Succeeded && result.Data != null)
-                {
-                    _subscriptionsPlans = result.Data;
-                    await ShowPlansInfo(_subscriptionsPlans, container);
-                }
-                else
-                {
-                    _errors?.Clear();
-                    _errors?.AddRange(result.Messages);
-                }
+    //            if (result.Succeeded && result.Data != null)
+    //            {
+    //                _subscriptionsPlans = result.Data;
+    //                await ShowPlansInfo(_subscriptionsPlans, container);
+    //            }
+    //            else
+    //            {
+    //                _errors?.Clear();
+    //                _errors?.AddRange(result.Messages);
+    //            }
 
 
-            }
-            catch (Exception e)
-            {
-                Snackbar.Add(e.Message, Severity.Error);
-            }
+    //        }
+    //        catch (Exception e)
+    //        {
+    //            Snackbar.Add(e.Message, Severity.Error);
+    //        }
 
-        }
+    //    }
 
-        //private async Task ShowPlansInfo(Data.BlazarComponents.Plans.Category.Model.InputCategory inputCategory)
-        private async Task ShowPlansInfo(List<PlanInfo> data, InputCategory container)
-        {
-            try { 
+    //    //private async Task ShowPlansInfo(Data.BlazarComponents.Plans.Category.Model.InputCategory inputCategory)
+    //    private async Task ShowPlansInfo(List<PlanInfo> data, InputCategory container)
+    //    {
+    //        try { 
             
 
-                    AuthComponent authComponent = new AuthComponent()
-                    {
-                        IsAuth = await authService.isAuth(),
-                        PageRouterName = "/login"
-                    };
+    //                AuthComponent authComponent = new AuthComponent()
+    //                {
+    //                    IsAuth = await authService.isAuth(),
+    //                    PageRouterName = "/login"
+    //                };
        
-                  var parameters = new DialogParameters<ListInfoPlans>{
-                  {x => x.TypeTransition,true},
-                  {x => x.IdCategry,container.Id},
-                  {x => x.auth,authComponent},
-                  {x =>x.Params,data} //dataFeaturee.plansList1}
-              };
+    //              var parameters = new DialogParameters<ListInfoPlans>{
+    //              {x => x.TypeTransition,true},
+    //              {x => x.IdCategry,container.Id},
+    //              {x => x.auth,authComponent},
+    //              {x =>x.Params,data} //dataFeaturee.plansList1}
+    //          };
 
-                    var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
-                    //   var dialog = await DialogService.ShowAsync<ListFeatureService>("",parameters, options);
-                    var dialog = await dialogService.ShowAsync<ListInfoPlans>("", parameters, options);
-                    var result = await dialog.Result;
-                    if (!result.Canceled)
-                    {
-                        var pbj = (PlanInfo)result.Data;
-                        string url = "/Payment/" + pbj.Id;
-                        navigation.NavigateTo(url);
-                    }
+    //                var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
+    //                //   var dialog = await DialogService.ShowAsync<ListFeatureService>("",parameters, options);
+    //                var dialog = await dialogService.ShowAsync<ListInfoPlans>("", parameters, options);
+    //                var result = await dialog.Result;
+    //                if (!result.Canceled)
+    //                {
+    //                    var pbj = (PlanInfo)result.Data;
+    //                    string url = "/Payment/" + pbj.Id;
+    //                    navigation.NavigateTo(url);
+    //                }
            
 
 
-            }
-            catch (Exception ex)
-            {
-                Snackbar.Add(ex.Message, Severity.Error);
-            }
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            Snackbar.Add(ex.Message, Severity.Error);
+    //        }
 
 
-        }
+    //    }
 
-    }
+    //}
 }

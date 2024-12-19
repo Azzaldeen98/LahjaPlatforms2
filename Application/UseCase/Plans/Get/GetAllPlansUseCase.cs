@@ -2,22 +2,24 @@
 using Domain.Repository.Plans;
 using Domain.Wrapper;
 
-namespace Application.UseCase.Plans
+namespace Application.UseCase.Plans.Get
 {
     public class GetAllPlansUseCase
     {
         private readonly IPlansRepository repository;
-        public GetAllPlansUseCase(IPlansRepository repository) {
+        public GetAllPlansUseCase(IPlansRepository repository)
+        {
 
             this.repository = repository;
         }
 
 
-        public async Task<Result<IEnumerable<PlanResponse>>> ExecuteAsync(){
+        public async Task<Result<IEnumerable<PlanResponse>>> ExecuteAsync()
+        {
 
-          return await repository.getAllPlansAsync();
+            return await repository.getAllPlansAsync();
 
         }
-    }
+    }  
 
 }

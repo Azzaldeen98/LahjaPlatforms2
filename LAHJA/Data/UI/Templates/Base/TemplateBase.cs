@@ -15,83 +15,76 @@ public  enum TypeTemplate
 }
 
 
-public  interface IBuilderApi<T,E>
+public  interface IBuilderApi<T>
 {
-
-    T CreateAsync(E data);
+    
+    //Task <bool> SendAsync(E data);
     //T DeleteAsync(E data);
     //T GetOneAsync(E data);
-    //IEnumerable<T> GetAllAsync(int skip=0,int take=1);
+    //IEnumerable<T> GetAllAsync(int skip = 0, int take = 1);
 }
 
-public  interface IBuilderComponents<T,E>
+public interface IBuilderComponents<T>
 {
-
 }
 
-public class BuilderApi<T, E> : IBuilderApi<T, E> 
+public class BuilderApi<T,E> : IBuilderApi<E> 
 {
-    public T CreateAsync(E data)
-    {
-        throw new NotImplementedException();
+    protected readonly IMapper Mapper;
+    protected readonly T Service;
+
+    public BuilderApi(IMapper mapper, T service) { 
+        Mapper = mapper;
+        this.Service = service;
     }
 
-   
+    public object GetInstance()
+    {
+        return this;
+    }
 }
 
-public class BuilderComponents<T, E> : IBuilderComponents<T, E>
+public class BuilderComponents<T> : IBuilderComponents<T>
 {
-
+  
 }
 public interface ITemplateBase<T,E>
 {
     bool IsActive { set; get; }
     TypeTemplate Type { get; }
-    T Map(E data);
-    IBuilderComponents<T, E> BuilderComponents { set; get; }
-    IBuilderApi<T, E> BuilderApi { set; get; }
 
+ 
 
 }
 
 
-public abstract class TemplateBase2<T, E> : ITemplateBase<T, E>
+public abstract class TemplateBase<T,E> : ITemplateBase<T, E>
 {
     public bool IsActive { get; set; }
     public  TypeTemplate Type { get=> TypeTemplate.Base; }
-    public IBuilderComponents<T, E> BuilderComponents { get; set; }
-    public IBuilderApi<T, E> BuilderApi { get; set ; }
-
-    public abstract T Map(E data);
-}
-
-public  class TemplateBase
-{
 
     protected readonly IMapper mapper;
-    protected readonly NavigationManager navigation;
     protected readonly AuthService authService;
-    protected readonly IDialogService dialogService;
-    protected readonly ISnackbar Snackbar;
-
-    //protected List<string> Errors { get => _errors; }
-
+    protected AppCustomAuthenticationStateProvider customAuthenticationStateProvider;
+    protected readonly T client;
     protected List<string> _errors;
 
 
-    public TemplateBase(IMapper mapper, NavigationManager navigation,
-        AuthService authService, IDialogService dialogService, ISnackbar snackbar)
+    public TemplateBase(IMapper mapper,
+        AuthService authService,
+        T client,
+        AppCustomAuthenticationStateProvider customAuthenticationStateProvider)
     {
 
         this.mapper = mapper;
-        this.navigation = navigation;
         _errors = new List<string>();
         this.authService = authService;
-        this.dialogService = dialogService;
-        this.Snackbar = snackbar;
-        
+        this.client = client;
+        this.customAuthenticationStateProvider = customAuthenticationStateProvider;
     }
+
 }
+
 
 
 

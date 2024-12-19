@@ -1,10 +1,12 @@
 ﻿
 using Application.Services.Auth;
+using Application.UseCase;
 using AutoMapper;
 using Blazorise.Extensions;
 using Domain.Entities.Auth.Request;
 using Domain.Entities.Auth.Response;
 using Domain.Wrapper;
+using Infrastructure.Models.Plans;
 using LAHJA.Helpers.Services;
 
 
@@ -50,6 +52,7 @@ namespace LAHJA.ApplicationLayer.Auth
             var response = await service.loginAsync(model);
             if (response.Succeeded)
             {
+                await tokenService.RemoveAllTokensAsync();
                 await tokenService.SaveAllTokensAsync(response.Data.accessToken,
                                                     response.Data.refreshToken,
                                                     response.Data.expiresIn,
@@ -59,27 +62,53 @@ namespace LAHJA.ApplicationLayer.Auth
 
             return response;
         }
-        //public async Task<Result<RegisterResponse>> registerAsync(VitsModel.Auth.RegisterRequest request)
-        //{
 
-        //    var model = _mapper.Map<RegisterRequest>(request);
-        //    return await service.registerAsync(model);
 
-        //}
-
-        public async Task<Result> registerAsync(RegisterRequest request)
+        public async Task<Result<RegisterResponse>> registerAsync(RegisterRequest request)
         {
-           
+
             return await service.registerAsync(request);
 
         }
 
-        public async Task<Result<string>> forgetPasswordAsync(string email)
+        public async Task<Result<ForgetPasswordResponse>> forgetPasswordAsync(ForgetPasswordRequest model)
         {
-            return await service.forgetPasswordAsync(email);
+            return await service.forgetPasswordAsync(model);
+
+        }
+
+        public async Task<Result<ResetPasswordResponse>> resetPasswordAsync(ResetPasswordRequest request)
+        {
+
+            return await service.resetPasswordAsync(request);
 
         }
 
 
+        public async Task<Result<string>> confirmationEmailAsync(ConfirmationEmail request)
+        {
+
+            return await service.confirmationEmailAsync(request);
+
+        }
+
+        public async Task<Result<string>> reConfirmationEmailAsync(ResendConfirmationEmail request)
+        {
+
+            return await service.reSendConfirmationEmailAsync(request);
+
+        }
+
+        public async Task<Result<string>> logoutAsync()
+        {
+            var response = await service.logoutAsync();
+            if (response.Succeeded)
+            {
+                await tokenService.RemoveAllTokensAsync();
+        
+            }
+            return response;
+
+        }
     }
 }

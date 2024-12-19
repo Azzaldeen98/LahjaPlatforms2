@@ -14,10 +14,11 @@ namespace Application.UseCase.Auth
         }
 
 
-        public async Task<Result<string>> ExecuteAsync(string  email)
+
+        public async Task<Result<ForgetPasswordResponse>> ExecuteAsync(ForgetPasswordRequest model)
         {
 
-            var data = await repository.forgetPasswordAsync(email);
+            var data = await repository.forgetPasswordAsync(model);
             return  data;
 
         }

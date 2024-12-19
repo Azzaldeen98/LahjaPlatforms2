@@ -1,8 +1,10 @@
 ﻿using Application.Services.Auth;
 using Application.Services.Plans;
 using Application.Services.Profile;
+using Application.UseCase;
 using Application.UseCase.Auth;
 using Application.UseCase.Plans;
+using Application.UseCase.Plans.Get;
 using Infrastructure.Mappings.Plans;
 using Infrastructure.Repository.Plans;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,13 +39,22 @@ namespace Infrastructure
             serviceCollection.AddScoped<LoginUseCase>();
             serviceCollection.AddScoped<RegisterUseCase>();
             serviceCollection.AddScoped<ForgetPasswordUseCase>();
+            serviceCollection.AddScoped<ResetPasswordUseCase>();
+            serviceCollection.AddScoped<ConfirmationEmailUseCase>();
+            serviceCollection.AddScoped<ReSendConfirmationEmailUseCase>();
+            serviceCollection.AddScoped<RefreshTokinUseCase>();
+            serviceCollection.AddScoped<LogoutUseCase>();
 
             /// Plans
+            serviceCollection.AddScoped<GetAllContainersPlansUseCase>();
             serviceCollection.AddScoped<GetPlansGroupUseCase>();
             serviceCollection.AddScoped<GetAllPlansUseCase>();
             serviceCollection.AddScoped<GetPlanByIdUseCase>();
             serviceCollection.AddScoped<GetPlanInfoByIdUseCase>();
             serviceCollection.AddScoped<GetAllPlansContainersUseCase>();
+            serviceCollection.AddScoped<GetSubscriptionPlansUseCase>();
+            serviceCollection.AddScoped<GetSubscriptionPlanFeaturesUseCase>();
+            serviceCollection.AddScoped<GetAllSubscriptionsPlansUseCase>();
 
 
             /// Profile
