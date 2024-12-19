@@ -110,6 +110,8 @@ public class TemplateAuthShare<T,E> : TemplateBase<T,E>
     protected readonly IDialogService dialogService;
     protected readonly ISnackbar Snackbar;
     protected IBuilderAuthApi<E> builderApi;
+    protected AppCustomAuthenticationStateProvider customAuthenticationStateProvider;
+
     private readonly IBuilderAuthComponent<E> builderComponents;
     public  IBuilderAuthComponent<E> BuilderComponents { get => builderComponents; }
     public TemplateAuthShare(
@@ -117,14 +119,14 @@ public class TemplateAuthShare<T,E> : TemplateBase<T,E>
            IMapper mapper, 
            AuthService authService, 
             T client,
-             AppCustomAuthenticationStateProvider customAuthenticationStateProvider,
+            AppCustomAuthenticationStateProvider customAuthenticationStateProvider,
             IBuilderAuthComponent<E> builderComponents,
             NavigationManager navigation,
             IDialogService dialogService,
             ISnackbar snackbar
 
 
-        ) : base(mapper, authService, client, customAuthenticationStateProvider)
+        ) : base(mapper, authService, client)
     {
 
 

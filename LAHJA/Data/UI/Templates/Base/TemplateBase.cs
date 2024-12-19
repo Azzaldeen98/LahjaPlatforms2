@@ -65,22 +65,20 @@ public abstract class TemplateBase<T,E> : ITemplateBase<T, E>
 
     protected readonly IMapper mapper;
     protected readonly AuthService authService;
-    protected AppCustomAuthenticationStateProvider customAuthenticationStateProvider;
     protected readonly T client;
     protected List<string> _errors;
 
 
     public TemplateBase(IMapper mapper,
         AuthService authService,
-        T client,
-        AppCustomAuthenticationStateProvider customAuthenticationStateProvider)
+        T client)
     {
 
         this.mapper = mapper;
         _errors = new List<string>();
         this.authService = authService;
         this.client = client;
-        this.customAuthenticationStateProvider = customAuthenticationStateProvider;
+        //this.customAuthenticationStateProvider = customAuthenticationStateProvider;
     }
 
 }

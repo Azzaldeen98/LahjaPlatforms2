@@ -81,7 +81,7 @@ namespace LAHJA.Mappings
 
 
             CreateMap<ContainerPlans, InputCategory>()
-           //.ForMember(dest => dest.PlanDescription, opt => opt.MapFrom(src => src.Description))
+      
            .ReverseMap();
 
             //CreateMap<TechnologyService, NumberOfService>().ReverseMap();

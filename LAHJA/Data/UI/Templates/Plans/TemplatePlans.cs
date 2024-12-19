@@ -1,155 +1,312 @@
 ﻿using AutoMapper;
-using LAHJA.ApplicationLayer.Auth;
+using Blazorise;
+using Domain.Entities.Auth.Request;
+using Domain.Entities.Plans.Response;
+using Domain.Wrapper;
 using LAHJA.ApplicationLayer.Plans;
-using LAHJA.Data.BlazarComponents.Plans.Category.DataModel;
 using LAHJA.Data.BlazarComponents.Plans.Category.Model;
-using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model;
-using LAHJA.Data.UI.Components.Authentication;
-using LAHJA.Data.UI.Components.Base;
 using LAHJA.Data.UI.Templates.Base;
 using LAHJA.Helpers.Services;
-using LAHJA.UI.Components.PlanCard.Components;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using static MudBlazor.CategoryTypes;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LAHJA.Data.UI.Templates.Plans
 {
-    //public class TemplatePlans: TemplateBase
-    //{
-    //    //[Inject] public PlansClientService PlansClientService { get; set; }
 
-    //    private readonly PlansClientService _plansClientService;
+    public class DataBuildPlansBase
+    {
+        public string CategoryId{ get; set; }
+        public string PlanId{ get; set; }
+    }
+
+
+    public interface IBuilderPlansComponent<T> : IBuilderComponents<T>
+    {
+        //public Func<T, Task> Submit { get; set; }
+        public Func<T, Task> SubmitContainerPlans { get; set; }
+        public Func<T, Task> SubmitSubscriptionPlan { get; set; }
+
+        //public List<InputCategory> Categories { get; set; }
+        //public List<SubscriptionPlan> SubscriptionPlans { get; set; }
+        //public List<PlanFeature> PlanFeatures { get; set; }
+     
+    }
+
+
+
+    public interface IBuilderPlansApi<T> : IBuilderApi<T>
+    {
+
+
+         //Task<Result<List<InputCategory>>> OnInitialize();
+         Task<Result<List<InputCategory>>> GetAllCategories();
+        Task<Result<List<SubscriptionPlan>>> getSubscriptionsPlansAsync(T data);
+        Task<Result<List<SubscriptionPlan>>> getAllSubscriptionsPlansAsync();
+        Task<Result<List<PlanFeature>>> getSubscriptionPlanFeaturesAsync(T data);
+
+    
+        //Task<Result<List<SubscriptionPlan>>> getSubscriptionsPlansAsync(string containerId);
+        //Task<Result<List<SubscriptionPlan>>> getAllSubscriptionsPlansAsync(int skip = 0, int take = 0);
+        //Task<Result<List<PlanFeature>>> getSubscriptionPlanFeaturesAsync(string planId);
+
+    }
+
+    public abstract class BuilderPlansApi<T, E> : BuilderApi<T, E>, IBuilderPlansApi<E>
+    {
+
+        public BuilderPlansApi(IMapper mapper, T service) : base(mapper, service)
+        {
+
+        }
+
+        //public abstract Task<Result<List<InputCategory>>> OnInitialize();
+        public abstract Task<Result<List<InputCategory>>> GetAllCategories();
+
+        public abstract Task<Result<List<SubscriptionPlan>>> getSubscriptionsPlansAsync(E data);  
         
+        public abstract Task<Result<List<SubscriptionPlan>>> getAllSubscriptionsPlansAsync();
+     
 
-
-    //    public TemplatePlans(PlansClientService plansClientService,
-    //                        IMapper mapper,
-    //                        NavigationManager navigation,
-    //                        AuthService authService,
-    //                        IDialogService dialogService,
-    //                        ISnackbar snackbar
-    //        )
-    //    : base(mapper, navigation, authService,dialogService,snackbar)
-    //    {
-
-    //        _plansClientService = plansClientService;
-    //        OnInitializedAsync = getAllPlansContainersAsync;
-    //        OnSubmitContainerPlanAsync = getSubscriptionsPlansAsync;
-    //    }
+        public abstract Task<Result<List<PlanFeature>>> getSubscriptionPlanFeaturesAsync(E data);
+      
 
 
 
-    //    public Func<Task> OnInitializedAsync { get; set; }
-    //    public Func<InputCategory, Task> OnSubmitContainerPlanAsync { get; set; }
+        //public Task<Result<List<SubscriptionPlan>>> getAllSubscriptionsPlansAsync(int skip = 0, int take = 0)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-    //    public List<string> Errors { get => _errors; }
-    //    public List<InputCategory> ContainersPlans { get => _containersPlans; }
-    //    public List<PlanInfo> SubscriptionsPlans { get => _subscriptionsPlans; }
+        //public Task<Result<List<SubscriptionPlan>>> getSubscriptionsPlansAsync(string containerId)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
+        //public Task<Result<List<PlanFeature>>> getSubscriptionPlanFeaturesAsync(string planId)
+        //{
+        //    throw new NotImplementedException();
+        //}
+    }
+    public class BuilderPlansComponent<T> : IBuilderPlansComponent<T>
+    {
+        //public Func<T, Task> Submit { get; set; }
+        public Func<T, Task> SubmitContainerPlans { get; set; }
+        public Func<T, Task> SubmitSubscriptionPlan { get; set; }
 
-
-    //    private List<InputCategory> _containersPlans = new List<InputCategory>();
-
-    //    private List<PlanInfo> _subscriptionsPlans=new List<PlanInfo>();
-
-
-    //    private async Task getAllPlansContainersAsync()
-    //    {
-  
-    //        try
-    //        {
-
-    //            var result = await _plansClientService.getAllPlansContainersAsync();
-
-    //            if (result.Succeeded && result.Data != null)
-    //            {
-    //                _containersPlans = result.Data;
-               
-    //            }
-    //            else
-    //            {
-    //                _errors?.Clear();
-    //                _errors?.AddRange(result.Messages);
-    //            }
+        //public List<InputCategory> Categories { get; set; }
+        //public List<SubscriptionPlan> SubscriptionPlans { get; set; }
+        //public List<PlanFeature> PlanFeatures { get; set; }
+    }
 
 
-    //        }
-    //        catch (Exception e)
-    //        {
+    public class TemplatePlansShare<T, E> : TemplateBase<T, E>
+    {
+        protected readonly NavigationManager navigation;
+        protected readonly IDialogService dialogService;
+        protected readonly ISnackbar Snackbar;
+        protected IBuilderPlansApi<E> builderApi;
+        private readonly IBuilderPlansComponent<E> builderComponents;
+        public IBuilderPlansComponent<E> BuilderComponents { get => builderComponents; }
+        public TemplatePlansShare(
 
-    //        }
-        
-    //}
-
-    //    private async Task getSubscriptionsPlansAsync(InputCategory container)
-    //    {
-
-    //        try
-    //        {
-
-    //            var result = await _plansClientService.getAllPlansInfoAsync();
-
-    //            if (result.Succeeded && result.Data != null)
-    //            {
-    //                _subscriptionsPlans = result.Data;
-    //                await ShowPlansInfo(_subscriptionsPlans, container);
-    //            }
-    //            else
-    //            {
-    //                _errors?.Clear();
-    //                _errors?.AddRange(result.Messages);
-    //            }
+               IMapper mapper,
+               AuthService AuthService,
+                T client,
+                IBuilderPlansComponent<E> builderComponents,
+                NavigationManager navigation,
+                IDialogService dialogService,
+                ISnackbar snackbar
 
 
-    //        }
-    //        catch (Exception e)
-    //        {
-    //            Snackbar.Add(e.Message, Severity.Error);
-    //        }
+            ) : base(mapper, AuthService, client){
 
-    //    }
 
-    //    //private async Task ShowPlansInfo(Data.BlazarComponents.Plans.Category.Model.InputCategory inputCategory)
-    //    private async Task ShowPlansInfo(List<PlanInfo> data, InputCategory container)
-    //    {
-    //        try { 
+
+            builderComponents = new BuilderPlansComponent<E>();
+            this.navigation = navigation;
+            this.dialogService = dialogService;
+            this.Snackbar = snackbar;
+            //this.builderApi = builderApi;
+            this.builderComponents = builderComponents;
+
+
+        }
+
+    }
+
+
+    public class BuilderPlansApiClient : BuilderPlansApi<PlansClientService, DataBuildPlansBase>, IBuilderPlansApi<DataBuildPlansBase>
+    {
+        public BuilderPlansApiClient(IMapper mapper, PlansClientService service) : base(mapper, service)
+        {
+        }
+
+   
+        public override async Task<Result<List<InputCategory>>> GetAllCategories()
+        {
+           
+            var res= await Service.getAllContainersAsync();
+            if (res.Succeeded)
+            {
+                try
+                {
+                    var map = Mapper.Map<List<InputCategory>>(res.Data);
+                    return Result<List<InputCategory>>.Success(map);
+
+                }catch(Exception e)
+                {
+                    return Result<List<InputCategory>>.Fail();
+                }
+            }
+            else
+            {
+                return Result<List<InputCategory>>.Fail(res.Messages);
+            }
+        }
+
+ 
+        public override async Task<Result<List<SubscriptionPlan>>> getAllSubscriptionsPlansAsync()
+        {
+           
+            var res = await Service.getAllSubscriptionPlansAsync();
+            if (res.Succeeded)
+            {
+                var map = Mapper.Map<List<SubscriptionPlan>>(res.Data);
+                return Result<List<SubscriptionPlan>>.Success(map);
+            }
+            else
+            {
+                return Result<List<SubscriptionPlan>>.Fail(res.Messages);
+            }
+        }
+
+        public override async Task<Result<List<SubscriptionPlan>>> getSubscriptionsPlansAsync(DataBuildPlansBase data)
+        {
+            //return await Service.getSubscriptionsPlansAsync(data.CategoryId);
+
+            var res = await Service.getSubscriptionsPlansAsync(data.CategoryId);
+            if (res.Succeeded)
+            {
+                var map = Mapper.Map<List<SubscriptionPlan>>(res.Data);
+                return Result<List<SubscriptionPlan>>.Success(map);
+            }
+            else
+            {
+                return Result<List<SubscriptionPlan>>.Fail(res.Messages);
+            }
+        }
+
+        public override async Task<Result<List<PlanFeature>>> getSubscriptionPlanFeaturesAsync(DataBuildPlansBase data)
+        {
+            //return await Service.getSubscriptionPlanFeaturesAsync(data.PlanId);
+
+
+            var res = await Service.getSubscriptionPlanFeaturesAsync(data.PlanId);
+            if (res.Succeeded)
+            {
+                var map = Mapper.Map<List<PlanFeature>>(res.Data);
+                return Result<List<PlanFeature>>.Success(map);
+            }
+            else
+            {
+                return Result<List<PlanFeature>>.Fail(res.Messages);
+            }
+        }
+
+    
+    }
+
+
+    public class TemplatePlans : TemplatePlansShare<PlansClientService, DataBuildPlansBase>
+    {
+        public List<InputCategory> Categories { get=> _categories; }
+        public List<SubscriptionPlan> SubscriptionPlans { get; set; }
+        public List<PlanFeature> PlanFeatures { get; set; }
+        public List<string> Errors { get => _errors; }
+
+
+        public TemplatePlans(
+            IMapper mapper,
+            AuthService AuthService,
+            PlansClientService client,
+            IBuilderPlansComponent<DataBuildPlansBase> builderComponents,
+            NavigationManager navigation,
+            IDialogService dialogService,
+            ISnackbar snackbar) : base(mapper, AuthService, client, builderComponents, navigation, dialogService, snackbar)
+        {
+            this.BuilderComponents.SubmitContainerPlans = OnSubmitContainerPlans;
+            this.BuilderComponents.SubmitSubscriptionPlan = OnSubmitSubscriptionPlan;
+
+            this.builderApi = new BuilderPlansApiClient(mapper, client);
+
+            Task.FromResult(OnInitialize());
+
+        }
+
+
+
+ 
+       
+
+
+        private List<InputCategory> _categories = new List<InputCategory>();
+
+        //public  IBuilderPlansComponent<DataBuildPlansBase, DataBuildPlansBase> BuilderPlansComponent { get => builderPlansComponents; }
+
+
+
+        private async Task OnInitialize()
+        {
+                var response = await builderApi.GetAllCategories();
+                if (response.Succeeded)
+                {
+                   _categories = response.Data;
+                }
+                else
+                {
+                    _errors = response.Messages;
+                }
             
 
-    //                AuthComponent authComponent = new AuthComponent()
-    //                {
-    //                    IsAuth = await authService.isAuth(),
-    //                    PageRouterName = "/login"
-    //                };
+        } private async Task OnSubmitContainerPlans(DataBuildPlansBase dataBuildPlansBase)
+        {
+
+            if (dataBuildPlansBase != null)
+            {
+                var response = await builderApi.getSubscriptionsPlansAsync(dataBuildPlansBase);
+                if (response.Succeeded)
+                {
+                    //BuilderComponents.SubscriptionPlans = response.Data;
+                }
+                else
+                {
+                    _errors = response.Messages;
+                }
+            }
+
+        }
+
+        private async Task OnSubmitSubscriptionPlan(DataBuildPlansBase dataBuildPlansBase)
+        {
+            
+
+            if (dataBuildPlansBase != null)
+            {
+                var response = await builderApi.getSubscriptionPlanFeaturesAsync(dataBuildPlansBase);
+                if (response.Succeeded)
+                {
+                    //BuilderComponents.PlanFeatures = response.Data;
+                }
+                else
+                {
+                    _errors = response.Messages;
+                }
+            }
+
+        }  
        
-    //              var parameters = new DialogParameters<ListInfoPlans>{
-    //              {x => x.TypeTransition,true},
-    //              {x => x.IdCategry,container.Id},
-    //              {x => x.auth,authComponent},
-    //              {x =>x.Params,data} //dataFeaturee.plansList1}
-    //          };
 
-    //                var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraLarge, FullWidth = true };
-    //                //   var dialog = await DialogService.ShowAsync<ListFeatureService>("",parameters, options);
-    //                var dialog = await dialogService.ShowAsync<ListInfoPlans>("", parameters, options);
-    //                var result = await dialog.Result;
-    //                if (!result.Canceled)
-    //                {
-    //                    var pbj = (PlanInfo)result.Data;
-    //                    string url = "/Payment/" + pbj.Id;
-    //                    navigation.NavigateTo(url);
-    //                }
-           
+    }
 
-
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            Snackbar.Add(ex.Message, Severity.Error);
-    //        }
-
-
-    //    }
-
-    //}
 }
