@@ -1,0 +1,146 @@
+﻿ 
+@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model
+@using LAHJA.Data.UI.Components.Authentication
+@using LAHJA.UI.Components.PlanCard.Components.Service
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+ 
+
+@if (@Params != null)
+{
+    <MudListItem>
+        <MudText Typo="Typo.body2">
+            @if (IsAuth)
+            {
+
+                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" Color="Color.Primary" @onclick="DeleteAsync"   />
+                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Color="Color.Primary"  @onclick="EditAsync" />
+            }
+            else
+            {
+
+                <MudIcon Icon="@Icons.Custom.Uncategorized.AlertSuccess" Color="Color.Primary" />
+            }
+
+            @Params.Name: @string.Join(",", Params.Quantity.ToString())
+        </MudText>
+    </MudListItem>
+
+
+}
+else
+{
+    <MudAlert Severity="Severity.Error">@Error</MudAlert>
+}
+
+@code 
+{
+
+
+
+    public string Error { get; set; } = "No Data";
+    private decimal totalPrice;
+    [Parameter]
+    public bool IsAuth { get; set; } = false;
+
+    [Parameter] public FeaturePlanInfo? Params { get; set; }
+
+
+
+    [Parameter] public EventCallback<FeaturePlanInfo> OnClickSelect { get; set; }
+
+
+
+
+
+
+    [Parameter] public EventCallback<FeaturePlanInfo> OnClickDelete { get; set; }
+
+
+
+    [Parameter] public EventCallback<FeaturePlanInfo> OnClickEdit { get; set; }
+
+    [Parameter] public string IdCategry { get; set; }
+
+
+
+    private async Task EditAsync()
+    {
+        try
+        {
+
+            var parameters = new DialogParameters<MudDialogEditNumberFeture>
+        {
+
+            { x => x.ButtonText, "Edit" },
+            { x => x.Color, Color.Success },
+            {x => x.Params,Params}
+        };
+
+            var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+
+
+            var dialog = await DialogService.ShowAsync<MudDialogEditNumberFeture>("Edit", parameters, options);
+
+
+
+            var result = await dialog.Result;
+
+            if (!result.Cancelled)
+            {
+
+                Params = (FeaturePlanInfo)result.Data;
+
+                if (OnClickEdit.HasDelegate)
+                {
+                    await OnClickEdit.InvokeAsync(Params);
+                }
+
+               
+
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+
+    }
+    private async Task DeleteAsync()
+    {
+        try
+        {
+
+            var parameters = new DialogParameters<MudDialogEditNumberFeture>
+        {
+            { x => x.ContentText, "Do you really want to delete these records? This process cannot be undone." },
+            { x => x.ButtonText, "Delete" },
+            { x => x.Color, Color.Error },
+            {x => x.Params,Params}
+        };
+
+            var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+            var dialog = await DialogService.ShowAsync<MudDialogEditNumberFeture>("Delete", parameters, options);
+
+            var result = await dialog.Result;
+
+            if (!result.Cancelled)
+            {
+                if (OnClickDelete.HasDelegate)
+                {
+                    await OnClickDelete.InvokeAsync(Params);
+                }
+
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+
+    }
+}

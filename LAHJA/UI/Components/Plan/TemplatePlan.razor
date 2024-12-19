@@ -1,0 +1,188 @@
+﻿@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model
+@using LAHJA.Data.UI.Components.Base
+@using LAHJA.Data.UI.Components.Plan
+
+
+@inject NavigationManager Navigation
+@inherits CardPlan<SubscriptionPlanInfo>
+@inject ISnackbar Snackbar
+ 
+@if (Params != null)
+
+{
+
+
+       <MudCard Class="plan-card">
+            <MudText Typo="Typo.body1" Align="Align.Center">
+                <strong>Name</strong>
+            @Params.Name
+            </MudText>
+            <MudCardContent>
+                <MudText Typo="Typo.body1" Class="mb-1">
+                    <MudIcon Icon="@Icons.Custom.Uncategorized.AlertSuccess" Color="Color.Primary" />
+                <strong>Total Price:</strong>@Params.Price
+                     
+
+                </MudText>
+                <MudList Dense="true">
+
+                    <MudText Typo="Typo.body1"><strong> 
+                        <MudIcon Icon="@Icons.Custom.Uncategorized.AlertSuccess" Color="Color.Primary" />Features:</strong></MudText>
+
+                @if (Params.Features != null && Params.Features.Count()>0){
+
+                    @foreach (var featur in Params.Features.Where(x=>x.IsFixed).ToList())
+                        {
+                      
+                            <MudListItem>
+
+                                <TechnologyFeture Params="featur" />
+                           
+                            </MudListItem>
+                        }
+                    @foreach (var feature in Params.Features.Where(x => x.IsFixed==false).ToList())
+                        {
+
+
+                        <NumberFeture Params="feature" IsAuth="IsAuth" OnClickDelete="ONclickDeleteNumberFeture" OnClickEdit="ONclickEditNumberFeture" />
+                           
+                        
+                        } 
+                }
+                </MudList>
+            </MudCardContent>
+        @if (FlagButton)
+        {
+               <MudCardActions>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="@(()=>Submit(@Params))" Class="select-button">Select Plan</MudButton>
+            </MudCardActions>
+        
+        }
+    </MudCard> 
+
+}
+ 
+
+    
+     
+    
+ 
+
+@code 
+{
+
+ 
+    [Parameter] public bool FlagButton { get; set; } = true;
+    [Parameter] public SubscriptionPlanInfo? Params { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+
+    private Color GetChipColor(bool status)
+    {
+        return status == true ? Color.Success : Color.Error;
+    }
+    private async Task Submit(SubscriptionPlanInfo input)
+    {
+        try
+        {
+
+            if (OnSubmit.HasDelegate)
+            {
+                await OnSubmit.InvokeAsync(input);
+            }
+
+
+        }
+        catch(Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+    }
+    private async void ONclickDeleteNumberFeture(FeaturePlanInfo numberOfService)
+    {
+        try
+        {
+
+
+            Params.Price -= numberOfService.Price;
+            Params.Features.Remove(numberOfService);
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+    }
+
+    private async void ONclickEditNumberFeture(FeaturePlanInfo numberOfService)
+    {
+        try
+        {
+
+         
+            Params.Price += numberOfService.Price;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+    }
+
+
+     
+
+
+
+    private async void ONclickEditNumberService(Data.BlazarComponents.Plans.TemFeturePlans2.Model.NumberOfService numberOfService)
+    {
+        try
+        {
+           
+            CalculateTotalPrice();
+              StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+    }
+    private void CalculateTotalPrice()
+    {
+
+        try
+        {
+            // Price = 0;
+            // foreach (var item in Params.Services)
+            // {
+            //     Price += item.Price;
+            // }
+
+            // foreach (var item in Params.numberOfServices)
+            // {
+            //     Price += item.Price;
+            // }
+
+    
+
+        }
+        catch(Exception ex)
+        {
+            
+        }
+    }
+
+     
+
+
+    }
+
+ 

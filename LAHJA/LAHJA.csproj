@@ -43,7 +43,6 @@
 		<PackageReference Include="NSwag.AspNetCore" Version="8.0.2" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Ans\" />
 	  <Folder Include="Data\UI\Templates\Payment\" />
 	  <Folder Include="Data\UI\Templates\Sections\Billing\" />
 	  <Folder Include="wwwroot\assets\images\Icon\" />

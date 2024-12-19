@@ -1,0 +1,85 @@
+﻿@using LAHJA.Data.BlazarComponents.DesignServicesLahja
+@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model
+@using LAHJA.Data.UI.Components.Category
+@using LAHJA.Data.UI.Components.Category.DataModel
+@using LAHJA.UI.Components.Category
+@* @using LAHJA.UI.Components.Plan *@
+@inject NavigationManager Navigation
+@inject ISnackbar Snackbar
+
+    <div style="padding:10px!important">
+
+    <MainCategory DataBuild="CategoryInfos" OnSubmit="ONclickCatgory" />
+
+
+    </div> 
+@if (flag)
+{
+
+
+    <div style="padding:10px!important">
+
+        <MainPlan IsDialog="true" DataBuilds="planInfos" OnSubmit="ttt" />
+        
+    </div> 
+}
+
+@code
+{
+
+
+
+    private List<PlanInfo> planInfos;
+    public bool flag = false;
+    private List<CategoryComponent> CategoryInfos;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+
+
+
+            planInfos = DataManager.GetAllPlanInfos();
+            CategoryInfos = DataManagerCategory.GetAllCategoryInfos();
+            
+
+            StateHasChanged();
+        }
+        catch(Exception ex)
+        {
+            
+        }
+    }
+
+    private async Task ttt(PlanInfo o)
+    {
+
+        if (o != null)
+        {
+
+            string url = "/Paymentt/" + o.Id;
+            Navigation.NavigateTo(url);
+            Snackbar.Add(o.Name, Severity.Error);
+        }
+
+    }
+    private async Task ONclickCatgory(DataBuildPlansBase category)
+    {
+        try
+        {
+
+
+            flag = true;
+              StateHasChanged();
+            Snackbar.Add(category.CategoryId, Severity.Success);
+
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+
+    }
+
+}

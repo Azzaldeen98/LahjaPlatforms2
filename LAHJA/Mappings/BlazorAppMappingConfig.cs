@@ -5,6 +5,7 @@ using Domain.Entities.Plans.Response;
 using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model;
 using LAHJA.Data.UI.Components.Base;
 using Domain.Entities.Auth.Request;
+using LAHJA.Data.UI.Components.Category;
 
 namespace LAHJA.Mappings
 {
@@ -79,10 +80,52 @@ namespace LAHJA.Mappings
                 .ReverseMap();
             //CreateMap<DataBuildAuthBase, RegisterRequest>().ReverseMap();
 
+            ////  Temp
+            CreateMap<ContainerPlans, InputCategory>().ReverseMap();
 
-            CreateMap<ContainerPlans, InputCategory>()
-      
-           .ReverseMap();
+            /// Plans
+            CreateMap<ContainerPlans, CategoryComponent>().ReverseMap();
+
+
+            CreateMap<PlanFeature, DigitalService>()
+                  .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => src.Name))
+                  .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.Price))
+                .ReverseMap();
+
+            CreateMap<PlanFeature, TechnologyService>()
+                  .ForMember(dest => dest.TechnicalServices, opt => opt.Ignore())
+                .ReverseMap();
+
+
+             CreateMap<SubscriptionPlan, SubscriptionPlanInfo>().ReverseMap();
+             CreateMap<PlanFeature, FeaturePlanInfo>().ReverseMap();
+
+
+            //.ForMember(dest => dest.ServiceDetailsList, opt => opt.MapFrom(src => src.Features
+            //    .Where(feature => feature.IsFixed==true) 
+            //    .Select(feature => new TechnologyService
+            //    {
+            //        Name = feature.Name,
+            //        Description = feature.Description,
+            //        Active= feature.Active,
+            //        Id= feature.Id,
+            //        TechnicalServices= null,
+
+            //    }).ToList())) 
+            //.ForMember(dest => dest.TechnologyServices, opt => opt.MapFrom(src => src.Features
+            //    .Where(feature => !feature.IsFixed==false) 
+            //    .Select(feature => new TechnologyService
+            //    {
+            //        Name = feature.Name,
+            //        Description = feature.Description,
+            //        Active = feature.Active,
+            //        Id = feature.Id,
+            //        TechnicalServices = null,
+            //    }).ToList())) 
+            //.ReverseMap();
+
+
+
 
             //CreateMap<TechnologyService, NumberOfService>().ReverseMap();
         }

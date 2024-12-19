@@ -1,0 +1,70 @@
+﻿@using LAHJA.Data.UI.Components.Authentication
+@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model
+ 
+@inject ISnackbar Snackbar
+@if (@Params != null)
+{
+
+
+    
+
+
+
+
+        <MudText Typo="Typo.body2">
+            <MudIcon Icon="@Icons.Custom.Uncategorized.AlertSuccess" Color="Color.Primary" />
+        @string.Join(",", Params.Name)
+        </MudText>
+        <MudText Typo="Typo.body2">
+            <MudIcon Icon="@Icons.Custom.Uncategorized.AlertSuccess" Color="Color.Primary" />
+        @Params.Price
+        </MudText>
+    
+
+
+
+}
+else
+{
+
+    <MudAlert Severity="Severity.Error">@Error</MudAlert>
+
+}
+
+@code
+{
+    [Parameter]
+    public bool flagTypeService { get; set; }
+    public string Error { get; set; } = "No Data";
+    [Parameter]
+    public Data.BlazarComponents.Shared.PageTransition PageTransition { get; set; }
+
+
+
+    [Parameter] public FeaturePlanInfo? Params { get; set; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    [Parameter] public EventCallback<FeaturePlanInfo> OnClick { get; set; }
+
+}

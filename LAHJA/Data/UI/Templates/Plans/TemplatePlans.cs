@@ -5,6 +5,8 @@ using Domain.Entities.Plans.Response;
 using Domain.Wrapper;
 using LAHJA.ApplicationLayer.Plans;
 using LAHJA.Data.BlazarComponents.Plans.Category.Model;
+using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model;
+using LAHJA.Data.UI.Components.Category;
 using LAHJA.Data.UI.Templates.Base;
 using LAHJA.Helpers.Services;
 using Microsoft.AspNetCore.Components;
@@ -14,11 +16,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace LAHJA.Data.UI.Templates.Plans
 {
 
-    public class DataBuildPlansBase
-    {
-        public string CategoryId{ get; set; }
-        public string PlanId{ get; set; }
-    }
+
 
 
     public interface IBuilderPlansComponent<T> : IBuilderComponents<T>
@@ -40,8 +38,8 @@ namespace LAHJA.Data.UI.Templates.Plans
 
 
          //Task<Result<List<InputCategory>>> OnInitialize();
-         Task<Result<List<InputCategory>>> GetAllCategories();
-        Task<Result<List<SubscriptionPlan>>> getSubscriptionsPlansAsync(T data);
+         Task<Result<List<CategoryComponent>>> GetAllCategories();
+        Task<Result<List<SubscriptionPlanInfo>>> getSubscriptionsPlansAsync(T data);
         Task<Result<List<SubscriptionPlan>>> getAllSubscriptionsPlansAsync();
         Task<Result<List<PlanFeature>>> getSubscriptionPlanFeaturesAsync(T data);
 
@@ -61,9 +59,9 @@ namespace LAHJA.Data.UI.Templates.Plans
         }
 
         //public abstract Task<Result<List<InputCategory>>> OnInitialize();
-        public abstract Task<Result<List<InputCategory>>> GetAllCategories();
+        public abstract Task<Result<List<CategoryComponent>>> GetAllCategories();
 
-        public abstract Task<Result<List<SubscriptionPlan>>> getSubscriptionsPlansAsync(E data);  
+        public abstract Task<Result<List<SubscriptionPlanInfo>>> getSubscriptionsPlansAsync(E data);  
         
         public abstract Task<Result<List<SubscriptionPlan>>> getAllSubscriptionsPlansAsync();
      
@@ -143,7 +141,7 @@ namespace LAHJA.Data.UI.Templates.Plans
         }
 
    
-        public override async Task<Result<List<InputCategory>>> GetAllCategories()
+        public override async Task<Result<List<CategoryComponent>>> GetAllCategories()
         {
            
             var res= await Service.getAllContainersAsync();
@@ -151,17 +149,17 @@ namespace LAHJA.Data.UI.Templates.Plans
             {
                 try
                 {
-                    var map = Mapper.Map<List<InputCategory>>(res.Data);
-                    return Result<List<InputCategory>>.Success(map);
+                    var map = Mapper.Map<List<CategoryComponent>>(res.Data);
+                    return Result<List<CategoryComponent>>.Success(map);
 
                 }catch(Exception e)
                 {
-                    return Result<List<InputCategory>>.Fail();
+                    return Result<List<CategoryComponent>>.Fail();
                 }
             }
             else
             {
-                return Result<List<InputCategory>>.Fail(res.Messages);
+                return Result<List<CategoryComponent>>.Fail(res.Messages);
             }
         }
 
@@ -181,19 +179,26 @@ namespace LAHJA.Data.UI.Templates.Plans
             }
         }
 
-        public override async Task<Result<List<SubscriptionPlan>>> getSubscriptionsPlansAsync(DataBuildPlansBase data)
+        public override async Task<Result<List<SubscriptionPlanInfo>>> getSubscriptionsPlansAsync(DataBuildPlansBase data)
         {
             //return await Service.getSubscriptionsPlansAsync(data.CategoryId);
 
             var res = await Service.getSubscriptionsPlansAsync(data.CategoryId);
             if (res.Succeeded)
             {
-                var map = Mapper.Map<List<SubscriptionPlan>>(res.Data);
-                return Result<List<SubscriptionPlan>>.Success(map);
+                var map = Mapper.Map<List<SubscriptionPlanInfo>>(res.Data);
+                //foreach (var item in map)
+                //{
+                //    foreach (var item in item)
+                //    {
+
+                //    }
+                //}
+                return Result<List<SubscriptionPlanInfo>>.Success(map);
             }
             else
             {
-                return Result<List<SubscriptionPlan>>.Fail(res.Messages);
+                return Result<List<SubscriptionPlanInfo>>.Fail(res.Messages);
             }
         }
 
@@ -220,9 +225,9 @@ namespace LAHJA.Data.UI.Templates.Plans
 
     public class TemplatePlans : TemplatePlansShare<PlansClientService, DataBuildPlansBase>
     {
-        public List<InputCategory> Categories { get=> _categories; }
-        public List<SubscriptionPlan> SubscriptionPlans { get; set; }
-        public List<PlanFeature> PlanFeatures { get; set; }
+        public List<CategoryComponent> Categories { get=> _categories; }
+        public List<SubscriptionPlanInfo> SubscriptionPlans { get => _plans; }
+        //public List<PlanFeature> PlanFeatures { get; set; }
         public List<string> Errors { get => _errors; }
 
 
@@ -250,7 +255,8 @@ namespace LAHJA.Data.UI.Templates.Plans
        
 
 
-        private List<InputCategory> _categories = new List<InputCategory>();
+        private List<CategoryComponent> _categories = new List<CategoryComponent>();
+        private List<SubscriptionPlanInfo> _plans = new List<SubscriptionPlanInfo>();
 
         //public  IBuilderPlansComponent<DataBuildPlansBase, DataBuildPlansBase> BuilderPlansComponent { get => builderPlansComponents; }
 
@@ -269,7 +275,8 @@ namespace LAHJA.Data.UI.Templates.Plans
                 }
             
 
-        } private async Task OnSubmitContainerPlans(DataBuildPlansBase dataBuildPlansBase)
+        } 
+        private async Task OnSubmitContainerPlans(DataBuildPlansBase dataBuildPlansBase)
         {
 
             if (dataBuildPlansBase != null)
@@ -277,7 +284,7 @@ namespace LAHJA.Data.UI.Templates.Plans
                 var response = await builderApi.getSubscriptionsPlansAsync(dataBuildPlansBase);
                 if (response.Succeeded)
                 {
-                    //BuilderComponents.SubscriptionPlans = response.Data;
+                    _plans = response.Data;
                 }
                 else
                 {

@@ -1,39 +1,21 @@
 ﻿@page "/TemplatePlan"
 
+ 
 
-@* 
-@using LAHJA.ApplicationLayer.Auth
-@using LAHJA.ApplicationLayer.Plans
-@using LAHJA.Components.TemPlansBlazar.FeaturesPlansTem2
-@using LAHJA.Data.BlazarComponents.DesignServicesLahja
-@using LAHJA.Data.BlazarComponents.Plans.Category.DataModel
-@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.DataModel
-@using LAHJA.Data.BlazarComponents.Plans.TemFeturePlans2.Them3.Model
-@using LAHJA.Data.UI.Components.Authentication
-@using LAHJA.Data.UI.Templates.Plans
-@using LAHJA.Helpers
-@using LAHJA.Helpers.Services
-@using LAHJA.UI.Components.PlanCard.Components
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.Authorization
- 
-@*  @inject NavigationManager Navigation
- @inject IDialogService DialogService
- @inject ISnackbar Snackbar
- @inject PlansClientService ClientPlansService
- @inject ClientAuthService clientAuthService
- @inject AuthService AuthService
- @inject AuthenticationStateProvider AuthenticationStateProvider
- @inject AppCustomAuthenticationStateProvider AppCustomAuthenticationStateProvider
- @inject PlansClientService plansClientService *@
+@using LAHJA.UI.Components.Category
+@using LAHJA.UI.Components.Plan
  @using LAHJA.UI.Templates.Plans
- 
+ @inject LAHJA.Data.UI.Templates.Plans.TemplatePlans Template
+
 <section>
 
 
     <div style="padding:10px!important">
+         
+        <MainCategory DataBuild="Template.Categories" OnSubmit="Template.BuilderComponents.SubmitContainerPlans" />
+        <MainPlan DataBuilds="Template.SubscriptionPlans" IsDialog="false"  />
 
-        <TemplatePlans />
+          @* <TemplatePlans /> *@
 
         @* <LAHJA.Components.TemPlansBlazar.Category_Plans_Template.TemListCategorys OnClick="Submit" Params="@dataPlansCategory._listcategories" /> *@
     </div>

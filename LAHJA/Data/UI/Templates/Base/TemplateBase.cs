@@ -61,6 +61,8 @@ public interface ITemplateBase<T,E>
 public abstract class TemplateBase<T,E> : ITemplateBase<T, E>
 {
     public bool IsActive { get; set; }
+    //public bool IsAuth { get=> _isAuth; }
+    //protected bool _isAuth = false;
     public  TypeTemplate Type { get=> TypeTemplate.Base; }
 
     protected readonly IMapper mapper;
@@ -78,6 +80,7 @@ public abstract class TemplateBase<T,E> : ITemplateBase<T, E>
         _errors = new List<string>();
         this.authService = authService;
         this.client = client;
+        //_isAuth = authService.isAuth().Result;
         //this.customAuthenticationStateProvider = customAuthenticationStateProvider;
     }
 

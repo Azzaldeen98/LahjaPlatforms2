@@ -18,6 +18,7 @@ using LAHJA.Data.UI.Templates.Auth;
 using LAHJA.Data.UI.Templates.Base;
 using LAHJA.Data.UI.Templates.Plans;
 using LAHJA.Data.UI.Components.Base;
+using LAHJA.Data.UI.Components.Category;
 
 namespace Infrastructure
 {
